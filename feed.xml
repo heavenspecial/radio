@@ -1,3 +1,4 @@
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <channel>
@@ -5,6 +6,7 @@
     <link>https://agrimamor.com</link>
     <language>en</language>
     <itunes:author>Agrim Amor</itunes:author>
+    <itunes:explicit>yes</itunes:explicit>
     <itunes:category text="Music"/>
     <itunes:category text="Comedy"/>
     <description><![CDATA[𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW.<br>
@@ -13,7 +15,7 @@ HEAR NON-STOP MUSIC, SPEECH & COMEDY! The promoters are confident that the publi
 FACE THE BATTLES OF LIFE WITH RENEWED VIGOR.<br>
 The sexful nature of the show has reportedly cured countless young women of their habitual fits of weeping.]]></description>
     <itunes:summary>Some kind of a show.</itunes:summary>
-    <itunes:image href="https://heavenspecial.github.io/artwork/cover.jpg"/>
+    <itunes:image href="https://heavenspecial.github.io/radio/artwork/cover.jpg"/>
     <item>
       <title>Leak a Take ❮Pilot❯</title>
       <link>https://agrimamor.com/leak-a-take-pilot</link>
@@ -25,3 +27,6 @@ The sexful nature of the show has reportedly cured countless young women of thei
     </item>
   </channel>
 </rss>
+
+```
+𝒱'
