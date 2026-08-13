@@ -12,6 +12,7 @@
       --text: #e6e6ed;
       --muted: #9393a5;
       --border: #2a2a3a;
+      --explicit-color: #e2a049;
     }
 
     * {
@@ -61,6 +62,12 @@
       gap: 0.5rem;
     }
 
+    .meta-line {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
     h1 {
       font-size: 1.8rem;
       letter-spacing: -0.02em;
@@ -74,10 +81,22 @@
       letter-spacing: 0.05em;
     }
 
+    .explicit-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--explicit-color);
+      border: 1px solid rgba(226, 160, 73, 0.4);
+      background: rgba(226, 160, 73, 0.1);
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+    }
+
     .tags {
       display: flex;
       gap: 0.5rem;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     .tag {
@@ -112,6 +131,12 @@
       border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    article.episode:target {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px rgba(255, 42, 95, 0.2);
     }
 
     .episode-header {
@@ -159,7 +184,7 @@
         width: 200px;
         height: 200px;
       }
-      .tags {
+      .meta-line, .tags {
         justify-content: center;
       }
       .episode-header {
@@ -173,14 +198,16 @@
 
 <main>
   <header>
-    <img src="https://heavenspecial.github.io/artwork/cover.jpg" alt="Bimbo Kimchi: Chase the Myth Cover Art">
+    <img src="https://heavenspecial.github.io/radio/artwork/cover.jpg" alt="Bimbo Kimchi: Chase the Myth Cover Art">
     <div class="show-details">
-      <div class="author">Agrim Amor</div>
+      <div class="meta-line">
+        <span class="author">Agrim Amor</span>
+        <span class="explicit-badge">Explicit</span>
+      </div>
       <h1>Bimbo Kimchi: Chase the Myth</h1>
       <div class="tags">
         <span class="tag">Music</span>
         <span class="tag">Comedy</span>
-        <span class="tag">Explicit</span>
       </div>
       <p class="show-description">𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW.
 Living, breathing, spoken entertainment.
@@ -195,9 +222,9 @@ The sexful nature of the show has reportedly cured countless young women of thei
   <section>
     <h2 class="episodes-title">Episodes</h2>
     
-    <article class="episode">
+    <article class="episode" id="pilot">
       <div class="episode-header">
-        <h3><a href="https://agrimamor.com/leak-a-take-pilot" class="episode-title">Leak a Take ❮Pilot❯</a></h3>
+        <h3><a href="#pilot" class="episode-title">Leak a Take ❮Pilot❯</a></h3>
         <time class="episode-date">Feb 17, 2026</time>
       </div>
       <p class="episode-description">➢ Original taping: Summer 2023.
