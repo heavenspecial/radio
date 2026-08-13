@@ -42,14 +42,19 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 2rem;
-      display: flex;
-      gap: 2rem;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "image details"
+        "description description";
+      gap: 1.5rem 2rem;
+      align-items: center;
       margin-bottom: 2rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
 
     header img {
+      grid-area: image;
       width: 160px;
       height: 160px;
       border-radius: 8px;
@@ -58,6 +63,7 @@
     }
 
     .show-details {
+      grid-area: details;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
@@ -114,7 +120,7 @@
     }
 
     .show-description {
-      margin-top: 1rem;
+      grid-area: description;
       font-size: 0.95rem;
       color: var(--text);
       white-space: pre-line;
@@ -180,8 +186,11 @@
 
     @media (max-width: 600px) {
       header {
-        flex-direction: column;
-        text-align: left;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "image"
+          "details"
+          "description";
       }
       header img {
         width: 200px;
@@ -202,6 +211,7 @@
 <main>
   <header>
     <img src="https://heavenspecial.github.io/radio/artwork/album.jpg" alt="Bimbo Kimchi: Chase the Myth Cover Art">
+    
     <div class="show-details">
       <div class="meta-line">
         <span class="author">Agrim Amor</span>
@@ -212,14 +222,15 @@
         <span class="tag">Music</span>
         <span class="tag">Comedy</span>
       </div>
-      <p class="show-description">𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW.
+    </div>
+
+    <p class="show-description">𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW.
 Living, breathing, spoken entertainment.
 
 HEAR NON-STOP MUSIC, SPEECH & COMEDY! The promoters are confident that the public will take kindly to a form of amusement that can be enjoyed in anyone's home and at nil cost.
 
 FACE THE BATTLES OF LIFE WITH RENEWED VIGOR.
 The sexful nature of the show has reportedly cured countless young women of their habitual fits of weeping.</p>
-    </div>
   </header>
 
   <section>
