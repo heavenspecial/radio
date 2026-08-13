@@ -28,7 +28,8 @@
       line-height: 1.6;
       padding: 2rem 1rem;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
+      text-align: left;
     }
 
     main {
@@ -43,7 +44,7 @@
       padding: 2rem;
       display: flex;
       gap: 2rem;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 2rem;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
@@ -65,6 +66,7 @@
     .meta-line {
       display: flex;
       align-items: center;
+      justify-content: flex-start;
       gap: 0.75rem;
     }
 
@@ -95,6 +97,7 @@
 
     .tags {
       display: flex;
+      justify-content: flex-start;
       gap: 0.5rem;
       margin-top: 0.25rem;
     }
@@ -178,14 +181,14 @@
     @media (max-width: 600px) {
       header {
         flex-direction: column;
-        text-align: center;
+        text-align: left;
       }
       header img {
         width: 200px;
         height: 200px;
       }
       .meta-line, .tags {
-        justify-content: center;
+        justify-content: flex-start;
       }
       .episode-header {
         flex-direction: column;
