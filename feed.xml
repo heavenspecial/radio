@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd">
   <channel>
-    <title>Title</title>
-    <link>https://domain.com</link>
+    <title>Bimbo Kimchi: Chase the Myth</title>
+    <link>https://agrimamor.com</link>
     <language>en</language>
-    <itunes:author>Author</itunes:author>
-    <description>Description</description>
-    <itunes:summary>Summary</itunes:summary>
-    <itunes:image href="https://domain.com/artwork.jpg"/>
+    <itunes:author>Agrim Amor</itunes:author>
+    <description><![CDATA[𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW. 
+Living, breathing, spoken entertainment. 
+
+HEAR NON-STOP MUSIC, SPEECH & COMEDY! The promoters are confident that the public will take kindly to a form of amusement that can be enjoyed in anyone's home and at nil cost. 
+
+FACE THE BATTLES OF LIFE WITH RENEWED VIGOR. 
+The sexful nature of the show has reportedly cured countless young women of their habitual fits of weeping.]]></description>
+    <itunes:summary>Some kind of a show.</itunes:summary>
+    <itunes:image href="https://heavenspecial.github.io/artwork/cover.jpg"/>
     <item>
-      <title>Episode 1</title>
-      <description>Episode notes.</description>
-      <enclosure url="https://cloudfront.net/audio.m4a" length="123456789" type="audio/mp4"/>
-      <guid>ep-1</guid>
-      <pubDate>Wed, 12 Aug 2026 00:00:00 GMT</pubDate>
+      <title>Leak a Take ❮Pilot❯</title>
+      <description><![CDATA[➢ Original taping: Summer 2023.
+
+(Warning is hereby given that the listeners are warned not to be swept off their feet by the multifarious appeal of this show, but to regard it soberly and to observe a critical attitude.)]]></description>
+      <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-1-17/38911075-49fc-f1dc-f9ca-ed9129b4dcf0.mp3" type="audio/mpeg"/>
+      <guid>pilot</guid>
+      <pubDate>Tue, 17 Feb 2026 05:00:00 EST</pubDate>
     </item>
   </channel>
 </rss>
