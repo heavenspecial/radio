@@ -4,26 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bimbo Kimchi: Chase the Myth</title>
-  
-  <!-- Plyr Player CSS -->
-  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-
   <style>
     :root {
       --bg: #1e3149;
       --panel: #16161f;
-      --accent: #e2a049;
+      --accent: #e2a049; /* Yellow accent for play button */
+      --scrub-blue: #007aff; /* Blue accent for seek bar */
       --text: #e6e6ed;
       --muted: #9393a5;
       --border: #2a2a3a;
       --explicit-color: #ff2a5f;
-
-      /* Custom Plyr Colors */
-      --plyr-color-main: var(--accent);
-      --plyr-audio-controls-background: var(--panel);
-      --plyr-audio-control-color: var(--text);
-      --plyr-audio-control-color-hover: #fff;
-      --plyr-range-track-height: 6px;
     }
 
     * {
@@ -151,7 +141,7 @@
     article.episode {
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 12px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       scroll-margin-top: 2rem;
@@ -188,52 +178,134 @@
     .episode-description {
       font-size: 0.9rem;
       color: var(--muted);
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
     }
 
-    /* Force Seek Bar Display & Dark Contrast Fixes */
-    .plyr--audio .plyr__controls {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.75rem;
+    /* --- CUSTOM PODCAST PLAYER STYLING --- */
+    .custom-player {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      gap: 1rem;
+      padding-top: 0.5rem;
     }
 
-    .plyr__progress {
-      display: flex !important;
-      flex-grow: 1;
-      margin: 0 0.5rem;
+    .player-controls-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2.5rem;
     }
 
-    .plyr__progress input[type="range"] {
+    .btn-skip {
+      background: none;
+      border: none;
+      color: var(--accent);
       cursor: pointer;
-      display: block !important;
-      width: 100% !important;
-      height: 6px;
-      accent-color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.1s ease;
     }
 
-    .plyr__progress__buffer {
-      color: rgba(255, 255, 255, 0.15) !important;
+    .btn-skip:active {
+      transform: scale(0.9);
+    }
+
+    .btn-play-pause {
+      background-color: var(--accent);
+      border: none;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(226, 160, 73, 0.3);
+      transition: transform 0.1s ease, background-color 0.2s ease;
+    }
+
+    .btn-play-pause:hover {
+      background-color: #f3b059;
+    }
+
+    .btn-play-pause:active {
+      transform: scale(0.95);
+    }
+
+    .btn-play-pause svg {
+      fill: #16161f;
+      width: 28px;
+      height: 28px;
+    }
+
+    /* Seek Slider Bar */
+    .timeline-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .seek-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: linear-gradient(to right, var(--scrub-blue) 0%, var(--scrub-blue) 0%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Slider Handle (Thumb) */
+    .seek-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--scrub-blue);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    .seek-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #fff;
+      border: 3px solid var(--scrub-blue);
+      cursor: pointer;
+      box-shadow: 0 0 6px rgba(0,0,0,0.5);
+    }
+
+    /* Timestamps underneath */
+    .time-display {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text);
+      font-weight: 500;
     }
 
     @media (max-width: 600px) {
-      body {
-        padding: 1rem 0.5rem;
-      }
-
+      body { padding: 1rem 0.5rem; }
       header {
         padding: 1.25rem;
         gap: 1rem;
         grid-template-columns: minmax(80px, 110px) 1fr;
       }
-
-      h1 {
-        font-size: 1.35rem;
-      }
-
+      h1 { font-size: 1.35rem; }
       .episode-header {
         flex-direction: column;
         gap: 0.25rem;
+      }
+      .player-controls-row {
+        gap: 1.75rem;
       }
     }
   </style>
@@ -253,12 +325,24 @@
   </section>
 </main>
 
-<!-- Plyr JavaScript CDN -->
-<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-
 <script>
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
+
+  // Helper to convert seconds into HH:MM:SS or MM:SS format
+  function formatTime(seconds) {
+    if (isNaN(seconds)) return '0:00';
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+
+    const formattedSecs = secs < 10 ? `0${secs}` : secs;
+    if (hrs > 0) {
+      const formattedMins = mins < 10 ? `0${mins}` : mins;
+      return `${hrs}:${formattedMins}:${formattedSecs}`;
+    }
+    return `${mins}:${formattedSecs}`;
+  }
 
   async function loadPodcastFeed() {
     try {
@@ -280,6 +364,7 @@
         return el ? el.textContent.trim() : '';
       };
 
+      // Extract Channel Header Data
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
@@ -308,14 +393,15 @@
         <div class="show-description">${podcastDesc}</div>
       `;
 
+      // Extract Episodes
       const items = xml.querySelectorAll('item');
       const container = document.getElementById('episodes-container');
       container.innerHTML = '';
 
-      items.forEach(item => {
+      items.forEach((item, index) => {
         const title = getTagText(item, 'title');
         const desc = getTagText(item, 'description');
-        const guid = getTagText(item, 'guid') || '';
+        const guid = getTagText(item, 'guid') || `ep-${index}`;
         const pubDateRaw = getTagText(item, 'pubDate');
 
         const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
@@ -326,11 +412,10 @@
 
         const enclosure = item.querySelector('enclosure');
         const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
-        const audioType = enclosure ? enclosure.getAttribute('type') : 'audio/mpeg';
 
         const article = document.createElement('article');
         article.className = 'episode';
-        if (guid) article.id = guid;
+        article.id = guid;
 
         article.innerHTML = `
           <div class="episode-header">
@@ -338,59 +423,140 @@
             <time class="episode-date">${pubDate}</time>
           </div>
           <div class="episode-description">${desc}</div>
+          
           ${audioUrl ? `
-            <audio class="podcast-player" controls preload="metadata">
-              <source src="${audioUrl}" type="${audioType}">
-              Your browser does not support the audio element.
-            </audio>
+            <div class="custom-player" id="player-${index}">
+              <audio src="${audioUrl}" preload="metadata"></audio>
+              
+              <!-- Play Controls Row -->
+              <div class="player-controls-row">
+                <!-- Rewind 15s -->
+                <button class="btn-skip btn-rewind" title="Rewind 15 seconds">
+                  <svg width="42" height="42" viewBox="0 0 48 48" fill="none">
+                    <path d="M14 22 C14 13 22 8 31 10 C40 12 43 22 40 31 C37 40 26 44 17 39 C14 37 11 34 10 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M10 16 L14 22 L21 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="25" y="30" font-size="12" font-weight="bold" fill="currentColor" text-anchor="middle">15</text>
+                  </svg>
+                </button>
+
+                <!-- Big Yellow Play/Pause Button -->
+                <button class="btn-play-pause" title="Play">
+                  <svg class="icon-play" viewBox="0 0 24 24">
+                    <polygon points="6,4 20,12 6,20"></polygon>
+                  </svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;">
+                    <rect x="6" y="4" width="4" height="16"></rect>
+                    <rect x="14" y="4" width="4" height="16"></rect>
+                  </svg>
+                </button>
+
+                <!-- Fast Forward 30s -->
+                <button class="btn-skip btn-ff" title="Fast forward 30 seconds">
+                  <svg width="42" height="42" viewBox="0 0 48 48" fill="none">
+                    <path d="M34 22 C34 13 26 8 17 10 C8 12 5 22 8 31 C11 40 22 44 31 39 C34 37 37 34 38 30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M38 16 L34 22 L27 19" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <text x="23" y="30" font-size="12" font-weight="bold" fill="currentColor" text-anchor="middle">30</text>
+                  </svg>
+                </button>
+              </div>
+
+              <!-- Seek Slider Container -->
+              <div class="timeline-container">
+                <input type="range" class="seek-slider" min="0" max="100" value="0">
+                <div class="time-display">
+                  <span class="time-current">0:00</span>
+                  <span class="time-duration">0:00</span>
+                </div>
+              </div>
+            </div>
           ` : ''}
         `;
 
         container.appendChild(article);
-      });
 
-      // Initialize Plyr players
-      const players = Plyr.setup('.podcast-player', {
-        controls: [
-          'rewind',       // 15s back
-          'play',         // Play/Pause
-          'fast-forward', // 30s forward
-          'progress',     // Dynamic Seek Bar
-          'current-time', 
-          'duration',     
-          'mute',         
-          'volume',       
-          'settings'      
-        ],
-        speed: { selected: 1, options: [0.75, 1, 1.25, 1.5, 1.75, 2] }
-      });
-
-      // Override skip durations (15s back / 30s forward)
-      players.forEach(player => {
-        player.on('ready', () => {
-          const containerNode = player.elements.container;
-
-          const rewindBtn = containerNode.querySelector('[data-plyr="rewind"]');
-          if (rewindBtn) {
-            rewindBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              player.currentTime = Math.max(0, player.currentTime - 15);
-            }, true);
-          }
-
-          const ffBtn = containerNode.querySelector('[data-plyr="fast-forward"]');
-          if (ffBtn) {
-            ffBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              player.currentTime = Math.min(player.duration || Infinity, player.currentTime + 30);
-            }, true);
-          }
-        });
+        // Bind interactive events if audio exists
+        if (audioUrl) {
+          setupPlayerControls(document.getElementById(`player-${index}`));
+        }
       });
 
     } catch (err) {
       console.error('Error fetching/parsing XML feed:', err);
     }
+  }
+
+  // Interactive JavaScript logic for custom player
+  function setupPlayerControls(playerEl) {
+    const audio = playerEl.querySelector('audio');
+    const playPauseBtn = playerEl.querySelector('.btn-play-pause');
+    const iconPlay = playerEl.querySelector('.icon-play');
+    const iconPause = playerEl.querySelector('.icon-pause');
+    const rewindBtn = playerEl.querySelector('.btn-rewind');
+    const ffBtn = playerEl.querySelector('.btn-ff');
+    const slider = playerEl.querySelector('.seek-slider');
+    const timeCurrent = playerEl.querySelector('.time-current');
+    const timeDuration = playerEl.querySelector('.time-duration');
+
+    // Update duration when metadata loads
+    audio.addEventListener('loadedmetadata', () => {
+      timeDuration.textContent = formatTime(audio.duration);
+    });
+
+    // Play/Pause toggle
+    playPauseBtn.addEventListener('click', () => {
+      // Pause all other audio players when playing a new episode
+      document.querySelectorAll('audio').forEach(otherAudio => {
+        if (otherAudio !== audio) {
+          otherAudio.pause();
+        }
+      });
+
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    audio.addEventListener('play', () => {
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+    });
+
+    audio.addEventListener('pause', () => {
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+    });
+
+    // Time update listener for slider and timer
+    audio.addEventListener('timeupdate', () => {
+      if (!isNaN(audio.duration) && audio.duration > 0) {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        slider.value = percentage;
+        
+        // Dynamic track color fill matching screen reference
+        slider.style.background = `linear-gradient(to right, var(--scrub-blue) 0%, var(--scrub-blue) ${percentage}%, rgba(255, 255, 255, 0.2) ${percentage}%, rgba(255, 255, 255, 0.2) 100%)`;
+        
+        timeCurrent.textContent = formatTime(audio.currentTime);
+      }
+    });
+
+    // Scrubbing via slider
+    slider.addEventListener('input', () => {
+      if (!isNaN(audio.duration)) {
+        const seekTo = (slider.value / 100) * audio.duration;
+        audio.currentTime = seekTo;
+      }
+    });
+
+    // Skip Buttons
+    rewindBtn.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime - 15);
+    });
+
+    ffBtn.addEventListener('click', () => {
+      audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
+    });
   }
 
   loadPodcastFeed();
