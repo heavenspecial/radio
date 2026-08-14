@@ -23,6 +23,7 @@
       --plyr-audio-controls-background: var(--panel);
       --plyr-audio-control-color: var(--text);
       --plyr-audio-control-color-hover: #fff;
+      --plyr-range-track-height: 6px;
     }
 
     * {
@@ -38,8 +39,8 @@
       line-height: 1.6;
       padding: 2rem 1rem;
       display: flex;
-      justify-content: center; /* Centered horizontally on desktop */
-      text-align: left;        /* Keeps inner text left-aligned */
+      justify-content: center;
+      text-align: left;
     }
 
     main {
@@ -190,11 +191,29 @@
       margin-bottom: 1.25rem;
     }
 
-    /* Customizing Plyr Player Container */
+    /* Force Seek Bar Display & Dark Contrast Fixes */
     .plyr--audio .plyr__controls {
       border: 1px solid var(--border);
       border-radius: 8px;
       padding: 0.75rem;
+    }
+
+    .plyr__progress {
+      display: flex !important;
+      flex-grow: 1;
+      margin: 0 0.5rem;
+    }
+
+    .plyr__progress input[type="range"] {
+      cursor: pointer;
+      display: block !important;
+      width: 100% !important;
+      height: 6px;
+      accent-color: var(--accent);
+    }
+
+    .plyr__progress__buffer {
+      color: rgba(255, 255, 255, 0.15) !important;
     }
 
     @media (max-width: 600px) {
@@ -251,7 +270,6 @@
 
       const channel = xml.querySelector('channel');
 
-      // Helper functions to safely extract data
       const getNS = (parent, ns, tag) => {
         const el = parent.getElementsByTagNameNS(ns, tag)[0];
         return el ? el.textContent.trim() : '';
@@ -262,24 +280,19 @@
         return el ? el.textContent.trim() : '';
       };
 
-      // Extract Channel metadata
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
       const isExplicit = getNS(channel, ITUNES_NS, 'explicit').toLowerCase() === 'yes';
 
-      // Parse Categories
       const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category'))
                               .map(cat => cat.getAttribute('text'));
 
-      // Artwork image fallback
       const imageNode = channel.getElementsByTagNameNS(ITUNES_NS, 'image')[0];
       const imageUrl = imageNode ? imageNode.getAttribute('href') : 'https://heavenspecial.github.io/radio/artwork/album.jpg';
 
-      // Set Document Title
       document.title = podcastTitle;
 
-      // Render Header
       document.getElementById('podcast-header').innerHTML = `
         <img src="${imageUrl}" alt="${podcastTitle} Cover Art">
         <div class="show-details">
@@ -295,7 +308,6 @@
         <div class="show-description">${podcastDesc}</div>
       `;
 
-      // Render Episodes
       const items = xml.querySelectorAll('item');
       const container = document.getElementById('episodes-container');
       container.innerHTML = '';
@@ -306,14 +318,12 @@
         const guid = getTagText(item, 'guid') || '';
         const pubDateRaw = getTagText(item, 'pubDate');
 
-        // Format Date
         const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'short',
           day: 'numeric'
         }) : '';
 
-        // Extract Audio File details
         const enclosure = item.querySelector('enclosure');
         const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
         const audioType = enclosure ? enclosure.getAttribute('type') : 'audio/mpeg';
@@ -339,28 +349,27 @@
         container.appendChild(article);
       });
 
-      // --- INITIALIZE PLYR AUDIO PLAYERS ---
+      // Initialize Plyr players
       const players = Plyr.setup('.podcast-player', {
         controls: [
-          'rewind',       // Skip back
+          'rewind',       // 15s back
           'play',         // Play/Pause
-          'fast-forward', // Skip forward
-          'progress',     // Clickable/Draggable Seek Bar
-          'current-time', // Time elapsed
-          'duration',     // Total duration
-          'mute',         // Mute toggle
-          'volume',       // Volume slider
-          'settings'      // Playback speed options
+          'fast-forward', // 30s forward
+          'progress',     // Dynamic Seek Bar
+          'current-time', 
+          'duration',     
+          'mute',         
+          'volume',       
+          'settings'      
         ],
         speed: { selected: 1, options: [0.75, 1, 1.25, 1.5, 1.75, 2] }
       });
 
-      // Override default skip intervals: 15s Rewind / 30s Fast Forward
+      // Override skip durations (15s back / 30s forward)
       players.forEach(player => {
         player.on('ready', () => {
           const containerNode = player.elements.container;
 
-          // Rewind 15 seconds
           const rewindBtn = containerNode.querySelector('[data-plyr="rewind"]');
           if (rewindBtn) {
             rewindBtn.addEventListener('click', (e) => {
@@ -369,7 +378,6 @@
             }, true);
           }
 
-          // Fast-forward 30 seconds
           const ffBtn = containerNode.querySelector('[data-plyr="fast-forward"]');
           if (ffBtn) {
             ffBtn.addEventListener('click', (e) => {
