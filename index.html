@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bimbo Kimchi: Chase the Myth</title>
   
-  <!-- Plyr CSS CDN -->
+  <!-- Plyr Player CSS -->
   <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
   <style>
@@ -17,9 +17,12 @@
       --muted: #9393a5;
       --border: #2a2a3a;
       --explicit-color: #ff2a5f;
-      
-      /* Plyr Color Theme Override */
+
+      /* Custom Plyr Colors */
       --plyr-color-main: var(--accent);
+      --plyr-audio-controls-background: var(--panel);
+      --plyr-audio-control-color: var(--text);
+      --plyr-audio-control-color-hover: #fff;
     }
 
     * {
@@ -187,30 +190,11 @@
       margin-bottom: 1.25rem;
     }
 
-    /* Custom Plyr Theme Styling */
+    /* Customizing Plyr Player Container */
     .plyr--audio .plyr__controls {
-      background: rgba(0, 0, 0, 0.25);
-      color: var(--text);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.5rem 0.75rem;
-    }
-
-    .plyr--audio .plyr__control {
-      color: var(--text);
-    }
-
-    .plyr--audio .plyr__control:hover,
-    .plyr--audio .plyr__control[aria-expanded="true"] {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .plyr__menu__container {
-      background: var(--panel) !important;
-      color: var(--text) !important;
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      padding: 0.75rem;
     }
 
     @media (max-width: 600px) {
@@ -250,7 +234,7 @@
   </section>
 </main>
 
-<!-- Plyr JS CDN -->
+<!-- Plyr JavaScript CDN -->
 <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
 <script>
@@ -347,6 +331,7 @@
           ${audioUrl ? `
             <audio class="podcast-player" controls preload="metadata">
               <source src="${audioUrl}" type="${audioType}">
+              Your browser does not support the audio element.
             </audio>
           ` : ''}
         `;
@@ -354,23 +339,45 @@
         container.appendChild(article);
       });
 
-      // Initialize Plyr on all generated audio players
-      Plyr.setup('.podcast-player', {
+      // --- INITIALIZE PLYR AUDIO PLAYERS ---
+      const players = Plyr.setup('.podcast-player', {
         controls: [
-          'restart',
-          'rewind',       // 30s skip back
-          'play',
-          'fast-forward', // 30s skip forward
-          'progress',
-          'current-time',
-          'duration',
-          'mute',
-          'volume',
-          'settings',     // Playback speed
-          'download'      // File download
+          'rewind',       // Skip back
+          'play',         // Play/Pause
+          'fast-forward', // Skip forward
+          'progress',     // Clickable/Draggable Seek Bar
+          'current-time', // Time elapsed
+          'duration',     // Total duration
+          'mute',         // Mute toggle
+          'volume',       // Volume slider
+          'settings'      // Playback speed options
         ],
-        seekTime: 30,     // Sets skip forward/back interval to 30 seconds
         speed: { selected: 1, options: [0.75, 1, 1.25, 1.5, 1.75, 2] }
+      });
+
+      // Override default skip intervals: 15s Rewind / 30s Fast Forward
+      players.forEach(player => {
+        player.on('ready', () => {
+          const containerNode = player.elements.container;
+
+          // Rewind 15 seconds
+          const rewindBtn = containerNode.querySelector('[data-plyr="rewind"]');
+          if (rewindBtn) {
+            rewindBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              player.currentTime = Math.max(0, player.currentTime - 15);
+            }, true);
+          }
+
+          // Fast-forward 30 seconds
+          const ffBtn = containerNode.querySelector('[data-plyr="fast-forward"]');
+          if (ffBtn) {
+            ffBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              player.currentTime = Math.min(player.duration || Infinity, player.currentTime + 30);
+            }, true);
+          }
+        });
       });
 
     } catch (err) {
