@@ -67,7 +67,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      min-width: 0; /* Prevents text overflow breaking grid layout */
+      min-width: 0;
     }
 
     .meta-line {
@@ -127,7 +127,6 @@
       grid-area: description;
       font-size: 0.95rem;
       color: var(--text);
-      white-space: pre-line;
     }
 
     .episodes-title {
@@ -149,7 +148,7 @@
 
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(255, 42, 95, 0.2);
+      box-shadow: 0 0 15px rgba(226, 160, 73, 0.2);
     }
 
     .episode-header {
@@ -188,7 +187,6 @@
       border-radius: 4px;
     }
 
-    /* Mobile Adjustments */
     @media (max-width: 600px) {
       body {
         padding: 1rem 0.5rem;
@@ -214,48 +212,127 @@
 <body>
 
 <main>
-  <header>
-    <img src="https://heavenspecial.github.io/radio/artwork/album.jpg" alt="Bimbo Kimchi: Chase the Myth Cover Art">
-    
-    <div class="show-details">
-      <div class="meta-line">
-        <span class="author">Agrim Amor</span>
-        <span class="explicit-badge">Explicit</span>
-      </div>
-      <h1>Bimbo Kimchi: Chase the Myth</h1>
-      <div class="tags">
-        <span class="tag">Music</span>
-        <span class="tag">Comedy</span>
-      </div>
-    </div>
-
-    <p class="show-description">𝕃𝕀𝕍𝔼! VARIETY RADIO SHOW.
-Living, breathing, spoken entertainment.
-
-HEAR NON-STOP MUSIC, SPEECH & COMEDY! The promoters are confident that the public will take kindly to a form of amusement that can be enjoyed in anyone's home and at nil cost.
-
-FACE THE BATTLES OF LIFE WITH RENEWED VIGOR.
-The sexful nature of the show has reportedly cured countless young women of their habitual fits of weeping.</p>
+  <header id="podcast-header">
+    <p>Loading show details...</p>
   </header>
 
   <section>
     <h2 class="episodes-title">Episodes</h2>
-    
-    <article class="episode" id="pilot">
-      <div class="episode-header">
-        <h3><a href="#pilot" class="episode-title">Leak a Take ❮Pilot❯</a></h3>
-        <time class="episode-date">Feb 17, 2026</time>
-      </div>
-      <p class="episode-description">➢ Original taping: Summer 2023.
-
-(Warning is hereby given that the listeners are warned not to be swept off their feet by the multifarious appeal of this show, but to regard it soberly and to observe a critical attitude.)</p>
-      <audio controls preload="metadata">
-        <source src="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-1-17/38911075-49fc-f1dc-f9ca-ed9129b4dcf0.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    </article>
+    <div id="episodes-container">
+      <p>Loading episodes...</p>
+    </div>
   </section>
 </main>
+
+<script>
+  const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
+  const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
+
+  async function loadPodcastFeed() {
+    try {
+      const response = await fetch(RSS_URL);
+      const textData = await response.text();
+      
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(textData, 'application/xml');
+
+      const channel = xml.querySelector('channel');
+
+      // Helper functions to safely extract data
+      const getNS = (parent, ns, tag) => {
+        const el = parent.getElementsByTagNameNS(ns, tag)[0];
+        return el ? el.textContent.trim() : '';
+      };
+
+      const getTagText = (parent, tag) => {
+        const el = parent.querySelector(tag);
+        return el ? el.textContent.trim() : '';
+      };
+
+      // Extract Channel metadata
+      const podcastTitle = getTagText(channel, 'title');
+      const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
+      const podcastDesc = getTagText(channel, 'description');
+      const isExplicit = getNS(channel, ITUNES_NS, 'explicit').toLowerCase() === 'yes';
+
+      // Parse Categories
+      const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category'))
+                              .map(cat => cat.getAttribute('text'));
+
+      // Artwork image fallback
+      const imageNode = channel.getElementsByTagNameNS(ITUNES_NS, 'image')[0];
+      const imageUrl = imageNode ? imageNode.getAttribute('href') : 'https://heavenspecial.github.io/radio/artwork/album.jpg';
+
+      // Set Document Title
+      document.title = podcastTitle;
+
+      // Render Header
+      document.getElementById('podcast-header').innerHTML = `
+        <img src="${imageUrl}" alt="${podcastTitle} Cover Art">
+        <div class="show-details">
+          <div class="meta-line">
+            ${podcastAuthor ? `<span class="author">${podcastAuthor}</span>` : ''}
+            ${isExplicit ? `<span class="explicit-badge">Explicit</span>` : ''}
+          </div>
+          <h1>${podcastTitle}</h1>
+          <div class="tags">
+            ${categories.map(cat => `<span class="tag">${cat}</span>`).join('')}
+          </div>
+        </div>
+        <div class="show-description">${podcastDesc}</div>
+      `;
+
+      // Render Episodes
+      const items = xml.querySelectorAll('item');
+      const container = document.getElementById('episodes-container');
+      container.innerHTML = '';
+
+      items.forEach(item => {
+        const title = getTagText(item, 'title');
+        const desc = getTagText(item, 'description');
+        const guid = getTagText(item, 'guid') || '';
+        const pubDateRaw = getTagText(item, 'pubDate');
+
+        // Format Date (e.g., Feb 25, 2026)
+        const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }) : '';
+
+        // Extract Audio File details
+        const enclosure = item.querySelector('enclosure');
+        const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
+        const audioType = enclosure ? enclosure.getAttribute('type') : 'audio/mpeg';
+
+        const article = document.createElement('article');
+        article.className = 'episode';
+        if (guid) article.id = guid;
+
+        article.innerHTML = `
+          <div class="episode-header">
+            <h3><a href="#${guid}" class="episode-title">${title}</a></h3>
+            <time class="episode-date">${pubDate}</time>
+          </div>
+          <div class="episode-description">${desc}</div>
+          ${audioUrl ? `
+            <audio controls preload="metadata">
+              <source src="${audioUrl}" type="${audioType}">
+              Your browser does not support the audio element.
+            </audio>
+          ` : ''}
+        `;
+
+        container.appendChild(article);
+      });
+
+    } catch (err) {
+      console.error('Error fetching/parsing XML feed:', err);
+    }
+  }
+
+  loadPodcastFeed();
+</script>
 
 </body>
 </html>
