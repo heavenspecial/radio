@@ -8,7 +8,7 @@
     :root {
       --bg: #1e3149;
       --panel: #16161f;
-      --accent: #007aff; /* Blue accent matching the seek bar */
+      --accent: #e2a049; /* Yellow accent for play button */
       --scrub-blue: #007aff; /* Blue accent for seek bar */
       --text: #e6e6ed;
       --muted: #9393a5;
@@ -114,9 +114,9 @@
     }
 
     .tag {
-      background: rgba(0, 122, 255, 0.1);
+      background: rgba(226, 160, 73, 0.1);
       color: var(--accent);
-      border: 1px solid rgba(0, 122, 255, 0.1);
+      border: 1px solid rgba(226, 160, 73, 0.1);
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
       font-size: 0.75rem;
@@ -149,7 +149,7 @@
 
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(0, 122, 255, 0.2);
+      box-shadow: 0 0 15px rgba(226, 160, 73, 0.2);
     }
 
     .episode-header {
@@ -214,7 +214,7 @@
     }
 
     .btn-play-pause {
-      background-color: var(--accent);
+      background-color: var(--scrub-blue);
       border: none;
       width: 68px;
       height: 68px;
@@ -236,7 +236,7 @@
     }
 
     .btn-play-pause svg {
-      fill: #ffffff;
+      fill: #16161f;
       width: 28px;
       height: 28px;
     }
@@ -439,7 +439,7 @@
                   </svg>
                 </button>
 
-                <!-- Big Blue Play/Pause Button -->
+                <!-- Big Yellow Play/Pause Button -->
                 <button class="btn-play-pause" title="Play">
                   <svg class="icon-play" viewBox="0 0 24 24">
                     <polygon points="6,4 20,12 6,20"></polygon>
