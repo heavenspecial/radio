@@ -29,7 +29,8 @@
       line-height: 1.6;
       padding: 2rem 1rem;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
       text-align: left;
     }
 
@@ -292,6 +293,19 @@
       font-weight: 500;
     }
 
+    /* Footer styles */
+    footer {
+      max-width: 768px;
+      width: 100%;
+      margin-top: 2rem;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
     @media (max-width: 600px) {
       body { padding: 1rem 0.5rem; }
       header {
@@ -324,6 +338,8 @@
     </div>
   </section>
 </main>
+
+<footer id="podcast-footer"></footer>
 
 <script>
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
@@ -368,6 +384,7 @@
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
+      const podcastSummary = getNS(channel, ITUNES_NS, 'summary') || podcastDesc;
       const isExplicit = getNS(channel, ITUNES_NS, 'explicit').toLowerCase() === 'yes';
 
       const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category'))
@@ -392,6 +409,9 @@
         </div>
         <div class="show-description">${podcastDesc}</div>
       `;
+
+      // Set iTunes Summary Footer Text
+      document.getElementById('podcast-footer').textContent = podcastSummary;
 
       // Extract Episodes
       const items = xml.querySelectorAll('item');
