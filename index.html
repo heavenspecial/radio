@@ -421,7 +421,9 @@
       items.forEach((item, index) => {
         const title = getTagText(item, 'title');
         const desc = getTagText(item, 'description');
-        const guid = getTagText(item, 'guid') || `ep-${index}`;
+        const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
+        // Extract plain ID if guid is a full URL
+        const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
         const pubDateRaw = getTagText(item, 'pubDate');
 
         const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
@@ -499,6 +501,15 @@
           setupPlayerControls(document.getElementById(`player-${index}`));
         }
       });
+
+      // Scroll and focus target element if URL contains a hash
+      if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
 
     } catch (err) {
       console.error('Error fetching/parsing XML feed:', err);
