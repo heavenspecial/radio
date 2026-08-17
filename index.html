@@ -7,16 +7,19 @@
   <style>
     :root {
       --bg: #000000;
-      --card-bg: rgba(28, 28, 30, 0.65);
-      --card-border: rgba(255, 255, 255, 0.1);
-      --accent: #fc3c44; /* Red Accent */
+      /* Refined Glass Specular Effects */
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --card-border-highlight: rgba(255, 255, 255, 0.25);
+      --accent: #fc3c44; /* Apple Music Red */
       --accent-hover: #ff4f57;
       --text: #f2f2f7;
       --secondary-text: #8e8e93;
       --tertiary-text: #636366;
-      --segmented-bg: #1c1c1e;
-      --segmented-btn: #2c2c2e;
-      --explicit-red: #b26868;
+      --segmented-bg: rgba(118, 118, 128, 0.24);
+      --segmented-btn: rgba(255, 255, 255, 0.18);
+      --explicit-red: rgba(255, 69, 58, 0.3);
+      --glass-blur: blur(30px) saturate(210%);
     }
 
     * {
@@ -27,6 +30,11 @@
 
     body {
       background-color: var(--bg);
+      /* Vibrant Ambient Glows in Background */
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(252, 60, 68, 0.18) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(120, 40, 200, 0.15) 0px, transparent 50%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -35,6 +43,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
 
     main {
@@ -45,10 +54,11 @@
     /* --- HERO HEADER --- */
     header {
       background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-border);
-      border-radius: 18px;
+      border-top: 1px solid var(--card-border-highlight);
+      border-radius: 22px;
       padding: 2rem;
       display: grid;
       grid-template-columns: 160px 1fr;
@@ -58,16 +68,19 @@
       gap: 1.5rem;
       align-items: center;
       margin-bottom: 2rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
     header img {
       grid-area: image;
       width: 160px;
       height: 160px;
-      border-radius: 14px;
+      border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .show-details {
@@ -95,11 +108,13 @@
     .explicit-badge {
       font-size: 0.6rem;
       font-weight: 700;
-      color: #fff;
+      color: #ff6b6b;
       background: var(--explicit-red);
-      padding: 0.05rem 0.35rem;
-      border-radius: 3px;
+      border: 1px solid rgba(255, 69, 58, 0.3);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
       text-transform: uppercase;
+      backdrop-filter: blur(4px);
     }
 
     h1 {
@@ -119,8 +134,10 @@
 
     .tag {
       background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
       color: var(--secondary-text);
-      padding: 0.25rem 0.6rem;
+      padding: 0.25rem 0.65rem;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 500;
@@ -130,7 +147,7 @@
       grid-area: description;
       font-size: 0.95rem;
       color: #d1d1d6;
-      border-top: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       padding-top: 1.25rem;
     }
 
@@ -145,27 +162,32 @@
     .segmented-control {
       display: inline-flex;
       background: var(--segmented-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       padding: 3px;
-      border-radius: 9px;
-      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .segmented-btn {
       background: transparent;
       border: none;
       color: var(--secondary-text);
-      padding: 0.4rem 1rem;
+      padding: 0.4rem 1.1rem;
       font-size: 0.85rem;
       font-weight: 600;
-      border-radius: 7px;
+      border-radius: 9px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .segmented-btn.active {
       background: var(--segmented-btn);
       color: #ffffff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(8px);
     }
 
     /* --- SEASON SECTION HEADERS --- */
@@ -187,23 +209,29 @@
     /* --- EPISODE CARD --- */
     article.episode {
       background: var(--card-bg);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-top: 1px solid var(--card-border-highlight);
+      border-radius: 18px;
       padding: 1.25rem;
       margin-bottom: 1rem;
       scroll-margin-top: 2rem;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
     article.episode:hover {
-      border-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
     }
 
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 0 0 20px rgba(252, 60, 68, 0.25);
+      box-shadow: 
+        0 0 30px rgba(252, 60, 68, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .episode-meta-tag {
@@ -227,6 +255,7 @@
       font-weight: 600;
       color: #ffffff;
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .episode-title:hover {
@@ -250,10 +279,13 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
       padding: 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
     }
 
     .player-controls-row {
@@ -268,12 +300,12 @@
       border: none;
       color: var(--text);
       cursor: pointer;
-      opacity: 0.85;
-      transition: opacity 0.15 ease, transform 0.1s ease;
+      opacity: 0.75;
+      transition: opacity 0.2s ease, transform 0.15s ease;
     }
 
-    .btn-skip:hover { opacity: 1; }
-    .btn-skip:active { transform: scale(0.9); }
+    .btn-skip:hover { opacity: 1; transform: scale(1.05); }
+    .btn-skip:active { transform: scale(0.92); }
 
     .btn-play-pause {
       background-color: var(--accent);
@@ -285,12 +317,18 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(252, 60, 68, 0.4);
-      transition: transform 0.1s ease, background-color 0.2s ease;
+      box-shadow: 
+        0 6px 20px rgba(252, 60, 68, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .btn-play-pause:hover { background-color: var(--accent-hover); }
-    .btn-play-pause:active { transform: scale(0.95); }
+    .btn-play-pause:hover { 
+      background-color: var(--accent-hover); 
+      transform: scale(1.04);
+      box-shadow: 0 8px 24px rgba(252, 60, 68, 0.55);
+    }
+    .btn-play-pause:active { transform: scale(0.94); }
 
     .btn-play-pause svg {
       fill: #ffffff;
@@ -309,31 +347,38 @@
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 4px;
-      border-radius: 2px;
+      height: 5px;
+      border-radius: 3px;
       background: rgba(255, 255, 255, 0.15);
       outline: none;
       cursor: pointer;
+      transition: height 0.1s ease;
+    }
+
+    .seek-slider:hover {
+      height: 7px;
     }
 
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,0,0,0.1);
     }
 
     .seek-slider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      border: 1px solid rgba(0,0,0,0.1);
     }
 
     .time-display {
@@ -661,13 +706,18 @@
       }
     });
 
-    rewindBtn.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
-    ffBtn.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30); });
+    rewindBtn.addEventListener('click', () => {
+      audio.currentTime = Math.max(0, audio.currentTime - 15);
+    });
+
+    ffBtn.addEventListener('click', () => {
+      if (!isNaN(audio.duration)) {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + 30);
+      }
+    });
   }
 
   loadPodcastFeed();
 </script>
-
 </body>
 </html>
-
