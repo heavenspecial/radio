@@ -6,19 +6,17 @@
   <title>Bimbo Kimchi: Chase the Myth</title>
   <style>
     :root {
-      /* Theme Palette */
-      --electric-blue: #0066ff;
-      --christmas-red: #d90429;
-      --lavender-miniskirt: #e2afff;
-      
-      /* Glassmorphism System */
-      --glass-bg: rgba(22, 22, 30, 0.55);
-      --glass-card: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(255, 255, 255, 0.12);
-      --glass-specular: rgba(255, 255, 255, 0.2);
-      
-      --text-main: #f5f5f7;
-      --text-sub: rgba(245, 245, 247, 0.65);
+      --bg: #000000;
+      --card-bg: rgba(28, 28, 30, 0.65);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #fc3c44; /* Red Accent */
+      --accent-hover: #ff4f57;
+      --text: #f2f2f7;
+      --secondary-text: #8e8e93;
+      --tertiary-text: #636366;
+      --segmented-bg: #1c1c1e;
+      --segmented-btn: #2c2c2e;
+      --explicit-red: #ff3b30;
     }
 
     * {
@@ -28,16 +26,15 @@
     }
 
     body {
-      background: radial-gradient(circle at 10% 10%, #1a002c 0%, #080811 50%, #000c1d 100%) fixed;
-      color: var(--text-main);
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
       line-height: 1.5;
-      padding: 2rem 1rem;
+      padding: 2rem 1rem 4rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      -webkit-font-smoothing: antialiased;
     }
 
     main {
@@ -45,77 +42,72 @@
       width: 100%;
     }
 
-    /* --- GLASS HEADER --- */
+    /* --- HERO HEADER --- */
     header {
-      background: var(--glass-bg);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border: 1px solid var(--glass-border);
-      border-top-color: var(--glass-specular);
-      border-radius: 24px;
-      padding: 2.2rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 2rem;
       display: grid;
       grid-template-columns: 160px 1fr;
       grid-template-areas:
         "image details"
         "description description";
-      gap: 1.75rem;
+      gap: 1.5rem;
       align-items: center;
       margin-bottom: 2rem;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
 
     header img {
       grid-area: image;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 16px;
+      width: 160px;
+      height: 160px;
+      border-radius: 14px;
       object-fit: cover;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     .show-details {
       grid-area: details;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
     .meta-line {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 2.1rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      background: linear-gradient(135deg, #ffffff 30%, var(--lavender-miniskirt));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
     .author {
-      font-size: 0.8rem;
-      color: var(--lavender-miniskirt);
+      color: var(--accent);
       text-transform: uppercase;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.05em;
     }
 
     .explicit-badge {
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-size: 0.6rem;
+      font-weight: 700;
       color: #fff;
-      background: var(--christmas-red);
-      padding: 0.15rem 0.45rem;
-      border-radius: 5px;
-      box-shadow: 0 0 10px rgba(217, 4, 41, 0.4);
+      background: var(--explicit-red);
+      padding: 0.05rem 0.35rem;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      line-height: 1.15;
     }
 
     .tags {
@@ -126,154 +118,141 @@
     }
 
     .tag {
-      background: rgba(0, 102, 255, 0.15);
-      color: var(--electric-blue);
-      border: 1px solid rgba(0, 102, 255, 0.3);
-      padding: 0.25rem 0.7rem;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--secondary-text);
+      padding: 0.25rem 0.6rem;
       border-radius: 20px;
       font-size: 0.75rem;
-      font-weight: 600;
-      backdrop-filter: blur(10px);
+      font-weight: 500;
     }
 
     .show-description {
       grid-area: description;
       font-size: 0.95rem;
-      color: var(--text-sub);
+      color: #d1d1d6;
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.25rem;
     }
 
-    /* --- SEASON NAVIGATION TABS --- */
-    .season-nav {
-      display: flex;
-      gap: 0.6rem;
-      margin-bottom: 1.5rem;
-      overflow-x: auto;
-      padding: 4px;
-    }
-
-    .season-tab {
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      color: var(--text-sub);
-      padding: 0.6rem 1.4rem;
-      border-radius: 30px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(15px);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      white-space: nowrap;
-    }
-
-    .season-tab:hover {
-      color: #fff;
-      border-color: var(--lavender-miniskirt);
-    }
-
-    .season-tab.active {
-      background: var(--electric-blue);
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.4);
-      box-shadow: 0 0 20px rgba(0, 102, 255, 0.5);
-    }
-
-    /* --- EPISODE CARD --- */
-    article.episode {
-      background: var(--glass-card);
-      backdrop-filter: blur(20px) saturate(160%);
-      -webkit-backdrop-filter: blur(20px) saturate(160%);
-      border: 1px solid var(--glass-border);
-      border-top-color: var(--glass-specular);
-      border-radius: 20px;
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-      scroll-margin-top: 2rem;
-      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    article.episode:hover {
-      border-color: rgba(226, 175, 255, 0.4);
-      transform: translateY(-2px);
-    }
-
-    article.episode:target {
-      border-color: var(--lavender-miniskirt);
-      box-shadow: 0 0 25px rgba(226, 175, 255, 0.25);
-    }
-
-    .episode-header {
+    /* --- APPLE SEGMENTED FILTER CONTROL --- */
+    .filter-wrapper {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.5rem;
-      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
     }
 
-    .episode-title-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
+    .segmented-control {
+      display: inline-flex;
+      background: var(--segmented-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--card-border);
     }
 
-    .episode-badge-row {
+    .segmented-btn {
+      background: transparent;
+      border: none;
+      color: var(--secondary-text);
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .segmented-btn.active {
+      background: var(--segmented-btn);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* --- SEASON SECTION HEADERS --- */
+    .season-group {
+      margin-bottom: 2.5rem;
+    }
+
+    .season-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      color: #ffffff;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .ep-type-badge {
-      font-size: 0.65rem;
-      text-transform: uppercase;
+    /* --- EPISODE CARD --- */
+    article.episode {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      scroll-margin-top: 2rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    article.episode:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    article.episode:target {
+      border-color: var(--accent);
+      box-shadow: 0 0 20px rgba(252, 60, 68, 0.25);
+    }
+
+    .episode-meta-tag {
+      font-size: 0.75rem;
       font-weight: 700;
-      padding: 0.1rem 0.5rem;
-      border-radius: 4px;
-      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
     }
 
-    .ep-type-badge.trailer {
-      background: rgba(217, 4, 41, 0.2);
-      color: var(--christmas-red);
-      border: 1px solid rgba(217, 4, 41, 0.3);
-    }
-
-    .ep-type-badge.full {
-      background: rgba(226, 175, 255, 0.15);
-      color: var(--lavender-miniskirt);
-      border: 1px solid rgba(226, 175, 255, 0.3);
+    .episode-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
     }
 
     .episode-title {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      color: #fff;
+      color: #ffffff;
       text-decoration: none;
-      transition: color 0.2s ease;
     }
 
     .episode-title:hover {
-      color: var(--lavender-miniskirt);
+      color: var(--accent);
     }
 
     .episode-date {
       font-size: 0.8rem;
-      color: var(--text-sub);
+      color: var(--secondary-text);
       white-space: nowrap;
     }
 
     .episode-description {
       font-size: 0.9rem;
-      color: var(--text-sub);
+      color: var(--secondary-text);
       margin-bottom: 1.25rem;
     }
 
-    /* --- GLASS PLAYER CONTROL --- */
+    /* --- CUSTOM AUDIO PLAYER --- */
     .custom-player {
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 1rem 1.25rem;
-      border-radius: 16px;
+      gap: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 10px;
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -287,44 +266,31 @@
     .btn-skip {
       background: none;
       border: none;
-      color: var(--lavender-miniskirt);
+      color: var(--text);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s ease, color 0.2s ease;
+      opacity: 0.85;
+      transition: opacity 0.15 ease, transform 0.1s ease;
     }
 
-    .btn-skip:hover {
-      color: #fff;
-    }
-
-    .btn-skip:active {
-      transform: scale(0.9);
-    }
+    .btn-skip:hover { opacity: 1; }
+    .btn-skip:active { transform: scale(0.9); }
 
     .btn-play-pause {
-      background: linear-gradient(135deg, var(--electric-blue), #0044b3);
+      background-color: var(--accent);
       border: none;
-      width: 54px;
-      height: 54px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0, 102, 255, 0.4);
-      transition: transform 0.15 ease, box-shadow 0.2s ease;
+      box-shadow: 0 4px 14px rgba(252, 60, 68, 0.4);
+      transition: transform 0.1s ease, background-color 0.2s ease;
     }
 
-    .btn-play-pause:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 22px rgba(0, 102, 255, 0.6);
-    }
-
-    .btn-play-pause:active {
-      transform: scale(0.95);
-    }
+    .btn-play-pause:hover { background-color: var(--accent-hover); }
+    .btn-play-pause:active { transform: scale(0.95); }
 
     .btn-play-pause svg {
       fill: #ffffff;
@@ -332,7 +298,6 @@
       height: 22px;
     }
 
-    /* Timeline & Scrubbing */
     .timeline-container {
       width: 100%;
       display: flex;
@@ -344,9 +309,9 @@
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 5px;
-      border-radius: 3px;
-      background: linear-gradient(to right, var(--lavender-miniskirt) 0%, var(--lavender-miniskirt) 0%, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.15) 100%);
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.15);
       outline: none;
       cursor: pointer;
     }
@@ -354,55 +319,54 @@
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(226, 175, 255, 0.8);
+      background: #ffffff;
       cursor: pointer;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
     }
 
     .seek-slider::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 10px rgba(226, 175, 255, 0.8);
+      background: #ffffff;
       cursor: pointer;
-      border: none;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
     }
 
     .time-display {
       display: flex;
       justify-content: space-between;
       font-size: 0.75rem;
-      color: var(--text-sub);
+      color: var(--secondary-text);
       font-weight: 500;
     }
 
     footer {
       max-width: 800px;
       width: 100%;
-      margin-top: 2rem;
-      padding: 1.5rem 0;
+      margin-top: 3rem;
       text-align: center;
       font-size: 0.75rem;
-      letter-spacing: 0.05em;
-      color: var(--text-sub);
-      border-top: 1px solid var(--glass-border);
+      color: var(--tertiary-text);
+      line-height: 1.5;
     }
 
     @media (max-width: 650px) {
-      body { padding: 1rem 0.5rem; }
       header {
-        padding: 1.25rem;
-        grid-template-columns: 100px 1fr;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "image"
+          "details"
+          "description";
+        text-align: center;
       }
-      h1 { font-size: 1.4rem; }
-      .episode-header {
-        flex-direction: column;
-        gap: 0.25rem;
-      }
+      header img { margin: 0 auto; }
+      .meta-line, .tags { justify-content: center; }
+      .episode-header { flex-direction: column; gap: 0.25rem; }
+      .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
     }
   </style>
 </head>
@@ -413,15 +377,18 @@
     <p>Loading show details...</p>
   </header>
 
-  <nav class="season-nav" id="season-tabs">
-    <!-- Season filter buttons injected here -->
-  </nav>
-
-  <section>
-    <div id="episodes-container">
-      <p>Loading episodes...</p>
+  <div class="filter-wrapper">
+    <div class="segmented-control" id="season-picker">
+      <button class="segmented-btn active" data-filter="all">All</button>
+      <button class="segmented-btn" data-filter="2">Season 2</button>
+      <button class="segmented-btn" data-filter="1">Season 1</button>
+      <button class="segmented-btn" data-filter="trailer">Bonus / Pilot</button>
     </div>
-  </section>
+  </div>
+
+  <div id="episodes-container">
+    <p>Loading episodes...</p>
+  </div>
 </main>
 
 <footer id="podcast-footer"></footer>
@@ -430,16 +397,12 @@
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
-  let allEpisodes = [];
-  let currentSeasonFilter = 'ALL';
-
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
     const formattedSecs = secs < 10 ? `0${secs}` : secs;
-
     if (hrs > 0) {
       const formattedMins = mins < 10 ? `0${mins}` : mins;
       return `${hrs}:${formattedMins}:${formattedSecs}`;
@@ -466,16 +429,13 @@
         return el ? el.textContent.trim() : '';
       };
 
-      // Header Info Extraction
+      // Set Header Data
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
       const podcastSummary = getNS(channel, ITUNES_NS, 'summary') || podcastDesc;
       const isExplicit = getNS(channel, ITUNES_NS, 'explicit').toLowerCase() === 'yes';
-
-      const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category'))
-                              .map(cat => cat.getAttribute('text'));
-
+      const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category')).map(cat => cat.getAttribute('text'));
       const imageNode = channel.getElementsByTagNameNS(ITUNES_NS, 'image')[0];
       const imageUrl = imageNode ? imageNode.getAttribute('href') : 'https://heavenspecial.github.io/radio/artwork/album.jpg';
 
@@ -498,159 +458,159 @@
 
       document.getElementById('podcast-footer').textContent = podcastSummary;
 
-      // Extract Episodes & Season Metadata
-      const items = xml.querySelectorAll('item');
-      const seasonsSet = new Set();
-
-      allEpisodes = Array.from(items).map((item, index) => {
-        const season = getNS(item, ITUNES_NS, 'season');
-        const episode = getNS(item, ITUNES_NS, 'episode');
-        const episodeType = getNS(item, ITUNES_NS, 'episodeType') || 'full';
-        
-        if (season) seasonsSet.add(season);
-
+      // Extract and Parse Episodes
+      const items = Array.from(xml.querySelectorAll('item'));
+      const episodesData = items.map((item, index) => {
+        const title = getTagText(item, 'title');
+        const desc = getTagText(item, 'description');
         const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
         const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
+        const pubDateRaw = getTagText(item, 'pubDate');
+        const season = getNS(item, ITUNES_NS, 'season');
+        const episode = getNS(item, ITUNES_NS, 'episode');
+        const type = getNS(item, ITUNES_NS, 'episodeType') || 'full';
 
-        return {
-          title: getTagText(item, 'title'),
-          desc: getTagText(item, 'description'),
-          guid: guid,
-          pubDateRaw: getTagText(item, 'pubDate'),
-          audioUrl: item.querySelector('enclosure')?.getAttribute('url') || '',
-          season: season || null,
-          episode: episode || null,
-          episodeType: episodeType,
-          index: index
-        };
+        const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
+          year: 'numeric', month: 'short', day: 'numeric'
+        }) : '';
+
+        const enclosure = item.querySelector('enclosure');
+        const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
+
+        return { index, title, desc, guid, pubDate, season, episode, type, audioUrl };
       });
 
-      renderSeasonTabs(Array.from(seasonsSet).sort((a, b) => b - a));
-      renderEpisodes();
+      renderEpisodes(episodesData);
+      setupSegmentedControl(episodesData);
 
-      // Deep Linking Support
+      // Handle Deep Linking / Anchors
       if (window.location.hash) {
         const targetId = window.location.hash.substring(1);
-        const targetEp = allEpisodes.find(e => e.guid === targetId);
-        if (targetEp && targetEp.season) {
-          switchSeason(targetEp.season);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
         }
-        setTimeout(() => {
-          const targetEl = document.getElementById(targetId);
-          if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
       }
 
     } catch (err) {
-      console.error('Error fetching/parsing XML feed:', err);
+      console.error('Error loading XML feed:', err);
     }
   }
 
-  function renderSeasonTabs(seasons) {
-    const tabsContainer = document.getElementById('season-tabs');
-    tabsContainer.innerHTML = `
-      <button class="season-tab active" onclick="switchSeason('ALL')">All Episodes</button>
-      ${seasons.map(s => `<button class="season-tab" onclick="switchSeason('${s}')">Season ${s}</button>`).join('')}
-      <button class="season-tab" onclick="switchSeason('BONUS')">Extras / Pilots</button>
-    `;
-  }
-
-  function switchSeason(seasonKey) {
-    currentSeasonFilter = seasonKey;
-    document.querySelectorAll('.season-tab').forEach(btn => {
-      btn.classList.toggle('active', 
-        (seasonKey === 'ALL' && btn.textContent === 'All Episodes') ||
-        (seasonKey === 'BONUS' && btn.textContent.includes('Extras')) ||
-        btn.textContent === `Season ${seasonKey}`
-      );
-    });
-    renderEpisodes();
-  }
-
-  function renderEpisodes() {
+  function renderEpisodes(episodes, filterSeason = 'all') {
     const container = document.getElementById('episodes-container');
     container.innerHTML = '';
 
-    const filtered = allEpisodes.filter(ep => {
-      if (currentSeasonFilter === 'ALL') return true;
-      if (currentSeasonFilter === 'BONUS') return !ep.season;
-      return ep.season === currentSeasonFilter;
+    // Filter Logic
+    let filtered = episodes;
+    if (filterSeason === 'trailer') {
+      filtered = episodes.filter(ep => ep.type === 'trailer' || !ep.season);
+    } else if (filterSeason !== 'all') {
+      filtered = episodes.filter(ep => ep.season === filterSeason);
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p style="color: var(--secondary-text); padding: 2rem 0;">No episodes found for this selection.</p>`;
+      return;
+    }
+
+    // Grouping by Season for display
+    const groups = {};
+    filtered.forEach(ep => {
+      let groupKey = 'Bonus & Specials';
+      if (ep.season) groupKey = `Season ${ep.season}`;
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(ep);
     });
 
-    filtered.forEach(ep => {
-      const pubDate = ep.pubDateRaw ? new Date(ep.pubDateRaw).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }) : '';
+    Object.keys(groups).forEach(groupName => {
+      const groupSection = document.createElement('section');
+      groupSection.className = 'season-group';
 
-      const article = document.createElement('article');
-      article.className = 'episode';
-      article.id = ep.guid;
+      if (filterSeason === 'all') {
+        const titleEl = document.createElement('h2');
+        titleEl.className = 'season-title';
+        titleEl.textContent = groupName;
+        groupSection.appendChild(titleEl);
+      }
 
-      article.innerHTML = `
-        <div class="episode-header">
-          <div class="episode-title-group">
-            <div class="episode-badge-row">
-              <span class="ep-type-badge ${ep.episodeType}">${ep.episodeType}</span>
-              ${ep.season ? `<span style="font-size:0.75rem; color:var(--text-sub);">S${ep.season} E${ep.episode}</span>` : ''}
-            </div>
+      groups[groupName].forEach(ep => {
+        const article = document.createElement('article');
+        article.className = 'episode';
+        article.id = ep.guid;
+
+        const subTag = ep.season && ep.episode ? `Season ${ep.season} • Episode ${ep.episode}` : (ep.type === 'trailer' ? 'Pilot / Trailer' : 'Special');
+
+        article.innerHTML = `
+          <div class="episode-meta-tag">${subTag}</div>
+          <div class="episode-header">
             <h3><a href="#${ep.guid}" class="episode-title">${ep.title}</a></h3>
+            <time class="episode-date">${ep.pubDate}</time>
           </div>
-          <time class="episode-date">${pubDate}</time>
-        </div>
-        <div class="episode-description">${ep.desc}</div>
-        
-        ${ep.audioUrl ? `
-          <div class="custom-player" id="player-${ep.index}">
-            <audio src="${ep.audioUrl}" preload="metadata"></audio>
-            
-            <div class="player-controls-row">
-              <button class="btn-skip btn-rewind" title="Rewind 15s">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                  <path d="M3 3v5h5"/>
-                  <text x="12" y="15.5" font-size="7" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">15</text>
-                </svg>
-              </button>
-
-              <button class="btn-play-pause" title="Play">
-                <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
-                <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;">
-                  <rect x="6" y="4" width="4" height="16"></rect>
-                  <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-              </button>
-
-              <button class="btn-skip btn-ff" title="Fast Forward 30s">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
-                  <path d="M21 3v5h-5"/>
-                  <text x="12" y="15.5" font-size="7" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">30</text>
-                </svg>
-              </button>
-            </div>
-
-            <div class="timeline-container">
-              <input type="range" class="seek-slider" min="0" max="100" value="0">
-              <div class="time-display">
-                <span class="time-current">0:00</span>
-                <span class="time-duration">0:00</span>
+          <div class="episode-description">${ep.desc}</div>
+          
+          ${ep.audioUrl ? `
+            <div class="custom-player" id="player-${ep.index}">
+              <audio src="${ep.audioUrl}" preload="metadata"></audio>
+              <div class="player-controls-row">
+                <button class="btn-skip btn-rewind" title="Rewind 15s">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                    <text x="12" y="15.5" font-size="6.5" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">15</text>
+                  </svg>
+                </button>
+                <button class="btn-play-pause" title="Play">
+                  <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                </button>
+                <button class="btn-skip btn-ff" title="Fast Forward 30s">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                    <text x="12" y="15.5" font-size="6.5" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">30</text>
+                  </svg>
+                </button>
+              </div>
+              <div class="timeline-container">
+                <input type="range" class="seek-slider" min="0" max="100" value="0">
+                <div class="time-display">
+                  <span class="time-current">0:00</span>
+                  <span class="time-duration">0:00</span>
+                </div>
               </div>
             </div>
-          </div>
-        ` : ''}
-      `;
+          ` : ''}
+        `;
 
-      container.appendChild(article);
+        groupSection.appendChild(article);
+      });
 
+      container.appendChild(groupSection);
+    });
+
+    // Re-bind Player Events
+    filtered.forEach(ep => {
       if (ep.audioUrl) {
         setupPlayerControls(document.getElementById(`player-${ep.index}`));
       }
     });
   }
 
+  function setupSegmentedControl(episodesData) {
+    const buttons = document.querySelectorAll('.segmented-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        renderEpisodes(episodesData, filter);
+      });
+    });
+  }
+
   function setupPlayerControls(playerEl) {
+    if (!playerEl) return;
     const audio = playerEl.querySelector('audio');
     const playPauseBtn = playerEl.querySelector('.btn-play-pause');
     const iconPlay = playerEl.querySelector('.icon-play');
@@ -666,10 +626,9 @@
     });
 
     playPauseBtn.addEventListener('click', () => {
-      document.querySelectorAll('audio').forEach(otherAudio => {
-        if (otherAudio !== audio) otherAudio.pause();
+      document.querySelectorAll('audio').forEach(other => {
+        if (other !== audio) other.pause();
       });
-
       if (audio.paused) {
         audio.play();
       } else {
@@ -691,7 +650,7 @@
       if (!isNaN(audio.duration) && audio.duration > 0) {
         const percentage = (audio.currentTime / audio.duration) * 100;
         slider.value = percentage;
-        slider.style.background = `linear-gradient(to right, var(--lavender-miniskirt) 0%, var(--lavender-miniskirt) ${percentage}%, rgba(255, 255, 255, 0.15) ${percentage}%, rgba(255, 255, 255, 0.15) 100%)`;
+        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.15) ${percentage}%, rgba(255, 255, 255, 0.15) 100%)`;
         timeCurrent.textContent = formatTime(audio.currentTime);
       }
     });
@@ -702,8 +661,8 @@
       }
     });
 
-    rewindBtn.addEventListener('click', () => audio.currentTime = Math.max(0, audio.currentTime - 15));
-    ffBtn.addEventListener('click', () => audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30));
+    rewindBtn.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
+    ffBtn.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30); });
   }
 
   loadPodcastFeed();
@@ -711,3 +670,4 @@
 
 </body>
 </html>
+
