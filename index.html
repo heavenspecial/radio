@@ -578,7 +578,7 @@
     // Grouping by Season for display
     const groups = {};
     filtered.forEach(ep => {
-      let groupKey = 'Bonus & Specials';
+      let groupKey = 'Pilot';
       if (ep.season) groupKey = `Season ${ep.season}`;
       if (!groups[groupKey]) groups[groupKey] = [];
       groups[groupKey].push(ep);
