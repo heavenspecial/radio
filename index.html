@@ -146,11 +146,17 @@
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       scroll-margin-top: 2rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
+    /* Target styling for deep-linked episodes */
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(226, 160, 73, 0.2);
+      box-shadow: 0 0 15px rgba(252, 229, 191, 0.2);
+    }
+
+    article.episode:target .episode-title {
+      color: var(--accent);
     }
 
     .episode-header {
@@ -164,6 +170,7 @@
       font-size: 1.25rem;
       color: #fff;
       text-decoration: none;
+      transition: color 0.2s ease;
     }
 
     .episode-title:hover {
@@ -502,12 +509,17 @@
         }
       });
 
-      // Scroll and focus target element if URL contains a hash
+      // Scroll, focus, and trigger CSS :target on initial page load
       if (window.location.hash) {
         const targetId = window.location.hash.substring(1);
         const targetEl = document.getElementById(targetId);
         if (targetEl) {
           targetEl.scrollIntoView({ behavior: 'smooth' });
+          
+          // Force the browser to evaluate :target on dynamically appended content
+          const currentHash = window.location.hash;
+          history.replaceState(null, '', ' ');
+          window.location.hash = currentHash;
         }
       }
 
