@@ -9,15 +9,16 @@
       --bg: #000000;
       --card-bg: rgba(28, 28, 30, 0.45);
       --card-border: rgba(255, 255, 255, 0.12);
-      --card-highlight: rgba(255, 255, 255, 0.08);
+      --card-border-glow: rgba(255, 255, 255, 0.22);
       --accent: #fc3c44; /* Red Accent */
       --accent-hover: #ff4f57;
       --text: #f2f2f7;
       --secondary-text: #8e8e93;
       --tertiary-text: #636366;
-      --segmented-bg: rgba(28, 28, 30, 0.55);
+      --segmented-bg: rgba(28, 28, 30, 0.5);
       --segmented-btn: rgba(255, 255, 255, 0.18);
       --explicit-red: #b26868;
+      --glass-gloss: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%);
     }
 
     * {
@@ -28,6 +29,10 @@
 
     body {
       background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 20% 20%, rgba(252, 60, 68, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+      background-attachment: fixed;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -36,10 +41,6 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(252, 60, 68, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 65%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
-      background-attachment: fixed;
     }
 
     main {
@@ -50,10 +51,11 @@
     /* --- HERO HEADER --- */
     header {
       background: var(--card-bg);
+      background-image: var(--glass-gloss);
       backdrop-filter: blur(30px) saturate(190%);
       -webkit-backdrop-filter: blur(30px) saturate(190%);
       border: 1px solid var(--card-border);
-      border-top: 1px solid rgba(255, 255, 255, 0.22);
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 22px;
       padding: 2rem;
       display: grid;
@@ -64,10 +66,8 @@
       gap: 1.5rem;
       align-items: center;
       margin-bottom: 2rem;
-      box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.7),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-      position: relative;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     header img {
@@ -76,8 +76,8 @@
       height: 160px;
       border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6),
+                  0 0 0 1px rgba(255, 255, 255, 0.1);
     }
 
     .show-details {
@@ -107,11 +107,11 @@
       font-weight: 700;
       color: #fff;
       background: var(--explicit-red);
-      padding: 0.05rem 0.35rem;
+      padding: 0.1rem 0.4rem;
       border-radius: 4px;
       text-transform: uppercase;
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
     }
 
     h1 {
@@ -120,6 +120,7 @@
       letter-spacing: -0.025em;
       color: #ffffff;
       line-height: 1.15;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     .tags {
@@ -130,22 +131,22 @@
     }
 
     .tag {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--secondary-text);
       padding: 0.25rem 0.65rem;
       border-radius: 20px;
       font-size: 0.75rem;
       font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .show-description {
       grid-area: description;
       font-size: 0.95rem;
       color: #d1d1d6;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--card-border);
       padding-top: 1.25rem;
     }
 
@@ -166,7 +167,8 @@
       border-radius: 12px;
       border: 1px solid var(--card-border);
       border-top: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
     .segmented-btn {
@@ -176,19 +178,18 @@
       padding: 0.45rem 1.1rem;
       font-size: 0.85rem;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: 9px;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .segmented-btn.active {
       background: var(--segmented-btn);
+      background-image: var(--glass-gloss);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
       color: #ffffff;
-      box-shadow: 
-        0 3px 10px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
@@ -211,6 +212,7 @@
     /* --- EPISODE CARD --- */
     article.episode {
       background: var(--card-bg);
+      background-image: var(--glass-gloss);
       backdrop-filter: blur(25px) saturate(180%);
       -webkit-backdrop-filter: blur(25px) saturate(180%);
       border: 1px solid var(--card-border);
@@ -219,26 +221,23 @@
       padding: 1.35rem;
       margin-bottom: 1.25rem;
       scroll-margin-top: 2rem;
-      box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
     article.episode:hover {
-      background: rgba(38, 38, 42, 0.55);
-      border-color: rgba(255, 255, 255, 0.25);
-      box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border-color: var(--card-border-glow);
+      border-top-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 
-        0 0 30px rgba(252, 60, 68, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 25px rgba(252, 60, 68, 0.35),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
     }
 
     .episode-meta-tag {
@@ -286,14 +285,14 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      padding: 1rem 1.2rem;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      padding: 1.1rem;
       border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
     }
 
     .player-controls-row {
@@ -313,11 +312,12 @@
     }
 
     .btn-skip:hover { opacity: 1; transform: scale(1.05); }
-    .btn-skip:active { transform: scale(0.9); }
+    .btn-skip:active { transform: scale(0.92); }
 
     .btn-play-pause {
       background-color: var(--accent);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(0, 0, 0, 0.1) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       width: 52px;
       height: 52px;
       border-radius: 50%;
@@ -325,26 +325,23 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 
-        0 6px 18px rgba(252, 60, 68, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      box-shadow: 0 6px 18px rgba(252, 60, 68, 0.45),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.4);
       transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .btn-play-pause:hover { 
       background-color: var(--accent-hover); 
-      box-shadow: 
-        0 8px 22px rgba(252, 60, 68, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
-      transform: scale(1.03);
+      box-shadow: 0 8px 22px rgba(252, 60, 68, 0.6),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
-    
-    .btn-play-pause:active { transform: scale(0.95); }
+    .btn-play-pause:active { transform: scale(0.92); }
 
     .btn-play-pause svg {
       fill: #ffffff;
       width: 22px;
       height: 22px;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
     }
 
     .timeline-container {
@@ -358,41 +355,43 @@
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 4px;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.15);
+      height: 5px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.12);
       outline: none;
       cursor: pointer;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
     }
 
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.1);
       transition: transform 0.1s ease;
     }
 
     .seek-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
+      transform: scale(1.15);
     }
 
     .seek-slider::-moz-range-thumb {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
+      border: none;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(0, 0, 0, 0.1);
       transition: transform 0.1s ease;
     }
 
     .seek-slider::-moz-range-thumb:hover {
-      transform: scale(1.2);
+      transform: scale(1.15);
     }
 
     .time-display {
@@ -649,4 +648,91 @@
     });
 
     // Re-bind Player Events
-    filtered.forEach(ep => 
+    filtered.forEach(ep => {
+      if (ep.audioUrl) {
+        setupPlayerControls(document.getElementById(`player-${ep.index}`));
+      }
+    });
+  }
+
+  function setupSegmentedControl(episodesData) {
+    const buttons = document.querySelectorAll('.segmented-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        renderEpisodes(episodesData, filter);
+      });
+    });
+  }
+
+  function setupPlayerControls(playerEl) {
+    if (!playerEl) return;
+    const audio = playerEl.querySelector('audio');
+    const playPauseBtn = playerEl.querySelector('.btn-play-pause');
+    const iconPlay = playerEl.querySelector('.icon-play');
+    const iconPause = playerEl.querySelector('.icon-pause');
+    const rewindBtn = playerEl.querySelector('.btn-rewind');
+    const ffBtn = playerEl.querySelector('.btn-ff');
+    const slider = playerEl.querySelector('.seek-slider');
+    const timeCurrent = playerEl.querySelector('.time-current');
+    const timeDuration = playerEl.querySelector('.time-duration');
+
+    audio.addEventListener('loadedmetadata', () => {
+      timeDuration.textContent = formatTime(audio.duration);
+    });
+
+    playPauseBtn.addEventListener('click', () => {
+      document.querySelectorAll('audio').forEach(other => {
+        if (other !== audio) other.pause();
+      });
+      if (audio.paused) {
+        audio.play();
+      } else {
+        audio.pause();
+      }
+    });
+
+    if (rewindBtn) {
+      rewindBtn.addEventListener('click', () => {
+        audio.currentTime = Math.max(0, audio.currentTime - 15);
+      });
+    }
+
+    if (ffBtn) {
+      ffBtn.addEventListener('click', () => {
+        audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 30);
+      });
+    }
+
+    audio.addEventListener('play', () => {
+      iconPlay.style.display = 'none';
+      iconPause.style.display = 'block';
+    });
+
+    audio.addEventListener('pause', () => {
+      iconPlay.style.display = 'block';
+      iconPause.style.display = 'none';
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      if (!isNaN(audio.duration) && audio.duration > 0) {
+        const percentage = (audio.currentTime / audio.duration) * 100;
+        slider.value = percentage;
+        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.12) ${percentage}%, rgba(255, 255, 255, 0.12) 100%)`;
+        timeCurrent.textContent = formatTime(audio.currentTime);
+      }
+    });
+
+    slider.addEventListener('input', () => {
+      if (!isNaN(audio.duration)) {
+        audio.currentTime = (slider.value / 100) * audio.duration;
+      }
+    });
+  }
+
+  loadPodcastFeed();
+</script>
+</body>
+</html>
