@@ -600,7 +600,7 @@
         article.className = 'episode';
         article.id = ep.guid;
 
-        const subTag = ep.season && ep.episode ? `Season ${ep.season} • Episode ${ep.episode}` : (ep.type === 'trailer' ? 'Pilot / Trailer' : 'Special');
+        const subTag = ep.season && ep.episode ? `Season ${ep.season} • Episode ${ep.episode}` : (ep.type === 'trailer' ? 'Bonus / Trailer' : 'Special');
 
         article.innerHTML = `
           <div class="episode-meta-tag">${subTag}</div>
@@ -725,3 +725,4 @@
 </script>
 </body>
 </html>
+
