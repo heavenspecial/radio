@@ -7,19 +7,17 @@
   <style>
     :root {
       --bg: #000000;
-      /* Refined Glass Specular Effects */
-      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-bg: rgba(28, 28, 30, 0.45);
       --card-border: rgba(255, 255, 255, 0.12);
-      --card-border-highlight: rgba(255, 255, 255, 0.25);
-      --accent: #fc3c44; /* Apple Music Red */
+      --card-highlight: rgba(255, 255, 255, 0.08);
+      --accent: #fc3c44; /* Red Accent */
       --accent-hover: #ff4f57;
       --text: #f2f2f7;
       --secondary-text: #8e8e93;
       --tertiary-text: #636366;
-      --segmented-bg: rgba(118, 118, 128, 0.24);
+      --segmented-bg: rgba(28, 28, 30, 0.55);
       --segmented-btn: rgba(255, 255, 255, 0.18);
-      --explicit-red: rgba(255, 69, 58, 0.3);
-      --glass-blur: blur(30px) saturate(210%);
+      --explicit-red: #b26868;
     }
 
     * {
@@ -30,11 +28,6 @@
 
     body {
       background-color: var(--bg);
-      /* Vibrant Ambient Glows in Background */
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(252, 60, 68, 0.18) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(120, 40, 200, 0.15) 0px, transparent 50%);
-      background-attachment: fixed;
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
@@ -43,7 +36,10 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(252, 60, 68, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 65%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+      background-attachment: fixed;
     }
 
     main {
@@ -54,10 +50,10 @@
     /* --- HERO HEADER --- */
     header {
       background: var(--card-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: blur(30px) saturate(190%);
+      -webkit-backdrop-filter: blur(30px) saturate(190%);
       border: 1px solid var(--card-border);
-      border-top: 1px solid var(--card-border-highlight);
+      border-top: 1px solid rgba(255, 255, 255, 0.22);
       border-radius: 22px;
       padding: 2rem;
       display: grid;
@@ -69,8 +65,9 @@
       align-items: center;
       margin-bottom: 2rem;
       box-shadow: 
-        0 30px 60px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 30px 60px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      position: relative;
     }
 
     header img {
@@ -79,8 +76,8 @@
       height: 160px;
       border-radius: 16px;
       object-fit: cover;
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .show-details {
@@ -108,13 +105,13 @@
     .explicit-badge {
       font-size: 0.6rem;
       font-weight: 700;
-      color: #ff6b6b;
+      color: #fff;
       background: var(--explicit-red);
-      border: 1px solid rgba(255, 69, 58, 0.3);
-      padding: 0.1rem 0.4rem;
+      padding: 0.05rem 0.35rem;
       border-radius: 4px;
       text-transform: uppercase;
       backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     h1 {
@@ -133,9 +130,10 @@
     }
 
     .tag {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.07);
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       color: var(--secondary-text);
       padding: 0.25rem 0.65rem;
       border-radius: 20px;
@@ -162,32 +160,36 @@
     .segmented-control {
       display: inline-flex;
       background: var(--segmented-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      padding: 3px;
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
+      padding: 4px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--card-border);
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
     }
 
     .segmented-btn {
       background: transparent;
       border: none;
       color: var(--secondary-text);
-      padding: 0.4rem 1.1rem;
+      padding: 0.45rem 1.1rem;
       font-size: 0.85rem;
       font-weight: 600;
-      border-radius: 9px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
     .segmented-btn.active {
       background: var(--segmented-btn);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       color: #ffffff;
       box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(8px);
+        0 3px 10px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     /* --- SEASON SECTION HEADERS --- */
@@ -209,22 +211,27 @@
     /* --- EPISODE CARD --- */
     article.episode {
       background: var(--card-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: blur(25px) saturate(180%);
+      -webkit-backdrop-filter: blur(25px) saturate(180%);
       border: 1px solid var(--card-border);
-      border-top: 1px solid var(--card-border-highlight);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
       border-radius: 18px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
       scroll-margin-top: 2rem;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
     }
 
     article.episode:hover {
-      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(38, 38, 42, 0.55);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
       transform: translateY(-2px);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
     }
 
     article.episode:target {
@@ -279,13 +286,14 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
-      padding: 1rem;
-      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
     }
 
     .player-controls-row {
@@ -300,16 +308,16 @@
       border: none;
       color: var(--text);
       cursor: pointer;
-      opacity: 0.75;
-      transition: opacity 0.2s ease, transform 0.15s ease;
+      opacity: 0.85;
+      transition: opacity 0.15s ease, transform 0.15s ease;
     }
 
     .btn-skip:hover { opacity: 1; transform: scale(1.05); }
-    .btn-skip:active { transform: scale(0.92); }
+    .btn-skip:active { transform: scale(0.9); }
 
     .btn-play-pause {
       background-color: var(--accent);
-      border: none;
+      border: 1px solid rgba(255, 255, 255, 0.25);
       width: 52px;
       height: 52px;
       border-radius: 50%;
@@ -318,17 +326,20 @@
       justify-content: center;
       cursor: pointer;
       box-shadow: 
-        0 6px 20px rgba(252, 60, 68, 0.45),
+        0 6px 18px rgba(252, 60, 68, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.3);
-      transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+      transition: transform 0.15s ease, background-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .btn-play-pause:hover { 
       background-color: var(--accent-hover); 
-      transform: scale(1.04);
-      box-shadow: 0 8px 24px rgba(252, 60, 68, 0.55);
+      box-shadow: 
+        0 8px 22px rgba(252, 60, 68, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transform: scale(1.03);
     }
-    .btn-play-pause:active { transform: scale(0.94); }
+    
+    .btn-play-pause:active { transform: scale(0.95); }
 
     .btn-play-pause svg {
       fill: #ffffff;
@@ -347,38 +358,41 @@
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 5px;
-      border-radius: 3px;
+      height: 4px;
+      border-radius: 2px;
       background: rgba(255, 255, 255, 0.15);
       outline: none;
       cursor: pointer;
-      transition: height 0.1s ease;
-    }
-
-    .seek-slider:hover {
-      height: 7px;
     }
 
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      transition: transform 0.1s ease;
+    }
+
+    .seek-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
     }
 
     .seek-slider::-moz-range-thumb {
-      width: 14px;
-      height: 14px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
       background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+      transition: transform 0.1s ease;
+    }
+
+    .seek-slider::-moz-range-thumb:hover {
+      transform: scale(1.2);
     }
 
     .time-display {
@@ -635,89 +649,4 @@
     });
 
     // Re-bind Player Events
-    filtered.forEach(ep => {
-      if (ep.audioUrl) {
-        setupPlayerControls(document.getElementById(`player-${ep.index}`));
-      }
-    });
-  }
-
-  function setupSegmentedControl(episodesData) {
-    const buttons = document.querySelectorAll('.segmented-btn');
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.getAttribute('data-filter');
-        renderEpisodes(episodesData, filter);
-      });
-    });
-  }
-
-  function setupPlayerControls(playerEl) {
-    if (!playerEl) return;
-    const audio = playerEl.querySelector('audio');
-    const playPauseBtn = playerEl.querySelector('.btn-play-pause');
-    const iconPlay = playerEl.querySelector('.icon-play');
-    const iconPause = playerEl.querySelector('.icon-pause');
-    const rewindBtn = playerEl.querySelector('.btn-rewind');
-    const ffBtn = playerEl.querySelector('.btn-ff');
-    const slider = playerEl.querySelector('.seek-slider');
-    const timeCurrent = playerEl.querySelector('.time-current');
-    const timeDuration = playerEl.querySelector('.time-duration');
-
-    audio.addEventListener('loadedmetadata', () => {
-      timeDuration.textContent = formatTime(audio.duration);
-    });
-
-    playPauseBtn.addEventListener('click', () => {
-      document.querySelectorAll('audio').forEach(other => {
-        if (other !== audio) other.pause();
-      });
-      if (audio.paused) {
-        audio.play();
-      } else {
-        audio.pause();
-      }
-    });
-
-    audio.addEventListener('play', () => {
-      iconPlay.style.display = 'none';
-      iconPause.style.display = 'block';
-    });
-
-    audio.addEventListener('pause', () => {
-      iconPlay.style.display = 'block';
-      iconPause.style.display = 'none';
-    });
-
-    audio.addEventListener('timeupdate', () => {
-      if (!isNaN(audio.duration) && audio.duration > 0) {
-        const percentage = (audio.currentTime / audio.duration) * 100;
-        slider.value = percentage;
-        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.15) ${percentage}%, rgba(255, 255, 255, 0.15) 100%)`;
-        timeCurrent.textContent = formatTime(audio.currentTime);
-      }
-    });
-
-    slider.addEventListener('input', () => {
-      if (!isNaN(audio.duration)) {
-        audio.currentTime = (slider.value / 100) * audio.duration;
-      }
-    });
-
-    rewindBtn.addEventListener('click', () => {
-      audio.currentTime = Math.max(0, audio.currentTime - 15);
-    });
-
-    ffBtn.addEventListener('click', () => {
-      if (!isNaN(audio.duration)) {
-        audio.currentTime = Math.min(audio.duration, audio.currentTime + 30);
-      }
-    });
-  }
-
-  loadPodcastFeed();
-</script>
-</body>
-</html>
+    filtered.forEach(ep => 
