@@ -6,14 +6,17 @@
   <title>Bimbo Kimchi: Chase the Myth</title>
   <style>
     :root {
-      --bg: #474747;
-      --panel: #1f1f1f;
-      --accent: #fce5bf; /* cream accent */
-      --scrub-blue: #ae96cb; /* colour for seek bar */
-      --text: #e6e6ed;
-      --muted: #9393a5;
-      --border: #2a2a3a;
-      --explicit-color: #ff2a5f;
+      --bg: #000000;
+      --card-bg: rgba(28, 28, 30, 0.65);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --accent: #fc3c44; /* Apple Podcasts Red Accent */
+      --accent-hover: #ff4f57;
+      --text: #f2f2f7;
+      --secondary-text: #8e8e93;
+      --tertiary-text: #636366;
+      --segmented-bg: #1c1c1e;
+      --segmented-btn: #2c2c2e;
+      --explicit-red: #ff3b30;
     }
 
     * {
@@ -25,152 +28,205 @@
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.6;
-      padding: 2rem 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      padding: 2rem 1rem 4rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      text-align: left;
     }
 
     main {
-      max-width: 768px;
+      max-width: 800px;
       width: 100%;
     }
 
+    /* --- HERO HEADER --- */
     header {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
       padding: 2rem;
       display: grid;
-      grid-template-columns: minmax(100px, 160px) 1fr;
+      grid-template-columns: 160px 1fr;
       grid-template-areas:
         "image details"
         "description description";
       gap: 1.5rem;
       align-items: center;
       margin-bottom: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     }
 
     header img {
       grid-area: image;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      border-radius: 8px;
+      width: 160px;
+      height: 160px;
+      border-radius: 14px;
       object-fit: cover;
-      border: 1px solid var(--border);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     .show-details {
       grid-area: details;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      min-width: 0;
+      gap: 0.4rem;
     }
 
     .meta-line {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      letter-spacing: -0.02em;
-      color: #fff;
-      overflow-wrap: break-word;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
     }
 
     .author {
-      font-size: 0.9rem;
-      color: var(--muted);
+      color: var(--accent);
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
 
     .explicit-badge {
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 700;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: var(--explicit-color);
-      border: 1px solid rgba(255, 42, 95, 0.2);
-      background: rgba(255, 42, 95, 0.2);
-      padding: 0.1rem 0.4rem;
+      color: #fff;
+      background: var(--explicit-red);
+      padding: 0.05rem 0.35rem;
       border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: #ffffff;
+      line-height: 1.15;
     }
 
     .tags {
       display: flex;
-      justify-content: flex-start;
       gap: 0.5rem;
       margin-top: 0.25rem;
       flex-wrap: wrap;
     }
 
     .tag {
-      background: rgba(252, 229, 191, 0.2);
-      color: var(--accent);
-      border: 1px solid rgba(252, 229, 191, 0.2);
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--secondary-text);
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
       font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
+      font-weight: 500;
     }
 
     .show-description {
       grid-area: description;
       font-size: 0.95rem;
-      color: var(--text);
+      color: #d1d1d6;
+      border-top: 1px solid var(--card-border);
+      padding-top: 1.25rem;
     }
 
-    .episodes-title {
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-    }
-
-    article.episode {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.5rem;
+    /* --- APPLE SEGMENTED FILTER CONTROL --- */
+    .filter-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1.5rem;
-      scroll-margin-top: 2rem;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    /* Target styling for deep-linked episodes */
+    .segmented-control {
+      display: inline-flex;
+      background: var(--segmented-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--card-border);
+    }
+
+    .segmented-btn {
+      background: transparent;
+      border: none;
+      color: var(--secondary-text);
+      padding: 0.4rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .segmented-btn.active {
+      background: var(--segmented-btn);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* --- SEASON SECTION HEADERS --- */
+    .season-group {
+      margin-bottom: 2.5rem;
+    }
+
+    .season-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* --- EPISODE CARD --- */
+    article.episode {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      scroll-margin-top: 2rem;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    article.episode:hover {
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
     article.episode:target {
       border-color: var(--accent);
-      box-shadow: 0 0 15px rgba(252, 229, 191, 0.2);
+      box-shadow: 0 0 20px rgba(252, 60, 68, 0.25);
     }
 
-    article.episode:target .episode-title {
+    .episode-meta-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
       color: var(--accent);
+      letter-spacing: 0.04em;
+      margin-bottom: 0.25rem;
     }
 
     .episode-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.75rem;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
     }
 
     .episode-title {
-      font-size: 1.25rem;
-      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
       text-decoration: none;
-      transition: color 0.2s ease;
     }
 
     .episode-title:hover {
@@ -179,155 +235,138 @@
 
     .episode-date {
       font-size: 0.8rem;
-      color: var(--muted);
+      color: var(--secondary-text);
       white-space: nowrap;
     }
 
     .episode-description {
       font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 1.5rem;
+      color: var(--secondary-text);
+      margin-bottom: 1.25rem;
     }
 
-    /* --- CUSTOM PODCAST PLAYER STYLING --- */
+    /* --- CUSTOM AUDIO PLAYER --- */
     .custom-player {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      width: 100%;
-      gap: 1rem;
-      padding-top: 0.5rem;
+      gap: 0.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .player-controls-row {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 2.5rem;
+      gap: 2rem;
     }
 
     .btn-skip {
       background: none;
       border: none;
-      color: var(--accent);
+      color: var(--text);
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.1s ease;
+      opacity: 0.85;
+      transition: opacity 0.15 ease, transform 0.1s ease;
     }
 
-    .btn-skip:active {
-      transform: scale(0.9);
-    }
+    .btn-skip:hover { opacity: 1; }
+    .btn-skip:active { transform: scale(0.9); }
 
     .btn-play-pause {
-      background-color: #7851a9;
+      background-color: var(--accent);
       border: none;
-      width: 68px;
-      height: 68px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3);
+      box-shadow: 0 4px 14px rgba(252, 60, 68, 0.4);
       transition: transform 0.1s ease, background-color 0.2s ease;
     }
 
-    .btn-play-pause:hover {
-      background-color: #7851a9;
-    }
-
-    .btn-play-pause:active {
-      transform: scale(0.95);
-    }
+    .btn-play-pause:hover { background-color: var(--accent-hover); }
+    .btn-play-pause:active { transform: scale(0.95); }
 
     .btn-play-pause svg {
       fill: #ffffff;
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
     }
 
-    /* Seek Slider Bar */
     .timeline-container {
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.3rem;
     }
 
     .seek-slider {
       -webkit-appearance: none;
       appearance: none;
       width: 100%;
-      height: 6px;
-      border-radius: 3px;
-      background: linear-gradient(to right, var(--scrub-blue) 0%, var(--scrub-blue) 0%, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.2) 100%);
+      height: 4px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.15);
       outline: none;
       cursor: pointer;
     }
 
-    /* Slider Handle (Thumb) */
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
-      background: #fff;
-      border: 3px solid var(--scrub-blue);
+      background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(0,0,0,0.5);
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
     }
 
     .seek-slider::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 12px;
+      height: 12px;
       border-radius: 50%;
-      background: #fff;
-      border: 3px solid var(--scrub-blue);
+      background: #ffffff;
       cursor: pointer;
-      box-shadow: 0 0 6px rgba(0,0,0,0.5);
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
     }
 
-    /* Timestamps underneath */
     .time-display {
       display: flex;
       justify-content: space-between;
-      font-size: 0.85rem;
-      color: var(--text);
+      font-size: 0.75rem;
+      color: var(--secondary-text);
       font-weight: 500;
     }
 
-    /* Footer styles */
     footer {
-      max-width: 768px;
+      max-width: 800px;
       width: 100%;
-      margin-top: 2rem;
-      padding: 1rem 0;
+      margin-top: 3rem;
       text-align: center;
       font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--muted);
+      color: var(--tertiary-text);
+      line-height: 1.5;
     }
 
-    @media (max-width: 600px) {
-      body { padding: 1rem 0.5rem; }
+    @media (max-width: 650px) {
       header {
-        padding: 1.25rem;
-        gap: 1rem;
-        grid-template-columns: minmax(80px, 110px) 1fr;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "image"
+          "details"
+          "description";
+        text-align: center;
       }
-      h1 { font-size: 1.35rem; }
-      .episode-header {
-        flex-direction: column;
-        gap: 0.25rem;
-      }
-      .player-controls-row {
-        gap: 1.75rem;
-      }
+      header img { margin: 0 auto; }
+      .meta-line, .tags { justify-content: center; }
+      .episode-header { flex-direction: column; gap: 0.25rem; }
+      .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
     }
   </style>
 </head>
@@ -338,12 +377,18 @@
     <p>Loading show details...</p>
   </header>
 
-  <section>
-    <h2 class="episodes-title">Episodes</h2>
-    <div id="episodes-container">
-      <p>Loading episodes...</p>
+  <div class="filter-wrapper">
+    <div class="segmented-control" id="season-picker">
+      <button class="segmented-btn active" data-filter="all">All</button>
+      <button class="segmented-btn" data-filter="2">Season 2</button>
+      <button class="segmented-btn" data-filter="1">Season 1</button>
+      <button class="segmented-btn" data-filter="trailer">Bonus / Pilot</button>
     </div>
-  </section>
+  </div>
+
+  <div id="episodes-container">
+    <p>Loading episodes...</p>
+  </div>
 </main>
 
 <footer id="podcast-footer"></footer>
@@ -352,13 +397,11 @@
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
-  // Helper to convert seconds into HH:MM:SS or MM:SS format
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = Math.floor(seconds % 60);
-
     const formattedSecs = secs < 10 ? `0${secs}` : secs;
     if (hrs > 0) {
       const formattedMins = mins < 10 ? `0${mins}` : mins;
@@ -371,7 +414,6 @@
     try {
       const response = await fetch(RSS_URL);
       const textData = await response.text();
-      
       const parser = new DOMParser();
       const xml = parser.parseFromString(textData, 'application/xml');
 
@@ -387,16 +429,13 @@
         return el ? el.textContent.trim() : '';
       };
 
-      // Extract Channel Header Data
+      // Set Header Data
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
       const podcastSummary = getNS(channel, ITUNES_NS, 'summary') || podcastDesc;
       const isExplicit = getNS(channel, ITUNES_NS, 'explicit').toLowerCase() === 'yes';
-
-      const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category'))
-                              .map(cat => cat.getAttribute('text'));
-
+      const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category')).map(cat => cat.getAttribute('text'));
       const imageNode = channel.getElementsByTagNameNS(ITUNES_NS, 'image')[0];
       const imageUrl = imageNode ? imageNode.getAttribute('href') : 'https://heavenspecial.github.io/radio/artwork/album.jpg';
 
@@ -417,79 +456,122 @@
         <div class="show-description">${podcastDesc}</div>
       `;
 
-      // Set iTunes Summary Footer Text
       document.getElementById('podcast-footer').textContent = podcastSummary;
 
-      // Extract Episodes
-      const items = xml.querySelectorAll('item');
-      const container = document.getElementById('episodes-container');
-      container.innerHTML = '';
-
-      items.forEach((item, index) => {
+      // Extract and Parse Episodes
+      const items = Array.from(xml.querySelectorAll('item'));
+      const episodesData = items.map((item, index) => {
         const title = getTagText(item, 'title');
         const desc = getTagText(item, 'description');
         const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
-        // Extract plain ID if guid is a full URL
         const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
         const pubDateRaw = getTagText(item, 'pubDate');
+        const season = getNS(item, ITUNES_NS, 'season');
+        const episode = getNS(item, ITUNES_NS, 'episode');
+        const type = getNS(item, ITUNES_NS, 'episodeType') || 'full';
 
         const pubDate = pubDateRaw ? new Date(pubDateRaw).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
+          year: 'numeric', month: 'short', day: 'numeric'
         }) : '';
 
         const enclosure = item.querySelector('enclosure');
         const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
 
+        return { index, title, desc, guid, pubDate, season, episode, type, audioUrl };
+      });
+
+      renderEpisodes(episodesData);
+      setupSegmentedControl(episodesData);
+
+      // Handle Deep Linking / Anchors
+      if (window.location.hash) {
+        const targetId = window.location.hash.substring(1);
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+    } catch (err) {
+      console.error('Error loading XML feed:', err);
+    }
+  }
+
+  function renderEpisodes(episodes, filterSeason = 'all') {
+    const container = document.getElementById('episodes-container');
+    container.innerHTML = '';
+
+    // Filter Logic
+    let filtered = episodes;
+    if (filterSeason === 'trailer') {
+      filtered = episodes.filter(ep => ep.type === 'trailer' || !ep.season);
+    } else if (filterSeason !== 'all') {
+      filtered = episodes.filter(ep => ep.season === filterSeason);
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `<p style="color: var(--secondary-text); padding: 2rem 0;">No episodes found for this selection.</p>`;
+      return;
+    }
+
+    // Grouping by Season for display
+    const groups = {};
+    filtered.forEach(ep => {
+      let groupKey = 'Bonus & Specials';
+      if (ep.season) groupKey = `Season ${ep.season}`;
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(ep);
+    });
+
+    Object.keys(groups).forEach(groupName => {
+      const groupSection = document.createElement('section');
+      groupSection.className = 'season-group';
+
+      if (filterSeason === 'all') {
+        const titleEl = document.createElement('h2');
+        titleEl.className = 'season-title';
+        titleEl.textContent = groupName;
+        groupSection.appendChild(titleEl);
+      }
+
+      groups[groupName].forEach(ep => {
         const article = document.createElement('article');
         article.className = 'episode';
-        article.id = guid;
+        article.id = ep.guid;
+
+        const subTag = ep.season && ep.episode ? `Season ${ep.season} • Episode ${ep.episode}` : (ep.type === 'trailer' ? 'Pilot / Trailer' : 'Special');
 
         article.innerHTML = `
+          <div class="episode-meta-tag">${subTag}</div>
           <div class="episode-header">
-            <h3><a href="#${guid}" class="episode-title">${title}</a></h3>
-            <time class="episode-date">${pubDate}</time>
+            <h3><a href="#${ep.guid}" class="episode-title">${ep.title}</a></h3>
+            <time class="episode-date">${ep.pubDate}</time>
           </div>
-          <div class="episode-description">${desc}</div>
+          <div class="episode-description">${ep.desc}</div>
           
-          ${audioUrl ? `
-            <div class="custom-player" id="player-${index}">
-              <audio src="${audioUrl}" preload="metadata"></audio>
-              
-              <!-- Play Controls Row -->
+          ${ep.audioUrl ? `
+            <div class="custom-player" id="player-${ep.index}">
+              <audio src="${ep.audioUrl}" preload="metadata"></audio>
               <div class="player-controls-row">
-                <!-- Rewind 15s -->
-                <button class="btn-skip btn-rewind" title="Rewind 15 seconds">
-                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button class="btn-skip btn-rewind" title="Rewind 15s">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                     <path d="M3 3v5h5"/>
-                    <text x="12" y="15.5" font-size="7" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle" font-family="-apple-system, sans-serif">15</text>
+                    <text x="12" y="15.5" font-size="6.5" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">15</text>
                   </svg>
                 </button>
-
-                <!-- Big Yellow Play/Pause Button -->
                 <button class="btn-play-pause" title="Play">
-                  <svg class="icon-play" viewBox="0 0 24 24">
-                    <polygon points="6,4 20,12 6,20"></polygon>
-                  </svg>
-                  <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;">
-                    <rect x="6" y="4" width="4" height="16"></rect>
-                    <rect x="14" y="4" width="4" height="16"></rect>
-                  </svg>
+                  <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
                 </button>
-
-                <!-- Fast Forward 30s -->
-                <button class="btn-skip btn-ff" title="Fast forward 30 seconds">
-                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <button class="btn-skip btn-ff" title="Fast Forward 30s">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
                     <path d="M21 3v5h-5"/>
-                    <text x="12" y="15.5" font-size="7" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle" font-family="-apple-system, sans-serif">30</text>
+                    <text x="12" y="15.5" font-size="6.5" font-weight="800" fill="currentColor" stroke="none" text-anchor="middle">30</text>
                   </svg>
                 </button>
               </div>
-
-              <!-- Seek Slider Container -->
               <div class="timeline-container">
                 <input type="range" class="seek-slider" min="0" max="100" value="0">
                 <div class="time-display">
@@ -501,35 +583,34 @@
           ` : ''}
         `;
 
-        container.appendChild(article);
-
-        // Bind interactive events if audio exists
-        if (audioUrl) {
-          setupPlayerControls(document.getElementById(`player-${index}`));
-        }
+        groupSection.appendChild(article);
       });
 
-      // Scroll, focus, and trigger CSS :target on initial page load
-      if (window.location.hash) {
-        const targetId = window.location.hash.substring(1);
-        const targetEl = document.getElementById(targetId);
-        if (targetEl) {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
-          
-          // Force the browser to evaluate :target on dynamically appended content
-          const currentHash = window.location.hash;
-          history.replaceState(null, '', ' ');
-          window.location.hash = currentHash;
-        }
-      }
+      container.appendChild(groupSection);
+    });
 
-    } catch (err) {
-      console.error('Error fetching/parsing XML feed:', err);
-    }
+    // Re-bind Player Events
+    filtered.forEach(ep => {
+      if (ep.audioUrl) {
+        setupPlayerControls(document.getElementById(`player-${ep.index}`));
+      }
+    });
   }
 
-  // Interactive JavaScript logic for custom player
+  function setupSegmentedControl(episodesData) {
+    const buttons = document.querySelectorAll('.segmented-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        renderEpisodes(episodesData, filter);
+      });
+    });
+  }
+
   function setupPlayerControls(playerEl) {
+    if (!playerEl) return;
     const audio = playerEl.querySelector('audio');
     const playPauseBtn = playerEl.querySelector('.btn-play-pause');
     const iconPlay = playerEl.querySelector('.icon-play');
@@ -540,20 +621,14 @@
     const timeCurrent = playerEl.querySelector('.time-current');
     const timeDuration = playerEl.querySelector('.time-duration');
 
-    // Update duration when metadata loads
     audio.addEventListener('loadedmetadata', () => {
       timeDuration.textContent = formatTime(audio.duration);
     });
 
-    // Play/Pause toggle
     playPauseBtn.addEventListener('click', () => {
-      // Pause all other audio players when playing a new episode
-      document.querySelectorAll('audio').forEach(otherAudio => {
-        if (otherAudio !== audio) {
-          otherAudio.pause();
-        }
+      document.querySelectorAll('audio').forEach(other => {
+        if (other !== audio) other.pause();
       });
-
       if (audio.paused) {
         audio.play();
       } else {
@@ -571,35 +646,23 @@
       iconPause.style.display = 'none';
     });
 
-    // Time update listener for slider and timer
     audio.addEventListener('timeupdate', () => {
       if (!isNaN(audio.duration) && audio.duration > 0) {
         const percentage = (audio.currentTime / audio.duration) * 100;
         slider.value = percentage;
-        
-        // Dynamic track color fill matching screen reference
-        slider.style.background = `linear-gradient(to right, var(--scrub-blue) 0%, var(--scrub-blue) ${percentage}%, rgba(255, 255, 255, 0.2) ${percentage}%, rgba(255, 255, 255, 0.2) 100%)`;
-        
+        slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.15) ${percentage}%, rgba(255, 255, 255, 0.15) 100%)`;
         timeCurrent.textContent = formatTime(audio.currentTime);
       }
     });
 
-    // Scrubbing via slider
     slider.addEventListener('input', () => {
       if (!isNaN(audio.duration)) {
-        const seekTo = (slider.value / 100) * audio.duration;
-        audio.currentTime = seekTo;
+        audio.currentTime = (slider.value / 100) * audio.duration;
       }
     });
 
-    // Skip Buttons
-    rewindBtn.addEventListener('click', () => {
-      audio.currentTime = Math.max(0, audio.currentTime - 15);
-    });
-
-    ffBtn.addEventListener('click', () => {
-      audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
-    });
+    rewindBtn.addEventListener('click', () => { audio.currentTime = Math.max(0, audio.currentTime - 15); });
+    ffBtn.addEventListener('click', () => { audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30); });
   }
 
   loadPodcastFeed();
