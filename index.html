@@ -7,6 +7,7 @@
   <style>
     :root {
       --bg: #030305;
+      /* Dynamic Glass Tokens */
       --glass-bg: rgba(255, 255, 255, 0.05);
       --glass-bg-hover: rgba(255, 255, 255, 0.08);
       --glass-border: rgba(255, 255, 255, 0.12);
@@ -14,12 +15,9 @@
       --glass-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
       --glass-blur: blur(35px) saturate(200%);
       
-      --accent: #fc3c44;
+      --accent: #fc3c44; /* Red */
       --accent-hover: #ff4f57;
       --accent-glow: rgba(252, 60, 68, 0.35);
-      
-      --sherlock-gold: #d4af37;
-      --sherlock-glow: rgba(212, 175, 55, 0.35);
       
       --text: #f5f5f7;
       --secondary-text: #a1a1a6;
@@ -37,6 +35,7 @@
 
     body {
       background-color: var(--bg);
+      /* Ambient Liquid Glow Effects */
       background-image: 
         radial-gradient(circle at 15% 15%, rgba(252, 60, 68, 0.15) 0%, transparent 40%),
         radial-gradient(circle at 85% 65%, rgba(120, 80, 255, 0.1) 0%, transparent 45%);
@@ -45,7 +44,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
-      padding: 2rem 1rem 6rem 1rem;
+      padding: 2rem 1rem 4rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -78,6 +77,7 @@
       overflow: hidden;
     }
 
+    /* Glass Reflection Highlight */
     header::before {
       content: '';
       position: absolute;
@@ -164,7 +164,7 @@
       padding-top: 1.25rem;
     }
 
-    /* --- FILTER CONTROL --- */
+    /* --- APPLE GLASS SEGMENTED FILTER CONTROL --- */
     .filter-wrapper {
       display: flex;
       justify-content: space-between;
@@ -189,6 +189,28 @@
       scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.15);
     }
 
+    /* Custom Glass Scrollbar (Webkit) */
+    .segmented-control::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .segmented-control::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      margin: 0 4px;
+    }
+
+    .segmented-control::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .segmented-control::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
     .segmented-btn {
       background: transparent;
       border: none;
@@ -203,7 +225,9 @@
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .segmented-btn:hover { color: #ffffff; }
+    .segmented-btn:hover {
+      color: #ffffff;
+    }
 
     .segmented-btn.active {
       background: var(--segmented-btn-active);
@@ -213,7 +237,9 @@
     }
 
     /* --- SEASON SECTION HEADERS --- */
-    .season-group { margin-bottom: 2.5rem; }
+    .season-group {
+      margin-bottom: 2.5rem;
+    }
 
     .season-title {
       font-size: 1.35rem;
@@ -226,7 +252,7 @@
       gap: 0.5rem;
     }
 
-    /* --- EPISODE CARD --- */
+    /* --- EPISODE CARD (GLASS) --- */
     article.episode {
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
@@ -277,7 +303,9 @@
       transition: color 0.2s ease;
     }
 
-    .episode-title:hover { color: var(--accent); }
+    .episode-title:hover {
+      color: var(--accent);
+    }
 
     .episode-date {
       font-size: 0.8rem;
@@ -291,7 +319,7 @@
       margin-bottom: 1.25rem;
     }
 
-    /* --- AUDIO PLAYER --- */
+    /* --- GLASS AUDIO PLAYER --- */
     .custom-player {
       display: flex;
       flex-direction: column;
@@ -342,6 +370,8 @@
       transform: scale(1.04);
       box-shadow: 0 8px 24px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
     }
+    
+    .btn-play-pause:active { transform: scale(0.95); }
 
     .btn-play-pause svg {
       fill: #ffffff;
@@ -368,7 +398,9 @@
       transition: height 0.15s ease;
     }
 
-    .seek-slider:hover { height: 6px; }
+    .seek-slider:hover {
+      height: 6px;
+    }
 
     .seek-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -382,6 +414,19 @@
       transition: transform 0.15s ease;
     }
 
+    .seek-slider:hover::-webkit-slider-thumb {
+      transform: scale(1.2);
+    }
+
+    .seek-slider::-moz-range-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    }
+
     .time-display {
       display: flex;
       justify-content: space-between;
@@ -390,151 +435,146 @@
       font-weight: 500;
     }
 
-    /* --- FOOTER & SHERLOCK EASTER EGG --- */
     footer {
       max-width: 800px;
       width: 100%;
       margin-top: 3rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.25rem;
       text-align: center;
       font-size: 0.75rem;
       color: var(--tertiary-text);
       line-height: 1.5;
-    }
-
-    .sherlock-trigger-btn {
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      color: var(--tertiary-text);
-      transition: all 0.3s ease;
-      padding: 0.5rem;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .sherlock-trigger-btn:hover {
-      color: var(--sherlock-gold);
-      transform: scale(1.15);
-      filter: drop-shadow(0 0 10px var(--sherlock-glow));
-    }
-
-    .sherlock-trigger-btn svg {
-      width: 28px;
-      height: 28px;
-      fill: currentColor;
-    }
-
-    /* --- SHERLOCK BOTTOM DRAWER --- */
-    .sherlock-drawer {
-      position: fixed;
-      bottom: -100%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: calc(100% - 2rem);
-      max-width: 500px;
-      background: rgba(18, 15, 12, 0.75);
-      backdrop-filter: blur(40px) saturate(180%);
-      -webkit-backdrop-filter: blur(40px) saturate(180%);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      border-bottom: none;
-      border-radius: 24px 24px 0 0;
-      padding: 1.5rem 1.75rem;
-      box-shadow: 0 -15px 40px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(212, 175, 55, 0.3);
-      transition: bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 1000;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
+    }
+
+    /* --- SHERLOCK EASTER EGG STYLES --- */
+    .sherlock-icon-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sherlock-icon-btn:hover {
+      transform: translateY(-3px) scale(1.08);
+    }
+
+    .sherlock-svg {
+      width: 36px;
+      height: 36px;
+      /* White Frosted Glass Styling */
+      fill: rgba(255, 255, 255, 0.45);
+      filter: drop-shadow(0 2px 8px rgba(255, 255, 255, 0.2));
+      transition: fill 0.3s ease, filter 0.3s ease;
+    }
+
+    .sherlock-icon-btn:hover .sherlock-svg {
+      fill: rgba(255, 255, 255, 0.9);
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
+    }
+
+    /* Drawer Backdrop */
+    .sherlock-drawer-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      z-index: 998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .sherlock-drawer-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Glass Bottom Drawer */
+    .sherlock-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(100%);
+      width: 100%;
+      max-width: 500px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border-light);
+      border-bottom: none;
+      border-radius: 24px 24px 0 0;
+      padding: 1.75rem;
+      box-shadow: 0 -20px 50px rgba(0, 0, 0, 0.7);
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
     }
 
     .sherlock-drawer.open {
-      bottom: 0;
+      transform: translateX(-50%) translateY(0);
     }
 
     .sherlock-drawer-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       width: 100%;
-    }
-
-    .sherlock-title-group {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 0.6rem;
     }
 
     .sherlock-title {
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 1.1rem;
-      color: var(--sherlock-gold);
-      letter-spacing: 0.05em;
+      font-size: 1.05rem;
       font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: 0.02em;
     }
 
-    .sherlock-subtitle {
-      font-size: 0.75rem;
-      color: #a89f91;
-      font-style: italic;
-    }
-
-    .sherlock-close-btn {
-      background: none;
+    .btn-close-drawer {
+      background: rgba(255, 255, 255, 0.1);
       border: none;
       color: var(--secondary-text);
-      font-size: 1.25rem;
-      cursor: pointer;
-      line-height: 1;
-      transition: color 0.2s ease;
-    }
-
-    .sherlock-close-btn:hover { color: #ffffff; }
-
-    .sherlock-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      width: 100%;
-    }
-
-    .btn-sherlock-toggle {
-      background-color: var(--sherlock-gold);
-      border: none;
-      width: 48px;
-      height: 48px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 15px var(--sherlock-glow), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-      transition: transform 0.2s ease, background-color 0.2s ease;
+      font-size: 1rem;
+      transition: all 0.2s ease;
     }
 
-    .btn-sherlock-toggle:hover {
-      transform: scale(1.05);
-      background-color: #e5bd38;
+    .btn-close-drawer:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
     }
 
-    .btn-sherlock-toggle svg {
-      fill: #120f0c;
-      width: 20px;
-      height: 20px;
+    .sherlock-status {
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+      text-align: center;
     }
 
     @media (max-width: 650px) {
       header {
         grid-template-columns: 1fr;
-        grid-template-areas: "image" "details" "description";
+        grid-template-areas:
+          "image"
+          "details"
+          "description";
         text-align: center;
         padding: 1.5rem;
       }
@@ -542,6 +582,7 @@
       .meta-line, .tags { justify-content: center; }
       .episode-header { flex-direction: column; gap: 0.25rem; }
       .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
+      .sherlock-drawer { max-width: 100%; border-radius: 20px 20px 0 0; }
     }
   </style>
 </head>
@@ -569,46 +610,69 @@
 
 <footer>
   <div id="podcast-footer"></div>
-  <!-- Sherlock Pipe SVG Icon Trigger -->
-  <button id="sherlock-trigger" class="sherlock-trigger-btn" title="221B Baker Street Wireless">
-    <svg viewBox="0 0 24 24">
-      <path d="M19.5,8.5 C18.1,8.5 17,9.6 17,11 L17,12 C17,13.1 16.1,14 15,14 L11,14 C9.9,14 9,13.1 9,12 L9,10 C9,8.9 9.9,8 11,8 L13,8 C13.6,8 14,7.6 14,7 C14,6.4 13.6,6 13,6 L11,6 C8.8,6 7,7.8 7,10 L7,12 C7,14.2 8.8,16 11,16 L15,16 C17.2,16 19,14.2 19,12 L19,11 C19,10.2 19.7,9.5 20.5,9.5 C21.3,9.5 22,10.2 22,11 C22,14.9 18.9,18 15,18 L11.8,18 C11.4,19.7 9.9,21 8,21 C5.8,21 4,19.2 4,17 C4,14.8 5.8,13 8,13 C8.4,13 8.8,13.1 9.2,13.2 C9.1,12.8 9,12.4 9,12 L9,10 C9,8.9 9.9,8 11,8 L13,8 Z M8,15 C6.9,15 6,15.9 6,17 C6,18.1 6.9,19 8,19 C9.1,19 10,18.1 10,17 C10,15.9 9.1,15 8,15 Z" />
+  
+  <!-- Sherlock Holmes Easter Egg Button -->
+  <button id="sherlock-trigger" class="sherlock-icon-btn" title="Sherlock Holmes Radio" aria-label="Sherlock Holmes Radio">
+    <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
+        l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
+        c9.75-76.413-18.366-123.936-70.85-145.942l24.641-5.04l-10.338-26.328l-44.328,20.491L299.813,0l-17.289,22.386l15.795,11.121
+        c-2.024-0.122-4.064-0.23-6.117-0.309c-96.294-3.762-131.662,92.532-131.662,92.532s-36.107,21.812-52.656,30.845
+        c-16.55,9.024-15.803,15.795-11.287,21.811c4.516,6.024,60.942,4.516,60.942,4.516s1.5,18.057,1.5,23.327
+        c0,5.262-17.303,28.582-30.09,44.385c-8.034,9.922,4.509,18.05,22.573,19.557c12.938,1.077,12.034,12.788,8.271,18.058
+        c-1.213,1.701-0.854,3.64,0.18,5.614c-5.809,2.513-12.73,6.311-21.238,12.292c-24.634,17.303-45.146,41.872-45.146,41.872
+        l-1.616-13.964c0.187-0.402,0.309-0.804,0.309-1.22c0-4.552-11.301-8.235-25.244-8.235c-13.936,0-25.244,3.683-25.244,8.235
+        c-1.4,10.288-2.757,26.407,0.122,36.81c3.899,14.122,25.531,25.84,48.37,14.122c22.832-11.717,21.474-28.503,57.438-59.311
+        c4.66-4,9.434-7.762,14.145-11.165c-0.524,1.005-0.848,2.118-0.568,3.533c2.284,11.459,8.688,4.042,11.28,15.048
+        c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
+        c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
     </svg>
   </button>
 </footer>
 
-<!-- Sherlock Radio Drawer -->
-<div id="sherlock-drawer" class="sherlock-drawer">
+<!-- Sherlock Radio Bottom Drawer -->
+<div class="sherlock-drawer-overlay" id="sherlock-overlay"></div>
+<div class="sherlock-drawer" id="sherlock-drawer">
   <div class="sherlock-drawer-header">
-    <div class="sherlock-title-group">
-      <span class="sherlock-title">221B Baker St. Wireless</span>
+    <div class="sherlock-title">
+      <svg class="sherlock-svg" style="width:20px; height:20px;" viewBox="0 0 512 512">
+        <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
+          l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
+          c9.75-76.413-18.366-123.936-70.85-145.942l24.641-5.04l-10.338-26.328l-44.328,20.491L299.813,0l-17.289,22.386l15.795,11.121
+          c-2.024-0.122-4.064-0.23-6.117-0.309c-96.294-3.762-131.662,92.532-131.662,92.532s-36.107,21.812-52.656,30.845
+          c-16.55,9.024-15.803,15.795-11.287,21.811c4.516,6.024,60.942,4.516,60.942,4.516s1.5,18.057,1.5,23.327
+          c0,5.262-17.303,28.582-30.09,44.385c-8.034,9.922,4.509,18.05,22.573,19.557c12.938,1.077,12.034,12.788,8.271,18.058
+          c-1.213,1.701-0.854,3.64,0.18,5.614c-5.809,2.513-12.73,6.311-21.238,12.292c-24.634,17.303-45.146,41.872-45.146,41.872
+          l-1.616-13.964c0.187-0.402,0.309-0.804,0.309-1.22c0-4.552-11.301-8.235-25.244-8.235c-13.936,0-25.244,3.683-25.244,8.235
+          c-1.4,10.288-2.757,26.407,0.122,36.81c3.899,14.122,25.531,25.84,48.37,14.122c22.832-11.717,21.474-28.503,57.438-59.311
+          c4.66-4,9.434-7.762,14.145-11.165c-0.524,1.005-0.848,2.118-0.568,3.533c2.284,11.459,8.688,4.042,11.28,15.048
+          c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
+          c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
+      </svg>
+      Sherlock Holmes Radio
     </div>
-    <button id="sherlock-close" class="sherlock-close-btn" title="Close">&times;</button>
+    <button class="btn-close-drawer" id="sherlock-close" aria-label="Close">✕</button>
   </div>
-  <div class="sherlock-subtitle">Sherlock Holmes Radio Broadcast</div>
-  <div class="sherlock-controls">
-    <button id="sherlock-toggle" class="btn-sherlock-toggle" title="Play / Pause">
-      <svg id="sherlock-icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
-      <svg id="sherlock-icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
-    </button>
-  </div>
+  <p class="sherlock-status" id="sherlock-status">Radio is currently off.</p>
+  <button class="btn-play-pause" id="sherlock-play-btn" title="Start Radio">
+    <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+  </button>
+  <audio id="sherlock-audio" preload="none"></audio>
 </div>
-
-<audio id="sherlock-audio" preload="none"></audio>
 
 <script>
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
-  // Sherlock Holmes Episode URLs List
-  const SHERLOCK_PLAYLIST = [
-    "https://archive.org/download/SherlockHolmes-NewAdventures/400202_017_The_Bruce_Partington_Plans.mp3",
-    "https://archive.org/download/SherlockHolmes-NewAdventures/391106_006_The_Adventure_of_the_Blue_Carbuncle.mp3",
-    "https://archive.org/download/SherlockHolmes-NewAdventures/480516_132_The_Adventure_of_the_Speckled_Band.mp3",
-    "https://archive.org/download/SherlockHolmes-NewAdventures/451126_060_The_Night_Before_Christmas.mp3"
+  // --- SHERLOCK HOLMES AUDIO URLS ---
+  // Replace or add your custom Sherlock Holmes audio links here
+  const SHERLOCK_URLS = [
+    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_391002_TheAdventureOfTheBrucePartingtonPlans.mp3',
+    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_391106_TheAdventureOfTheRetiredColourman.mp3',
+    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_400122_TheAdventureOfTheCopperBeeches.mp3',
+    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_450326_TheBookOfTobit.mp3'
   ];
-
-  let isFirstSherlockPlay = true;
 
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
@@ -642,6 +706,7 @@
         return el ? el.textContent.trim() : '';
       };
 
+      // Set Header Data
       const podcastTitle = getTagText(channel, 'title');
       const podcastAuthor = getNS(channel, ITUNES_NS, 'author');
       const podcastDesc = getTagText(channel, 'description');
@@ -670,6 +735,7 @@
 
       document.getElementById('podcast-footer').textContent = podcastSummary;
 
+      // Extract and Parse Episodes
       const items = Array.from(xml.querySelectorAll('item'));
       const episodesData = items.map((item, index) => {
         const title = getTagText(item, 'title');
@@ -677,9 +743,10 @@
         const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
         const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
         
+        // Extract link tag fragment (e.g., "s1-e3" from ".../#s1-e3")
         const rawLink = getTagText(item, 'link');
         const linkAnchor = rawLink.includes('#') ? rawLink.split('#').pop() : '';
-        const anchorId = linkAnchor || guid;
+        const anchorId = linkAnchor || guid; // Fall back to guid if no anchor is present
 
         const pubDateRaw = getTagText(item, 'pubDate');
         const season = getNS(item, ITUNES_NS, 'season');
@@ -699,6 +766,7 @@
       renderEpisodes(episodesData);
       setupSegmentedControl(episodesData);
 
+      // Handle Deep Linking / Anchors
       if (window.location.hash) {
         const targetId = window.location.hash.substring(1);
         const targetEl = document.getElementById(targetId);
@@ -716,6 +784,7 @@
     const container = document.getElementById('episodes-container');
     container.innerHTML = '';
 
+    // Filter Logic
     let filtered = episodes;
     if (filterSeason === 'trailer') {
       filtered = episodes.filter(ep => ep.type === 'trailer' || !ep.season);
@@ -728,6 +797,7 @@
       return;
     }
 
+    // Grouping by Season for display
     const groups = {};
     filtered.forEach(ep => {
       let groupKey = 'Pilot';
@@ -802,6 +872,7 @@
       container.appendChild(groupSection);
     });
 
+    // Re-bind Player Events
     filtered.forEach(ep => {
       if (ep.audioUrl) {
         setupPlayerControls(document.getElementById(`player-${ep.index}`));
@@ -839,9 +910,10 @@
     });
 
     playPauseBtn.addEventListener('click', () => {
-      // Pause Sherlock audio if running
-      const sherlockAudio = document.getElementById('sherlock-audio');
-      if (sherlockAudio) sherlockAudio.pause();
+      // Pause Sherlock Radio if active
+      if (sherlockAudio && !sherlockAudio.paused) {
+        sherlockAudio.pause();
+      }
 
       document.querySelectorAll('audio').forEach(other => {
         if (other !== audio) other.pause();
@@ -878,6 +950,7 @@
       }
     });
 
+    // Skip Buttons
     rewindBtn.addEventListener('click', () => {
       audio.currentTime = Math.max(0, audio.currentTime - 15);
     });
@@ -887,77 +960,101 @@
     });
   }
 
-  /* --- SHERLOCK HOLMES RADIO LOGIC --- */
+  // --- SHERLOCK HOLMES EASTER EGG ENGINE ---
+  let sherlockAudio = null;
+  let isFirstPlay = true;
+
   function setupSherlockRadio() {
-    const triggerBtn = document.getElementById('sherlock-trigger');
+    const trigger = document.getElementById('sherlock-trigger');
     const drawer = document.getElementById('sherlock-drawer');
+    const overlay = document.getElementById('sherlock-overlay');
     const closeBtn = document.getElementById('sherlock-close');
-    const toggleBtn = document.getElementById('sherlock-toggle');
-    const audio = document.getElementById('sherlock-audio');
-    const iconPlay = document.getElementById('sherlock-icon-play');
-    const iconPause = document.getElementById('sherlock-icon-pause');
+    const playBtn = document.getElementById('sherlock-play-btn');
+    const iconPlay = playBtn.querySelector('.icon-play');
+    const iconPause = playBtn.querySelector('.icon-pause');
+    const statusText = document.getElementById('sherlock-status');
+    sherlockAudio = document.getElementById('sherlock-audio');
 
-    // Open drawer on icon click
-    triggerBtn.addEventListener('click', () => {
+    const openDrawer = () => {
       drawer.classList.add('open');
-    });
+      overlay.classList.add('open');
+    };
 
-    closeBtn.addEventListener('click', () => {
+    const closeDrawer = () => {
       drawer.classList.remove('open');
-    });
+      overlay.classList.remove('open');
+    };
 
-    function playNextRandomTrack(isInitial = false) {
-      const randomIndex = Math.floor(Math.random() * SHERLOCK_PLAYLIST.length);
-      audio.src = SHERLOCK_PLAYLIST[randomIndex];
-      audio.load();
+    trigger.addEventListener('click', openDrawer);
+    closeBtn.addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
 
-      audio.addEventListener('loadedmetadata', function onMeta() {
-        audio.removeEventListener('loadedmetadata', onMeta);
-        
-        if (isInitial) {
-          // Seek to random timestamp for the first play
-          const randomTime = Math.floor(Math.random() * (audio.duration * 0.7));
-          audio.currentTime = randomTime;
-        } else {
-          // Play from start for subsequent tracks
-          audio.currentTime = 0;
-        }
+    const getRandomUrl = () => {
+      const idx = Math.floor(Math.random() * SHERLOCK_URLS.length);
+      return SHERLOCK_URLS[idx];
+    };
 
-        audio.play();
+    const playRandomTrack = (randomSeek = false) => {
+      if (!SHERLOCK_URLS.length) return;
+      
+      const trackUrl = getRandomUrl();
+      sherlockAudio.src = trackUrl;
+      statusText.textContent = "Connecting to frequency...";
+
+      if (randomSeek) {
+        // Once metadata loads, seek to a random spot between 10% and 85%
+        const onMetadata = () => {
+          if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
+            const minTime = sherlockAudio.duration * 0.1;
+            const maxTime = sherlockAudio.duration * 0.85;
+            sherlockAudio.currentTime = Math.random() * (maxTime - minTime) + minTime;
+          }
+          sherlockAudio.removeEventListener('loadedmetadata', onMetadata);
+        };
+        sherlockAudio.addEventListener('loadedmetadata', onMetadata);
+      } else {
+        sherlockAudio.currentTime = 0;
+      }
+
+      sherlockAudio.play().catch(err => {
+        console.error("Playback error:", err);
+        statusText.textContent = "Error playing radio stream.";
       });
-    }
+    };
 
-    toggleBtn.addEventListener('click', () => {
-      // Pause all main podcast episodes
+    playBtn.addEventListener('click', () => {
+      // Pause any running podcast episodes
       document.querySelectorAll('audio').forEach(a => {
-        if (a !== audio) a.pause();
+        if (a !== sherlockAudio) a.pause();
       });
 
-      if (audio.paused) {
-        if (isFirstSherlockPlay || !audio.src) {
-          playNextRandomTrack(true);
-          isFirstSherlockPlay = false;
+      if (sherlockAudio.paused) {
+        if (isFirstPlay || !sherlockAudio.src) {
+          playRandomTrack(true);
+          isFirstPlay = false;
         } else {
-          audio.play();
+          sherlockAudio.play();
         }
       } else {
-        audio.pause();
+        sherlockAudio.pause();
       }
     });
 
-    audio.addEventListener('play', () => {
+    sherlockAudio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
+      statusText.textContent = "Sherlock Holmes Radio is ON";
     });
 
-    audio.addEventListener('pause', () => {
+    sherlockAudio.addEventListener('pause', () => {
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
+      statusText.textContent = "Radio is paused.";
     });
 
-    // Auto-advance to a new random track from the start when finished
-    audio.addEventListener('ended', () => {
-      playNextRandomTrack(false);
+    // When a track finishes, automatically play a new random track from 0:00
+    sherlockAudio.addEventListener('ended', () => {
+      playRandomTrack(false);
     });
   }
 
