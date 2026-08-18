@@ -526,6 +526,12 @@
         const desc = getTagText(item, 'description');
         const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
         const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
+        
+        // Extract link tag fragment (e.g., "s1-e3" from ".../#s1-e3")
+        const rawLink = getTagText(item, 'link');
+        const linkAnchor = rawLink.includes('#') ? rawLink.split('#').pop() : '';
+        const anchorId = linkAnchor || guid; // Fall back to guid if no anchor is present
+
         const pubDateRaw = getTagText(item, 'pubDate');
         const season = getNS(item, ITUNES_NS, 'season');
         const episode = getNS(item, ITUNES_NS, 'episode');
@@ -538,7 +544,7 @@
         const enclosure = item.querySelector('enclosure');
         const audioUrl = enclosure ? enclosure.getAttribute('url') : '';
 
-        return { index, title, desc, guid, pubDate, season, episode, type, audioUrl };
+        return { index, title, desc, guid, anchorId, pubDate, season, episode, type, audioUrl };
       });
 
       renderEpisodes(episodesData);
@@ -598,14 +604,14 @@
       groups[groupName].forEach(ep => {
         const article = document.createElement('article');
         article.className = 'episode';
-        article.id = ep.guid;
+        article.id = ep.anchorId;
 
         const subTag = ep.season && ep.episode ? `Season ${ep.season} • Episode ${ep.episode}` : (ep.type === 'trailer' ? 'Bonus / Trailer' : 'Special');
 
         article.innerHTML = `
           <div class="episode-meta-tag">${subTag}</div>
           <div class="episode-header">
-            <h3><a href="#${ep.guid}" class="episode-title">${ep.title}</a></h3>
+            <h3><a href="#${ep.anchorId}" class="episode-title">${ep.title}</a></h3>
             <time class="episode-date">${ep.pubDate}</time>
           </div>
           <div class="episode-description">${ep.desc}</div>
