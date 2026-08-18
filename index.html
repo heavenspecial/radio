@@ -449,7 +449,7 @@
       gap: 1.25rem;
     }
 
-    /* --- SHERLOCK EASTER EGG STYLES --- */
+    /* --- BAKER STREET WIRELESS EASTER EGG STYLES --- */
     .sherlock-icon-btn {
       background: transparent;
       border: none;
@@ -563,11 +563,9 @@
     }
 
     .sherlock-status {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: var(--text);
+      font-size: 0.85rem;
+      color: var(--secondary-text);
       text-align: center;
-      min-height: 1.35em;
     }
 
     @media (max-width: 650px) {
@@ -613,7 +611,7 @@
 <footer>
   <div id="podcast-footer"></div>
   
-  <!-- Baker Street Wireless Easter Egg Button -->
+  <!-- Sherlock Holmes Easter Egg Button -->
   <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
     <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
@@ -665,7 +663,6 @@
 
 <script>
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
-  const SHERLOCK_RSS_URL = 'https://fourble.co.uk/sherlockholm-260818-0.rss';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
   function formatTime(seconds) {
@@ -904,7 +901,8 @@
     });
 
     playPauseBtn.addEventListener('click', () => {
-      // Pause Sherlock Radio if active
+      // Pause Sherlock Radio if currently active
+      const sherlockAudio = document.getElementById('sherlock-audio');
       if (sherlockAudio && !sherlockAudio.paused) {
         sherlockAudio.pause();
       }
@@ -954,34 +952,16 @@
     });
   }
 
-  // --- BAKER STREET WIRELESS EASTER EGG ENGINE ---
-  let sherlockAudio = null;
-  let isFirstPlay = true;
-  let sherlockEpisodes = [];
-  let currentEpisodeTitle = '';
+  // --- BAKER STREET WIRELESS (SHERLOCK HOLMES RADIO) ENGINE ---
+  function setupBakerStreetWireless() {
+    const SHERLOCK_FEED_URL = 'https://fourble.co.uk/sherlockholm-260818-0.rss';
+    
+    let sherlockTracks = []; // Stores { title, audioUrl }
+    let sherlockAudio = null;
+    let isFirstPlay = true;
+    let currentTrackTitle = '';
 
-  async function fetchSherlockFeed() {
-    try {
-      const response = await fetch(SHERLOCK_RSS_URL);
-      const textData = await response.text();
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(textData, 'application/xml');
-
-      const items = Array.from(xml.querySelectorAll('item'));
-      sherlockEpisodes = items.map(item => {
-        const titleEl = item.querySelector('title');
-        const enclosure = item.querySelector('enclosure');
-        return {
-          title: titleEl ? titleEl.textContent.trim() : 'Unknown Episode',
-          audioUrl: enclosure ? enclosure.getAttribute('url') : ''
-        };
-      }).filter(ep => ep.audioUrl !== '');
-    } catch (err) {
-      console.error('Error fetching Sherlock RSS feed:', err);
-    }
-  }
-
-  function setupSherlockRadio() {
+    // UI Elements
     const trigger = document.getElementById('sherlock-trigger');
     const drawer = document.getElementById('sherlock-drawer');
     const overlay = document.getElementById('sherlock-overlay');
@@ -992,7 +972,34 @@
     const statusText = document.getElementById('sherlock-status');
     sherlockAudio = document.getElementById('sherlock-audio');
 
-    fetchSherlockFeed();
+    // Fetch and parse the Fourble RSS feed dynamically
+    async function fetchSherlockTracks() {
+      try {
+        const response = await fetch(SHERLOCK_FEED_URL);
+        const textData = await response.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(textData, 'application/xml');
+        const items = Array.from(xml.querySelectorAll('item'));
+
+        sherlockTracks = items.map(item => {
+          const titleEl = item.querySelector('title');
+          const enclosure = item.querySelector('enclosure');
+          
+          let rawTitle = titleEl ? titleEl.textContent.trim() : 'Unknown Episode';
+          // Strip out the prefix "Sherlock Holmes BBC Audiodramas: " to leave ONLY the episode title
+          let cleanTitle = rawTitle.includes(': ') ? rawTitle.split(': ').slice(1).join(': ') : rawTitle;
+
+          return {
+            title: cleanTitle,
+            audioUrl: enclosure ? enclosure.getAttribute('url') : ''
+          };
+        }).filter(track => track.audioUrl !== '');
+
+      } catch (err) {
+        console.error('Error fetching Baker Street Wireless feed:', err);
+        statusText.textContent = 'Unable to load frequency.';
+      }
+    }
 
     const openDrawer = () => {
       drawer.classList.add('open');
@@ -1008,25 +1015,21 @@
     closeBtn.addEventListener('click', closeDrawer);
     overlay.addEventListener('click', closeDrawer);
 
-    const getRandomEpisode = () => {
-      const idx = Math.floor(Math.random() * sherlockEpisodes.length);
-      return sherlockEpisodes[idx];
+    const getRandomTrack = () => {
+      const idx = Math.floor(Math.random() * sherlockTracks.length);
+      return sherlockTracks[idx];
     };
 
     const playRandomTrack = (randomSeek = false) => {
-      if (!sherlockEpisodes.length) {
-        statusText.textContent = "Connecting to frequency...";
-        setTimeout(() => playRandomTrack(randomSeek), 1000);
-        return;
-      }
-      
-      const track = getRandomEpisode();
-      currentEpisodeTitle = track.title;
+      if (!sherlockTracks.length) return;
+
+      const track = getRandomTrack();
+      currentTrackTitle = track.title;
       sherlockAudio.src = track.audioUrl;
-      statusText.textContent = "Tuning in...";
+      statusText.textContent = 'Connecting...';
 
       if (randomSeek) {
-        // Seek to a random position between 10% and 85%
+        // Seek to a random point between 10% and 85% of total length on initial tuning
         const onMetadata = () => {
           if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
             const minTime = sherlockAudio.duration * 0.1;
@@ -1041,13 +1044,17 @@
       }
 
       sherlockAudio.play().catch(err => {
-        console.error("Playback error:", err);
-        statusText.textContent = "Error playing frequency.";
+        console.error('Playback error:', err);
+        statusText.textContent = 'Error tuning into broadcast.';
       });
     };
 
-    playBtn.addEventListener('click', () => {
-      // Pause any running podcast episodes
+    playBtn.addEventListener('click', async () => {
+      if (sherlockTracks.length === 0) {
+        await fetchSherlockTracks();
+      }
+
+      // Pause any main podcast audio that might be playing
       document.querySelectorAll('audio').forEach(a => {
         if (a !== sherlockAudio) a.pause();
       });
@@ -1067,24 +1074,27 @@
     sherlockAudio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
-      statusText.textContent = currentEpisodeTitle;
+      // Shows strictly the standalone episode title
+      statusText.textContent = currentTrackTitle;
     });
 
     sherlockAudio.addEventListener('pause', () => {
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
-      statusText.textContent = "Radio is paused.";
     });
 
-    // When a track finishes, automatically play a new random track from 0:00
+    // Continuous play: automatically pick another random track starting at 0:00 when done
     sherlockAudio.addEventListener('ended', () => {
       playRandomTrack(false);
     });
+
+    // Fetch tracks ahead of time
+    fetchSherlockTracks();
   }
 
   window.addEventListener('DOMContentLoaded', () => {
     loadPodcastFeed();
-    setupSherlockRadio();
+    setupBakerStreetWireless();
   });
 </script>
 
