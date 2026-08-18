@@ -954,7 +954,7 @@
 
   // --- BAKER STREET WIRELESS (SHERLOCK HOLMES RADIO) ENGINE ---
   function setupBakerStreetWireless() {
-    const SHERLOCK_FEED_URL = 'https://fourble.co.uk/sherlockholm-260818-0.rss';
+    const SHERLOCK_JSON_URL = 'https://heavenspecial.github.io/radio/221b.json';
     
     let sherlockTracks = []; // Stores { title, audioUrl }
     let sherlockAudio = null;
@@ -972,28 +972,18 @@
     const statusText = document.getElementById('sherlock-status');
     sherlockAudio = document.getElementById('sherlock-audio');
 
-    // Fetch and parse the Fourble RSS feed dynamically
+    // Fetch and parse the Sherlock JSON feed dynamically
     async function fetchSherlockTracks() {
       try {
-        const response = await fetch(SHERLOCK_FEED_URL);
-        const textData = await response.text();
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(textData, 'application/xml');
-        const items = Array.from(xml.querySelectorAll('item'));
+        const response = await fetch(SHERLOCK_JSON_URL);
+        const data = await response.json();
 
-        sherlockTracks = items.map(item => {
-          const titleEl = item.querySelector('title');
-          const enclosure = item.querySelector('enclosure');
-          
-          let rawTitle = titleEl ? titleEl.textContent.trim() : 'Unknown Episode';
-          // Strip out the prefix "Sherlock Holmes BBC Audiodramas: " to leave ONLY the episode title
-          let cleanTitle = rawTitle.includes(': ') ? rawTitle.split(': ').slice(1).join(': ') : rawTitle;
-
-          return {
-            title: cleanTitle,
-            audioUrl: enclosure ? enclosure.getAttribute('url') : ''
-          };
-        }).filter(track => track.audioUrl !== '');
+        sherlockTracks = data
+          .map(item => ({
+            title: item.title || 'Unknown Episode',
+            audioUrl: item.audioUrl || ''
+          }))
+          .filter(track => track.audioUrl !== '');
 
       } catch (err) {
         console.error('Error fetching Baker Street Wireless feed:', err);
