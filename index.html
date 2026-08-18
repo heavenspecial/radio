@@ -164,94 +164,76 @@
       padding-top: 1.25rem;
     }
 
-    /* --- CUSTOM GLASS DROPDOWN --- */
+    /* --- APPLE GLASS SEGMENTED FILTER CONTROL --- */
     .filter-wrapper {
       display: flex;
-      justify-content: flex-start;
+      justify-content: space-between;
       align-items: center;
       margin-bottom: 2rem;
-    }
-
-    .custom-dropdown {
-      position: relative;
-      min-width: 200px;
-    }
-
-    .dropdown-trigger {
       width: 100%;
+    }
+
+    .segmented-control {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      background-color: var(--segmented-bg);
-      color: var(--text);
-      font-family: inherit;
-      font-size: 0.9rem;
-      font-weight: 600;
-      padding: 0.65rem 1.25rem;
-      border-radius: 12px;
-      border: 1px solid var(--glass-border);
+      width: 100%;
+      overflow-x: auto;
+      background: var(--segmented-bg);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
-      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2);
+      gap: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.15);
+    }
+
+    /* Custom Glass Scrollbar (Webkit) */
+    .segmented-control::-webkit-scrollbar {
+      height: 5px;
+    }
+
+    .segmented-control::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 10px;
+      margin: 0 4px;
+    }
+
+    .segmented-control::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .segmented-control::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .segmented-btn {
+      background: transparent;
+      border: none;
+      color: var(--secondary-text);
+      padding: 0.5rem 1.25rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .dropdown-trigger:hover {
-      background-color: var(--glass-bg-hover);
-      border-color: var(--glass-border-light);
+    .segmented-btn:hover {
+      color: #ffffff;
     }
 
-    .dropdown-trigger svg {
-      transition: transform 0.25s ease;
-    }
-
-    .custom-dropdown.open .dropdown-trigger svg {
-      transform: rotate(180deg);
-    }
-
-    .dropdown-menu {
-      position: absolute;
-      top: calc(100% + 8px);
-      left: 0;
-      right: 0;
-      background: rgba(18, 18, 22, 0.85);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--glass-border-light);
-      border-radius: 14px;
-      padding: 0.4rem;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
-      display: none;
-      flex-direction: column;
-      gap: 0.2rem;
-      z-index: 100;
-    }
-
-    .custom-dropdown.open .dropdown-menu {
-      display: flex;
-    }
-
-    .dropdown-option {
-      padding: 0.6rem 0.85rem;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--secondary-text);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .dropdown-option:hover {
-      background: var(--glass-bg-hover);
-      color: var(--text);
-    }
-
-    .dropdown-option.active {
+    .segmented-btn.active {
       background: var(--segmented-btn-active);
       color: #ffffff;
-      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
     }
 
     /* --- SEASON SECTION HEADERS --- */
@@ -477,7 +459,6 @@
       .meta-line, .tags { justify-content: center; }
       .episode-header { flex-direction: column; gap: 0.25rem; }
       .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
-      .custom-dropdown { width: 100%; }
     }
   </style>
 </head>
@@ -489,20 +470,12 @@
   </header>
 
   <div class="filter-wrapper">
-    <div class="custom-dropdown" id="season-dropdown">
-      <button class="dropdown-trigger" id="dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
-        <span id="dropdown-label">All Episodes</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
-        </svg>
-      </button>
-      <div class="dropdown-menu" id="dropdown-menu" role="listbox">
-        <div class="dropdown-option active" data-value="all" role="option">All Episodes</div>
-        <div class="dropdown-option" data-value="3" role="option">Season 3</div>
-        <div class="dropdown-option" data-value="2" role="option">Season 2</div>
-        <div class="dropdown-option" data-value="1" role="option">Season 1</div>
-        <div class="dropdown-option" data-value="trailer" role="option">Pilot</div>
-      </div>
+    <div class="segmented-control" id="season-picker">
+      <button class="segmented-btn active" data-filter="all">All</button>
+      <button class="segmented-btn" data-filter="3">Season 3</button>
+      <button class="segmented-btn" data-filter="2">Season 2</button>
+      <button class="segmented-btn" data-filter="1">Season 1</button>
+      <button class="segmented-btn" data-filter="trailer">Pilot</button>
     </div>
   </div>
 
@@ -607,7 +580,7 @@
       });
 
       renderEpisodes(episodesData);
-      setupSeasonDropdown(episodesData);
+      setupSegmentedControl(episodesData);
 
       // Handle Deep Linking / Anchors
       if (window.location.hash) {
@@ -723,37 +696,15 @@
     });
   }
 
-  function setupSeasonDropdown(episodesData) {
-    const dropdown = document.getElementById('season-dropdown');
-    const trigger = document.getElementById('dropdown-btn');
-    const label = document.getElementById('dropdown-label');
-    const options = dropdown.querySelectorAll('.dropdown-option');
-
-    trigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = dropdown.classList.toggle('open');
-      trigger.setAttribute('aria-expanded', isOpen);
-    });
-
-    options.forEach(opt => {
-      opt.addEventListener('click', () => {
-        options.forEach(o => o.classList.remove('active'));
-        opt.classList.add('active');
-        
-        label.textContent = opt.textContent;
-        dropdown.classList.remove('open');
-        trigger.setAttribute('aria-expanded', 'false');
-
-        const filterVal = opt.getAttribute('data-value');
-        renderEpisodes(episodesData, filterVal);
+  function setupSegmentedControl(episodesData) {
+    const buttons = document.querySelectorAll('.segmented-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        buttons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        renderEpisodes(episodesData, filter);
       });
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('open');
-        trigger.setAttribute('aria-expanded', 'false');
-      }
     });
   }
 
