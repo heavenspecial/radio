@@ -567,8 +567,7 @@
       font-weight: 500;
       color: var(--text);
       text-align: center;
-      padding: 0 1rem;
-      line-height: 1.4;
+      min-height: 1.35em;
     }
 
     @media (max-width: 650px) {
@@ -614,7 +613,7 @@
 <footer>
   <div id="podcast-footer"></div>
   
-  <!-- Sherlock Holmes Easter Egg Button -->
+  <!-- Baker Street Wireless Easter Egg Button -->
   <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
     <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
@@ -656,7 +655,7 @@
     </div>
     <button class="btn-close-drawer" id="sherlock-close" aria-label="Close">✕</button>
   </div>
-  <p class="sherlock-status" id="sherlock-status">Radio is off.</p>
+  <p class="sherlock-status" id="sherlock-status">Radio is currently off.</p>
   <button class="btn-play-pause" id="sherlock-play-btn" title="Start Radio">
     <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
     <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
@@ -957,9 +956,9 @@
 
   // --- BAKER STREET WIRELESS EASTER EGG ENGINE ---
   let sherlockAudio = null;
-  let sherlockTracks = [];
-  let currentTrack = null;
   let isFirstPlay = true;
+  let sherlockEpisodes = [];
+  let currentEpisodeTitle = '';
 
   async function fetchSherlockFeed() {
     try {
@@ -969,18 +968,16 @@
       const xml = parser.parseFromString(textData, 'application/xml');
 
       const items = Array.from(xml.querySelectorAll('item'));
-      sherlockTracks = items.map(item => {
+      sherlockEpisodes = items.map(item => {
         const titleEl = item.querySelector('title');
-        const enclosureEl = item.querySelector('enclosure');
-        
+        const enclosure = item.querySelector('enclosure');
         return {
-          title: titleEl ? titleEl.textContent.trim() : 'Sherlock Holmes Mystery',
-          url: enclosureEl ? enclosureEl.getAttribute('url') : ''
+          title: titleEl ? titleEl.textContent.trim() : 'Unknown Episode',
+          audioUrl: enclosure ? enclosure.getAttribute('url') : ''
         };
-      }).filter(track => track.url !== '');
-
+      }).filter(ep => ep.audioUrl !== '');
     } catch (err) {
-      console.error('Error loading Sherlock RSS feed:', err);
+      console.error('Error fetching Sherlock RSS feed:', err);
     }
   }
 
@@ -994,6 +991,8 @@
     const iconPause = playBtn.querySelector('.icon-pause');
     const statusText = document.getElementById('sherlock-status');
     sherlockAudio = document.getElementById('sherlock-audio');
+
+    fetchSherlockFeed();
 
     const openDrawer = () => {
       drawer.classList.add('open');
@@ -1009,21 +1008,25 @@
     closeBtn.addEventListener('click', closeDrawer);
     overlay.addEventListener('click', closeDrawer);
 
-    const getRandomTrack = () => {
-      const idx = Math.floor(Math.random() * sherlockTracks.length);
-      return sherlockTracks[idx];
+    const getRandomEpisode = () => {
+      const idx = Math.floor(Math.random() * sherlockEpisodes.length);
+      return sherlockEpisodes[idx];
     };
 
     const playRandomTrack = (randomSeek = false) => {
-      if (!sherlockTracks.length) {
-        statusText.textContent = "Tuning into frequency...";
+      if (!sherlockEpisodes.length) {
+        statusText.textContent = "Connecting to frequency...";
+        setTimeout(() => playRandomTrack(randomSeek), 1000);
         return;
       }
       
-      currentTrack = getRandomTrack();
-      sherlockAudio.src = currentTrack.url;
+      const track = getRandomEpisode();
+      currentEpisodeTitle = track.title;
+      sherlockAudio.src = track.audioUrl;
+      statusText.textContent = "Tuning in...";
 
       if (randomSeek) {
+        // Seek to a random position between 10% and 85%
         const onMetadata = () => {
           if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
             const minTime = sherlockAudio.duration * 0.1;
@@ -1039,7 +1042,7 @@
 
       sherlockAudio.play().catch(err => {
         console.error("Playback error:", err);
-        statusText.textContent = "Error playing radio stream.";
+        statusText.textContent = "Error playing frequency.";
       });
     };
 
@@ -1064,23 +1067,23 @@
     sherlockAudio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
-      statusText.textContent = currentTrack ? currentTrack.title : 'Baker Street Wireless';
+      statusText.textContent = currentEpisodeTitle;
     });
 
     sherlockAudio.addEventListener('pause', () => {
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
-      statusText.textContent = currentTrack ? `${currentTrack.title} (Paused)` : 'Radio is paused.';
+      statusText.textContent = "Radio is paused.";
     });
 
+    // When a track finishes, automatically play a new random track from 0:00
     sherlockAudio.addEventListener('ended', () => {
       playRandomTrack(false);
     });
   }
 
-  window.addEventListener('DOMContentLoaded', async () => {
+  window.addEventListener('DOMContentLoaded', () => {
     loadPodcastFeed();
-    await fetchSherlockFeed();
     setupSherlockRadio();
   });
 </script>
