@@ -44,7 +44,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
-      padding: 2rem 1rem 4rem 1rem;
+      padding: 5rem 1rem 4rem 1rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -54,6 +54,185 @@
     main {
       max-width: 800px;
       width: 100%;
+    }
+
+    /* --- APPLE BURGER BUTTON --- */
+    .burger-btn {
+      position: fixed;
+      top: 1.25rem;
+      left: 1.25rem;
+      z-index: 1001;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .burger-btn:hover {
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-light);
+    }
+
+    .burger-bar {
+      width: 18px;
+      height: 2px;
+      background-color: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    }
+
+    .burger-btn.active .burger-bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .burger-btn.active .burger-bar:nth-child(2) {
+      opacity: 0;
+    }
+
+    .burger-btn.active .burger-bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* --- TOP GLASS DRAWER --- */
+    .top-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(15, 15, 20, 0.85);
+      backdrop-filter: blur(40px) saturate(200%);
+      -webkit-backdrop-filter: blur(40px) saturate(200%);
+      border-bottom: 1px solid var(--glass-border);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+      z-index: 1000;
+      transform: translateY(-100%);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 4rem 1.5rem 2rem 1.5rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    .top-drawer.open {
+      transform: translateY(0);
+    }
+
+    .drawer-content {
+      max-width: 600px;
+      width: 100%;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .drawer-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .drawer-subtitle {
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+      margin-top: 0.25rem;
+    }
+
+    /* --- RADIO DIAL UI --- */
+    .radio-dial-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border-light);
+      box-shadow: var(--glass-shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0;
+      user-select: none;
+    }
+
+    .radio-dial {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      position: relative;
+      cursor: grab;
+      transition: transform 0.1s ease-out;
+    }
+
+    .radio-dial:active {
+      cursor: grabbing;
+    }
+
+    .dial-indicator {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-glow);
+    }
+
+    .dial-readout {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .station-freq {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .station-name {
+      font-size: 0.8rem;
+      color: var(--secondary-text);
+    }
+
+    .station-list {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .station-btn {
+      background: var(--segmented-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--secondary-text);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .station-btn:hover, .station-btn.active {
+      background: var(--segmented-btn-active);
+      color: #fff;
+      border-color: var(--glass-border-light);
     }
 
     /* --- HERO HEADER --- */
@@ -189,7 +368,6 @@
       scrollbar-color: rgba(255, 255, 255, 0.2) rgba(0, 0, 0, 0.15);
     }
 
-    /* Custom Glass Scrollbar (Webkit) */
     .segmented-control::-webkit-scrollbar {
       height: 5px;
     }
@@ -464,6 +642,39 @@
 </head>
 <body>
 
+<!-- Apple Burger Trigger -->
+<button class="burger-btn" id="burger-btn" aria-label="Toggle Live Radio">
+  <span class="burger-bar"></span>
+  <span class="burger-bar"></span>
+  <span class="burger-bar"></span>
+</button>
+
+<!-- Glass Top Drawer -->
+<div class="top-drawer" id="top-drawer">
+  <div class="drawer-content">
+    <div class="drawer-header">
+      <h2>Live Radio</h2>
+      <p class="drawer-subtitle">A glassmorphic dial for chasing radio stations</p>
+    </div>
+
+    <!-- Interactive Dial -->
+    <div class="radio-dial-container">
+      <div class="radio-dial" id="radio-dial">
+        <div class="dial-indicator"></div>
+      </div>
+      <div class="dial-readout">
+        <span class="station-freq" id="freq-display">98.5 FM</span>
+        <span class="station-name" id="name-display">Lo-Fi Chill</span>
+      </div>
+    </div>
+
+    <audio id="live-radio-player"></audio>
+
+    <!-- Preset Stations List -->
+    <div class="station-list" id="station-list"></div>
+  </div>
+</div>
+
 <main>
   <header id="podcast-header">
     <p>Loading show details...</p>
@@ -490,6 +701,17 @@
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
+  // Live Radio Stations Data
+  const STATIONS = [
+    { freq: '88.1 FM', name: 'Comedy Club', url: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+    { freq: '94.3 FM', name: 'Synthwave Neon', url: 'https://stream.zeno.fm/0r0xa792kwzuv' },
+    { freq: '98.5 FM', name: 'Lo-Fi Chill', url: 'https://stream.zeno.fm/f3wvbbqmdg8uv' },
+    { freq: '102.7 FM', name: 'Indie Rock', url: 'https://stream.zeno.fm/0r0xa792kwzuv' },
+    { freq: '106.9 FM', name: 'Ambient Space', url: 'https://stream.zeno.fm/f3wvbbqmdg8uv' }
+  ];
+
+  let currentStationIndex = 2;
+
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
@@ -501,6 +723,87 @@
       return `${hrs}:${formattedMins}:${formattedSecs}`;
     }
     return `${mins}:${formattedSecs}`;
+  }
+
+  // --- DRAWER & RADIO DIAL CONTROL ---
+  function setupRadioDrawer() {
+    const burgerBtn = document.getElementById('burger-btn');
+    const drawer = document.getElementById('top-drawer');
+    const dial = document.getElementById('radio-dial');
+    const freqDisplay = document.getElementById('freq-display');
+    const nameDisplay = document.getElementById('name-display');
+    const stationList = document.getElementById('station-list');
+    const radioPlayer = document.getElementById('live-radio-player');
+
+    // Toggle Drawer
+    burgerBtn.addEventListener('click', () => {
+      burgerBtn.classList.toggle('active');
+      drawer.classList.toggle('open');
+    });
+
+    // Render Preset Station Buttons
+    STATIONS.forEach((st, idx) => {
+      const btn = document.createElement('button');
+      btn.className = `station-btn ${idx === currentStationIndex ? 'active' : ''}`;
+      btn.textContent = `${st.freq} - ${st.name}`;
+      btn.addEventListener('click', () => setStation(idx));
+      stationList.appendChild(btn);
+    });
+
+    function setStation(index) {
+      currentStationIndex = index;
+      const st = STATIONS[index];
+      freqDisplay.textContent = st.freq;
+      nameDisplay.textContent = st.name;
+
+      // Update active button state
+      document.querySelectorAll('.station-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+
+      // Update Dial Rotation
+      const angle = (index / (STATIONS.length - 1)) * 180 - 90;
+      dial.style.transform = `rotate(${angle}deg)`;
+
+      // Play Live Stream
+      // Pause podcast playback if active
+      document.querySelectorAll('audio').forEach(a => {
+        if (a !== radioPlayer) a.pause();
+      });
+
+      radioPlayer.src = st.url;
+      radioPlayer.play().catch(e => console.log('Autoplay prevented or stream loading issue:', e));
+    }
+
+    // Drag / Rotate Dial Interaction
+    let isDragging = false;
+    let startAngle = 0;
+
+    dial.addEventListener('mousedown', (e) => {
+      isDragging = true;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isDragging) isDragging = false;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      const rect = dial.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const rad = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+      let deg = rad * (180 / Math.PI) + 90;
+
+      // Map rotation angle to station index
+      let normalized = (deg + 180) % 360;
+      let targetIndex = Math.floor((normalized / 360) * STATIONS.length);
+      targetIndex = Math.max(0, Math.min(STATIONS.length - 1, targetIndex));
+
+      if (targetIndex !== currentStationIndex) {
+        setStation(targetIndex);
+      }
+    });
   }
 
   async function loadPodcastFeed() {
@@ -559,10 +862,9 @@
         const rawGuid = getTagText(item, 'guid') || `ep-${index}`;
         const guid = rawGuid.includes('/') ? rawGuid.split('/').pop() : rawGuid;
         
-        // Extract link tag fragment (e.g., "s1-e3" from ".../#s1-e3")
         const rawLink = getTagText(item, 'link');
         const linkAnchor = rawLink.includes('#') ? rawLink.split('#').pop() : '';
-        const anchorId = linkAnchor || guid; // Fall back to guid if no anchor is present
+        const anchorId = linkAnchor || guid;
 
         const pubDateRaw = getTagText(item, 'pubDate');
         const season = getNS(item, ITUNES_NS, 'season');
@@ -726,6 +1028,10 @@
     });
 
     playPauseBtn.addEventListener('click', () => {
+      // Pause live radio if playing
+      const radioPlayer = document.getElementById('live-radio-player');
+      if (radioPlayer) radioPlayer.pause();
+
       document.querySelectorAll('audio').forEach(other => {
         if (other !== audio) other.pause();
       });
@@ -771,7 +1077,10 @@
     });
   }
 
-  window.addEventListener('DOMContentLoaded', loadPodcastFeed);
+  window.addEventListener('DOMContentLoaded', () => {
+    setupRadioDrawer();
+    loadPodcastFeed();
+  });
 </script>
 
 </body>
