@@ -18,6 +18,42 @@ The mildly sexful nature of this programme has reportedly cured countless young 
     <itunes:summary>PUBLIC NOTICE: Music heard in an educational program (Music Appreciation, Composition Analysis and Lyrical Study) falls under 'Fair Use'.</itunes:summary>
     <itunes:image href="https://heavenspecial.github.io/radio/artwork/album.jpg"/>
 
+      <item>
+      <title>S3E3❃ Uprise</title>
+      <itunes:season>3</itunes:season>
+      <itunes:episode>3</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <link>https://heavenspecial.github.io/radio/#s3-e3</link>
+      <description>➂ of 3 ➢ Original taping: Spring 2026.</description>
+      <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-5-10/425870317-44100-2-5d04af771aeae.m4a" length="172980457" type="audio/mp4"/>
+      <guid isPermaLink="false">ep_s3e3</guid>
+      <pubDate>Mon, 17 Aug 2026 21:00:00 EST</pubDate>
+    </item>
+
+    <item>
+      <title>S3E2❃ Martial Hearts</title>
+      <itunes:season>3</itunes:season>
+      <itunes:episode>2</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <link>https://heavenspecial.github.io/radio/#s3-e2</link>
+      <description>➁ of 3 ➢ Original taping: Spring 2026.</description>
+      <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-5-7/425656505-44100-2-68182f5df3112.m4a" length="139114352" type="audio/mp4"/>
+      <guid isPermaLink="false">ep_s3e2</guid>
+      <pubDate>Mon, 10 Aug 2026 21:00:00 EST</pubDate>
+    </item>
+
+    <item>
+      <title>S3E1❃ Bushidō</title>
+      <itunes:season>3</itunes:season>
+      <itunes:episode>1</itunes:episode>
+      <itunes:episodeType>full</itunes:episodeType>
+      <link>https://heavenspecial.github.io/radio/#s3-e1</link>
+      <description>➀ of 3 ➢ Original taping: Spring 2026.</description>
+      <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-5-7/425647032-44100-2-ba797188e33c.m4a" length="157591388" type="audio/mp4"/>
+      <guid isPermaLink="false">ep_s3e1</guid>
+      <pubDate>Mon, 03 Aug 2026 21:00:00 EST</pubDate>
+    </item>
+
     <item>
       <title>S2E3❆ Journey Proud</title>
       <itunes:season>2</itunes:season>
