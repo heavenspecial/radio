@@ -164,7 +164,7 @@
       padding-top: 1.25rem;
     }
 
-    /* --- APPLE GLASS DROPDOWN FILTER CONTROL --- */
+    /* --- CUSTOM GLASS DROPDOWN --- */
     .filter-wrapper {
       display: flex;
       justify-content: flex-start;
@@ -172,39 +172,86 @@
       margin-bottom: 2rem;
     }
 
-    .season-select {
-      appearance: none;
-      -webkit-appearance: none;
+    .custom-dropdown {
+      position: relative;
+      min-width: 200px;
+    }
+
+    .dropdown-trigger {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
       background-color: var(--segmented-bg);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f7' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1rem center;
-      background-size: 16px;
       color: var(--text);
       font-family: inherit;
       font-size: 0.9rem;
       font-weight: 600;
-      padding: 0.65rem 2.75rem 0.65rem 1.25rem;
+      padding: 0.65rem 1.25rem;
       border-radius: 12px;
       border: 1px solid var(--glass-border);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.2);
       cursor: pointer;
-      outline: none;
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      min-width: 180px;
     }
 
-    .season-select:hover, .season-select:focus {
+    .dropdown-trigger:hover {
       background-color: var(--glass-bg-hover);
       border-color: var(--glass-border-light);
     }
 
-    .season-select option {
-      background-color: #16161a;
+    .dropdown-trigger svg {
+      transition: transform 0.25s ease;
+    }
+
+    .custom-dropdown.open .dropdown-trigger svg {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: rgba(18, 18, 22, 0.85);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border-light);
+      border-radius: 14px;
+      padding: 0.4rem;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      display: none;
+      flex-direction: column;
+      gap: 0.2rem;
+      z-index: 100;
+    }
+
+    .custom-dropdown.open .dropdown-menu {
+      display: flex;
+    }
+
+    .dropdown-option {
+      padding: 0.6rem 0.85rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--secondary-text);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .dropdown-option:hover {
+      background: var(--glass-bg-hover);
       color: var(--text);
-      padding: 0.5rem;
+    }
+
+    .dropdown-option.active {
+      background: var(--segmented-btn-active);
+      color: #ffffff;
+      font-weight: 600;
     }
 
     /* --- SEASON SECTION HEADERS --- */
@@ -430,7 +477,7 @@
       .meta-line, .tags { justify-content: center; }
       .episode-header { flex-direction: column; gap: 0.25rem; }
       .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
-      .season-select { width: 100%; }
+      .custom-dropdown { width: 100%; }
     }
   </style>
 </head>
@@ -442,13 +489,21 @@
   </header>
 
   <div class="filter-wrapper">
-    <select class="season-select" id="season-picker" aria-label="Filter episodes by season">
-      <option value="all">All Seasons</option>
-      <option value="3">Season 3</option>
-      <option value="2">Season 2</option>
-      <option value="1">Season 1</option>
-      <option value="trailer">Pilot</option>
-    </select>
+    <div class="custom-dropdown" id="season-dropdown">
+      <button class="dropdown-trigger" id="dropdown-btn" aria-haspopup="listbox" aria-expanded="false">
+        <span id="dropdown-label">All Seasons</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+      <div class="dropdown-menu" id="dropdown-menu" role="listbox">
+        <div class="dropdown-option active" data-value="all" role="option">All Seasons</div>
+        <div class="dropdown-option" data-value="3" role="option">Season 3</div>
+        <div class="dropdown-option" data-value="2" role="option">Season 2</div>
+        <div class="dropdown-option" data-value="1" role="option">Season 1</div>
+        <div class="dropdown-option" data-value="trailer" role="option">Pilot</div>
+      </div>
+    </div>
   </div>
 
   <div id="episodes-container">
@@ -669,11 +724,36 @@
   }
 
   function setupSeasonDropdown(episodesData) {
-    const select = document.getElementById('season-picker');
-    if (!select) return;
+    const dropdown = document.getElementById('season-dropdown');
+    const trigger = document.getElementById('dropdown-btn');
+    const label = document.getElementById('dropdown-label');
+    const options = dropdown.querySelectorAll('.dropdown-option');
 
-    select.addEventListener('change', (e) => {
-      renderEpisodes(episodesData, e.target.value);
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      trigger.setAttribute('aria-expanded', isOpen);
+    });
+
+    options.forEach(opt => {
+      opt.addEventListener('click', () => {
+        options.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        
+        label.textContent = opt.textContent;
+        dropdown.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+
+        const filterVal = opt.getAttribute('data-value');
+        renderEpisodes(episodesData, filterVal);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
