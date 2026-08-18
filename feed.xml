@@ -23,10 +23,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>2</itunes:season>
       <itunes:episode>3</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S02E03</link>
+      <link>https://heavenspecial.github.io/radio/#s2-e3</link>
       <description>➂ of 3 ➢ Original taping: Winter 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-3-29/423115588-44100-2-930fbc1a961fc.m4a" length="153511526" type="audio/mp4"/>
-      <guid isPermaLink="false">S02E03</guid>
+      <guid isPermaLink="false">ep_s2e3</guid>
       <pubDate>Wed, 20 May 2026 21:00:00 EST</pubDate>
     </item>
 
@@ -35,10 +35,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>2</itunes:season>
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S02E02</link>
+      <link>https://heavenspecial.github.io/radio/#s2-e2</link>
       <description>➁ of 3 ➢ Original taping: Winter 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-3-29/423115394-44100-2-1f180e034c554.m4a" length="149567980" type="audio/mp4"/>
-      <guid isPermaLink="false">S02E02</guid>
+      <guid isPermaLink="false">ep_s2e2</guid>
       <pubDate>Tue, 12 May 2026 21:00:00 EST</pubDate>
     </item>
     
@@ -47,10 +47,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>2</itunes:season>
       <itunes:episode>1</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S02E01</link>
+      <link>https://heavenspecial.github.io/radio/#s2-e1</link>
       <description>➀ of 3 ➢ Original taping: Winter 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-3-28/423061228-44100-2-479d1c8ad88.m4a" length="151204659" type="audio/mp4"/>
-      <guid isPermaLink="false">S02E01</guid>
+      <guid isPermaLink="false">ep_s2e1</guid>
       <pubDate>Mon, 11 May 2026 21:00:00 EST</pubDate>
     </item>
     
@@ -59,10 +59,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>1</itunes:season>
       <itunes:episode>3</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S01E03</link>
+      <link>https://heavenspecial.github.io/radio/#s1-e3</link>
       <description>➂ of 3 ➢ Original taping: Summer 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-7-13/429798101-44100-2-c22769c228927.m4a" length="141568236" type="audio/mp4"/>
-      <guid isPermaLink="false">S01E03</guid>
+      <guid isPermaLink="false">ep_s1e3</guid>
       <pubDate>Wed, 25 Feb 2026 21:00:00 EST</pubDate>
     </item>
 
@@ -71,10 +71,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>1</itunes:season>
       <itunes:episode>2</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S01E02</link>
+      <link>https://heavenspecial.github.io/radio/#s1-e2</link>
       <description>➁ of 3 ➢ Original taping: Summer 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-7-13/468a4ef5-16c3-d23a-40d7-2d1265c4b578.mp3" length="179594611" type="audio/mpeg"/>
-      <guid isPermaLink="false">S01E02</guid>
+      <guid isPermaLink="false">ep_s1e2</guid>
       <pubDate>Tue, 24 Feb 2026 21:00:00 EST</pubDate>
     </item>
     
@@ -83,10 +83,10 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <itunes:season>1</itunes:season>
       <itunes:episode>1</itunes:episode>
       <itunes:episodeType>full</itunes:episodeType>
-      <link>https://heavenspecial.github.io/radio/#S01E01</link>
+      <link>https://heavenspecial.github.io/radio/#s1-e1</link>
       <description>➀ of 3 ➢ Original taping: Summer 2025.</description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-7-14/429843265-44100-2-d221702657e17.m4a" length="150554542" type="audio/mp4"/>
-      <guid isPermaLink="false">S01E01</guid>
+      <guid isPermaLink="false">ep_s1e1</guid>
       <pubDate>Wed, 18 Feb 2026 21:00:00 EST</pubDate>
     </item>
     
@@ -98,7 +98,7 @@ The mildly sexful nature of this programme has reportedly cured countless young 
       <description><![CDATA[➢ Original taping: Summer 2023.<br><br>
 (Warning is hereby given that the listeners are warned not to be swept off their feet by the multifarious appeal of this show, but to regard it soberly and to observe a critical attitude.)]]></description>
       <enclosure url="https://d3ctxlq1ktw2nl.cloudfront.net/staging/2026-1-17/38911075-49fc-f1dc-f9ca-ed9129b4dcf0.mp3" length="28605644" type="audio/mpeg"/>
-      <guid isPermaLink="false">pilot</guid>
+      <guid isPermaLink="false">ep_pilot</guid>
       <pubDate>Tue, 17 Feb 2026 05:00:00 EST</pubDate>
     </item>
   </channel>
