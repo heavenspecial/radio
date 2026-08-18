@@ -506,14 +506,14 @@
       transform: translateX(-50%) translateY(100%);
       width: 100%;
       max-width: 500px;
-      min-height: 180px; /* Ensures a taller drawer height */
+      min-height: 200px;
       background: var(--glass-bg);
       backdrop-filter: var(--glass-blur);
       -webkit-backdrop-filter: var(--glass-blur);
       border: 1px solid var(--glass-border);
       border-bottom: none;
       border-radius: 24px 24px 0 0;
-      padding: 1.5rem 1.75rem 3.5rem 1.75rem; /* Increased */
+      padding: 1.25rem 1.75rem 3.5rem 1.75rem;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       z-index: 999;
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -521,12 +521,19 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      gap: 1.25rem; /* Adds space between the drag handle pill, top icon, and content row */
-      touch-action: none; /* Allows responsive drag control */
+      gap: 1.25rem;
+      touch-action: none;
       cursor: grab;
       overflow: hidden;
     }
 
+    .drawer-top-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+    }
 
     /* Red ambient glow from top left */
     .sherlock-drawer::before {
@@ -554,12 +561,6 @@
       cursor: grab;
     }
 
-    .drawer-top-icon {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
     /* Side-by-Side Content Container */
     .sherlock-content-row {
       width: 100%;
@@ -573,7 +574,7 @@
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
-      min-width: 0; /* Ensures proper text truncation if needed */
+      min-width: 0;
     }
 
     .sherlock-drawer-header {
@@ -664,8 +665,7 @@
 <!-- Sherlock Radio Bottom Drawer -->
 <div class="sherlock-drawer-overlay" id="sherlock-overlay"></div>
 <div class="sherlock-drawer" id="sherlock-drawer">
-  <div class="drawer-handle-bar"></div>
-  <div class="drawer-top-icon">
+  <div class="drawer-top-container">
     <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
         l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
@@ -680,6 +680,7 @@
         c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
         c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
     </svg>
+    <div class="drawer-handle-bar"></div>
   </div>
   <div class="sherlock-content-row">
     <div class="sherlock-info-col">
