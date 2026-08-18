@@ -563,9 +563,12 @@
     }
 
     .sherlock-status {
-      font-size: 0.85rem;
-      color: var(--secondary-text);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
       text-align: center;
+      padding: 0 1rem;
+      line-height: 1.4;
     }
 
     @media (max-width: 650px) {
@@ -612,7 +615,7 @@
   <div id="podcast-footer"></div>
   
   <!-- Sherlock Holmes Easter Egg Button -->
-  <button id="sherlock-trigger" class="sherlock-icon-btn" title="Sherlock Holmes Radio" aria-label="Sherlock Holmes Radio">
+  <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
     <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
       <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
         l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
@@ -649,11 +652,11 @@
           c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
           c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
       </svg>
-      Sherlock Holmes Radio
+      Baker Street Wireless
     </div>
     <button class="btn-close-drawer" id="sherlock-close" aria-label="Close">✕</button>
   </div>
-  <p class="sherlock-status" id="sherlock-status">Radio is currently off.</p>
+  <p class="sherlock-status" id="sherlock-status">Radio is off.</p>
   <button class="btn-play-pause" id="sherlock-play-btn" title="Start Radio">
     <svg class="icon-play" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"></polygon></svg>
     <svg class="icon-pause" viewBox="0 0 24 24" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
@@ -663,16 +666,8 @@
 
 <script>
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
+  const SHERLOCK_RSS_URL = 'https://fourble.co.uk/sherlockholm-260818-0.rss';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
-
-  // --- SHERLOCK HOLMES AUDIO URLS ---
-  // Replace or add your custom Sherlock Holmes audio links here
-  const SHERLOCK_URLS = [
-    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_391002_TheAdventureOfTheBrucePartingtonPlans.mp3',
-    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_391106_TheAdventureOfTheRetiredColourman.mp3',
-    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_400122_TheAdventureOfTheCopperBeeches.mp3',
-    'https://ia800201.us.archive.org/13/items/SherlockHolmesOldTimeRadio/SherlockHolmes_450326_TheBookOfTobit.mp3'
-  ];
 
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
@@ -960,9 +955,34 @@
     });
   }
 
-  // --- SHERLOCK HOLMES EASTER EGG ENGINE ---
+  // --- BAKER STREET WIRELESS EASTER EGG ENGINE ---
   let sherlockAudio = null;
+  let sherlockTracks = [];
+  let currentTrack = null;
   let isFirstPlay = true;
+
+  async function fetchSherlockFeed() {
+    try {
+      const response = await fetch(SHERLOCK_RSS_URL);
+      const textData = await response.text();
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(textData, 'application/xml');
+
+      const items = Array.from(xml.querySelectorAll('item'));
+      sherlockTracks = items.map(item => {
+        const titleEl = item.querySelector('title');
+        const enclosureEl = item.querySelector('enclosure');
+        
+        return {
+          title: titleEl ? titleEl.textContent.trim() : 'Sherlock Holmes Mystery',
+          url: enclosureEl ? enclosureEl.getAttribute('url') : ''
+        };
+      }).filter(track => track.url !== '');
+
+    } catch (err) {
+      console.error('Error loading Sherlock RSS feed:', err);
+    }
+  }
 
   function setupSherlockRadio() {
     const trigger = document.getElementById('sherlock-trigger');
@@ -989,20 +1009,21 @@
     closeBtn.addEventListener('click', closeDrawer);
     overlay.addEventListener('click', closeDrawer);
 
-    const getRandomUrl = () => {
-      const idx = Math.floor(Math.random() * SHERLOCK_URLS.length);
-      return SHERLOCK_URLS[idx];
+    const getRandomTrack = () => {
+      const idx = Math.floor(Math.random() * sherlockTracks.length);
+      return sherlockTracks[idx];
     };
 
     const playRandomTrack = (randomSeek = false) => {
-      if (!SHERLOCK_URLS.length) return;
+      if (!sherlockTracks.length) {
+        statusText.textContent = "Tuning into frequency...";
+        return;
+      }
       
-      const trackUrl = getRandomUrl();
-      sherlockAudio.src = trackUrl;
-      statusText.textContent = "Connecting to frequency...";
+      currentTrack = getRandomTrack();
+      sherlockAudio.src = currentTrack.url;
 
       if (randomSeek) {
-        // Once metadata loads, seek to a random spot between 10% and 85%
         const onMetadata = () => {
           if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
             const minTime = sherlockAudio.duration * 0.1;
@@ -1043,23 +1064,23 @@
     sherlockAudio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
-      statusText.textContent = "Sherlock Holmes Radio is ON";
+      statusText.textContent = currentTrack ? currentTrack.title : 'Baker Street Wireless';
     });
 
     sherlockAudio.addEventListener('pause', () => {
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
-      statusText.textContent = "Radio is paused.";
+      statusText.textContent = currentTrack ? `${currentTrack.title} (Paused)` : 'Radio is paused.';
     });
 
-    // When a track finishes, automatically play a new random track from 0:00
     sherlockAudio.addEventListener('ended', () => {
       playRandomTrack(false);
     });
   }
 
-  window.addEventListener('DOMContentLoaded', () => {
+  window.addEventListener('DOMContentLoaded', async () => {
     loadPodcastFeed();
+    await fetchSherlockFeed();
     setupSherlockRadio();
   });
 </script>
