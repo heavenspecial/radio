@@ -1177,32 +1177,30 @@
 
     const updateMediaSession = () => {
       if ('mediaSession' in navigator) {
-        const numListening = Math.floor(Math.random() * 72) + 1;
-
         navigator.mediaSession.metadata = new MediaMetadata({
           title: 'Baker Street Wireless',
-          artist: `${numListening} Listening`,
-          album: 'Sherlock Radio',
-          artwork: [
-            { src: 'https://heavenspecial.github.io/radio/artwork/album.jpg', sizes: '512x512', type: 'image/jpeg' }
-          ]
+          artist: 'Live Broadcast',
+          album: 'Sherlock Radio'
         });
 
-        navigator.mediaSession.playbackState = 'playing';
+        if ('setPositionState' in navigator.mediaSession) {
+          navigator.mediaSession.setPositionState({
+            duration: Infinity,
+            playbackRate: 1.0,
+            position: 0
+          });
+        }
 
         try {
-          navigator.mediaSession.setActionHandler('play', () => {
-            sherlockAudio.play();
-          });
-          navigator.mediaSession.setActionHandler('pause', () => {
-            sherlockAudio.pause();
-          });
           navigator.mediaSession.setActionHandler('seekto', null);
           navigator.mediaSession.setActionHandler('seekforward', null);
           navigator.mediaSession.setActionHandler('seekbackward', null);
         } catch (e) {
-          console.warn('MediaSession handler error:', e);
+          console.warn('MediaSession seek handlers unbind not supported');
         }
+
+        navigator.mediaSession.setActionHandler('play', () => sherlockAudio.play());
+        navigator.mediaSession.setActionHandler('pause', () => sherlockAudio.pause());
       }
     };
 
@@ -1228,9 +1226,7 @@
         sherlockAudio.currentTime = 0;
       }
 
-      sherlockAudio.play().then(() => {
-        updateMediaSession();
-      }).catch(err => {
+      sherlockAudio.play().catch(err => {
         console.error('Playback error:', err);
         statusText.textContent = 'Error tuning into broadcast.';
       });
@@ -1251,9 +1247,7 @@
           playRandomTrack(true);
           isFirstPlay = false;
         } else {
-          sherlockAudio.play().then(() => {
-            updateMediaSession();
-          });
+          sherlockAudio.play();
         }
       } else {
         sherlockAudio.pause();
@@ -1270,9 +1264,6 @@
     sherlockAudio.addEventListener('pause', () => {
       iconPlay.style.display = 'block';
       iconPause.style.display = 'none';
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.playbackState = 'paused';
-      }
     });
 
     sherlockAudio.addEventListener('ended', () => {
