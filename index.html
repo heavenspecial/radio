@@ -1010,6 +1010,26 @@
     const statusText = document.getElementById('sherlock-status');
     sherlockAudio = document.getElementById('sherlock-audio');
 
+    // Update system notification bar via Media Session API
+    function updateMediaSession() {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: currentTrackTitle || 'Live Radio Stream',
+          artist: 'Baker Street Wireless',
+          album: 'Sherlock Holmes Radio'
+        });
+
+        // Setting duration to Infinity tells Android/iOS to treat this as a Live stream without scrubbers
+        if ('setPositionState' in navigator.mediaSession) {
+          navigator.mediaSession.setPositionState({
+            duration: Infinity,
+            playbackRate: 1,
+            position: 0
+          });
+        }
+      }
+    }
+
     // Fetch and parse the Sherlock JSON feed dynamically
     async function fetchSherlockTracks() {
       try {
@@ -1153,6 +1173,9 @@
       iconPause.style.display = 'block';
       // Displays "Now Playing: " followed by the episode title
       statusText.textContent = `Now Playing: ${currentTrackTitle}`;
+      
+      // Update system notification UI for Live Mode
+      updateMediaSession();
     });
 
     sherlockAudio.addEventListener('pause', () => {
