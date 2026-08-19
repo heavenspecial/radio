@@ -178,24 +178,28 @@
     .microblog-item {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 0.85rem 1rem;
+      border-radius: 18px;
+      padding: 1.25rem 1.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
-    .microblog-date {
-      font-size: 0.72rem;
-      color: var(--secondary-text);
-      font-weight: 500;
-    }
-
+    /* Matches podcast title CSS */
     .microblog-text {
-      font-size: 0.9rem;
-      color: var(--text);
-      line-height: 1.4;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1.15;
       white-space: pre-wrap;
+    }
+
+    /* Matches episode description CSS */
+    .microblog-date {
+      font-size: 0.92rem;
+      color: var(--secondary-text);
+      line-height: 1.5;
     }
 
     /* --- HERO HEADER --- */
@@ -720,6 +724,7 @@
 
     @media (max-width: 650px) {
       .apple-menu-links { display: none; }
+      .microblog-text { font-size: 1.6rem; }
       header#podcast-header {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -839,6 +844,23 @@
     return `${mins}:${formattedSecs}`;
   }
 
+  // Format date cleanly as "11:06 AM - 6 Aug 2026"
+  function formatFlaireDate(dateObj) {
+    if (isNaN(dateObj.getTime())) return '';
+    
+    const timeStr = dateObj.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true
+    });
+    
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
+    const year = dateObj.getFullYear();
+
+    return `${timeStr} - ${day} ${month} ${year}`;
+  }
+
   // Fetch Microblogs from GitJournal "flaires/" directory
   async function fetchMicroblogsFromGitJournal() {
     const container = document.getElementById('microblog-container');
@@ -874,22 +896,21 @@
         // Clean YAML frontmatter from GitJournal
         const cleanText = rawText.replace(/^---[\s\S]*?---/, '').trim();
 
-        // Extract date from filename (e.g. 2026-08-19-17-30.md)
-        let postDate = '';
+        // Extract date from filename or fallback
+        let postDateStr = '';
         const dateMatch = file.name.match(/^(\d{4}-\d{2}-\d{2}[T_\-]\d{2}[\-:]\d{2})/);
         if (dateMatch) {
           const parsed = new Date(dateMatch[1].replace('_', 'T'));
-          if (!isNaN(parsed)) {
-            postDate = parsed.toLocaleString('en-US', {
-              month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
-            });
-          }
+          postDateStr = formatFlaireDate(parsed);
+        } else if (file.path) {
+          // Fallback timestamp if filename parsing yields no date
+          postDateStr = formatFlaireDate(new Date());
         }
 
         return `
           <article class="microblog-item">
-            ${postDate ? `<time class="microblog-date">${postDate}</time>` : ''}
-            <p class="microblog-text">${cleanText}</p>
+            <div class="microblog-text">${cleanText}</div>
+            ${postDateStr ? `<time class="microblog-date">${postDateStr}</time>` : ''}
           </article>
         `;
       }).join('');
