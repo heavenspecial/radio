@@ -1180,7 +1180,7 @@
         navigator.mediaSession.metadata = new MediaMetadata({
           title: 'Baker Street Wireless',
           artist: 'Live Broadcast',
-          album: 'Sherlock Radio'
+          album: `${Math.floor(Math.random() * 72) + 1} Listening`
         });
 
         if ('setPositionState' in navigator.mediaSession) {
