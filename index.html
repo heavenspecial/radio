@@ -1010,23 +1010,45 @@
     const statusText = document.getElementById('sherlock-status');
     sherlockAudio = document.getElementById('sherlock-audio');
 
-    // Update system notification bar via Media Session API
+    // Override system notification bar via Media Session API
     function updateMediaSession() {
       if ('mediaSession' in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: currentTrackTitle || 'Live Radio Stream',
+          title: currentTrackTitle || 'Live Radio Broadcast',
           artist: 'Baker Street Wireless',
           album: 'Sherlock Holmes Radio'
         });
 
-        // Setting duration to Infinity tells Android/iOS to treat this as a Live stream without scrubbers
+        // Set duration to Infinity for OS lockscreen notification UI
         if ('setPositionState' in navigator.mediaSession) {
-          navigator.mediaSession.setPositionState({
-            duration: Infinity,
-            playbackRate: 1,
-            position: 0
-          });
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: Infinity,
+              playbackRate: 1,
+              position: 0
+            });
+          } catch(e) {
+            // Safari iOS fallback
+          }
         }
+
+        // Remove seeking actions from Control Center (specifically forces iOS into Live Broadcast mode)
+        navigator.mediaSession.setActionHandler('seekto', null);
+        navigator.mediaSession.setActionHandler('seekbackward', null);
+        navigator.mediaSession.setActionHandler('seekforward', null);
+      }
+    }
+
+    // Force iOS Safari to treat audio as a live infinite stream
+    function applyIOSStreamFix() {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      
+      if (isIOS) {
+        // Prevent Safari from broadcasting the duration property to WebKit MediaSession
+        Object.defineProperty(sherlockAudio, 'duration', {
+          get: function() { return Infinity; },
+          configurable: true
+        });
       }
     }
 
@@ -1127,16 +1149,18 @@
       if (randomSeek) {
         // Seek to a random point between 10% and 85% of total length on initial tuning
         const onMetadata = () => {
-          if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
+          if (!isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0 && sherlockAudio.duration !== Infinity) {
             const minTime = sherlockAudio.duration * 0.1;
             const maxTime = sherlockAudio.duration * 0.85;
             sherlockAudio.currentTime = Math.random() * (maxTime - minTime) + minTime;
           }
+          applyIOSStreamFix();
           sherlockAudio.removeEventListener('loadedmetadata', onMetadata);
         };
         sherlockAudio.addEventListener('loadedmetadata', onMetadata);
       } else {
         sherlockAudio.currentTime = 0;
+        applyIOSStreamFix();
       }
 
       sherlockAudio.play().catch(err => {
