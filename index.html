@@ -1096,6 +1096,37 @@
       return sherlockTracks[idx];
     };
 
+    const updateMediaSession = () => {
+      if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: 'Baker Street Wireless',
+          artist: 'Live Broadcast',
+          album: 'Sherlock Radio'
+        });
+
+        // Set live position state (Infinity hides seekbar in OS controls)
+        if ('setPositionState' in navigator.mediaSession) {
+          navigator.mediaSession.setPositionState({
+            duration: Infinity,
+            playbackRate: 1.0,
+            position: 0
+          });
+        }
+
+        // Unbind seek actions to prevent OS scrubbing controls
+        try {
+          navigator.mediaSession.setActionHandler('seekto', null);
+          navigator.mediaSession.setActionHandler('seekforward', null);
+          navigator.mediaSession.setActionHandler('seekbackward', null);
+        } catch (e) {
+          console.warn('MediaSession seek handlers unbind not supported');
+        }
+
+        navigator.mediaSession.setActionHandler('play', () => sherlockAudio.play());
+        navigator.mediaSession.setActionHandler('pause', () => sherlockAudio.pause());
+      }
+    };
+
     const playRandomTrack = (randomSeek = false) => {
       if (!sherlockTracks.length) return;
 
@@ -1153,6 +1184,7 @@
       iconPause.style.display = 'block';
       // Displays "Now Playing: " followed by the episode title
       statusText.textContent = `Now Playing: ${currentTrackTitle}`;
+      updateMediaSession();
     });
 
     sherlockAudio.addEventListener('pause', () => {
