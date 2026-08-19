@@ -157,30 +157,45 @@
     }
 
     .apple-nav-drawer.open {
-      max-height: 300px;
-      padding: 1.5rem 0 2rem 0;
+      max-height: 70vh;
+      padding: 1.5rem 0;
     }
 
+    /* Microblog Drawer Container & Feed Styles */
     .apple-drawer-menu {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-      text-align: center;
+      gap: 1rem;
       width: 100%;
+      max-width: 600px;
+      padding: 0 1.25rem;
+      overflow-y: auto;
+      max-height: 100%;
+      text-align: left;
     }
 
-    .apple-drawer-menu a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.1rem;
+    .microblog-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .microblog-date {
+      font-size: 0.72rem;
+      color: var(--secondary-text);
       font-weight: 500;
-      display: block;
-      transition: color 0.2s ease;
     }
 
-    .apple-drawer-menu a:hover {
-      color: var(--accent);
+    .microblog-text {
+      font-size: 0.9rem;
+      color: var(--text);
+      line-height: 1.4;
+      white-space: pre-wrap;
     }
 
     /* --- HERO HEADER --- */
@@ -748,22 +763,14 @@
           c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
       </svg>
     </button>
-
-    <ul class="apple-menu-links">
-      <li><a href="#podcast-header">Overview</a></li>
-      <li><a href="#episodes-container">Episodes</a></li>
-      <li><a href="#podcast-footer">About</a></li>
-    </ul>
   </div>
 </nav>
 
-<!-- Apple Header Drawer -->
+<!-- Dynamic Microblog Navigation Drawer -->
 <div class="apple-nav-drawer" id="apple-nav-drawer">
-  <ul class="apple-drawer-menu">
-    <li><a href="#podcast-header" class="drawer-link">Overview</a></li>
-    <li><a href="#episodes-container" class="drawer-link">Episodes</a></li>
-    <li><a href="#podcast-footer" class="drawer-link">About</a></li>
-  </ul>
+  <div class="apple-drawer-menu" id="microblog-container">
+    <p style="color: var(--secondary-text);">Loading updates...</p>
+  </div>
 </div>
 
 <main>
@@ -814,6 +821,11 @@
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
+  // GitJournal Flaires Configuration
+  const GITHUB_USER = 'heavenspecial';
+  const GITHUB_REPO = 'radio';
+  const POSTS_FOLDER = 'flaires';
+
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
@@ -825,6 +837,67 @@
       return `${hrs}:${formattedMins}:${formattedSecs}`;
     }
     return `${mins}:${formattedSecs}`;
+  }
+
+  // Fetch Microblogs from GitJournal "flaires/" directory
+  async function fetchMicroblogsFromGitJournal() {
+    const container = document.getElementById('microblog-container');
+    
+    try {
+      const listRes = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`);
+      
+      if (!listRes.ok) {
+        if (listRes.status === 404) {
+          container.innerHTML = `<p style="color: var(--secondary-text);">No posts in flaires/ yet.</p>`;
+          return;
+        }
+        throw new Error(`GitHub API Error: ${listRes.status}`);
+      }
+
+      const files = await listRes.json();
+
+      if (!Array.isArray(files) || files.length === 0) {
+        container.innerHTML = `<p style="color: var(--secondary-text);">No microblogs published yet.</p>`;
+        return;
+      }
+
+      // Sort newest files first based on filename timestamping
+      files.sort((a, b) => b.name.localeCompare(a.name));
+
+      // Fetch file content in parallel
+      const postPromises = files.map(file => fetch(file.download_url).then(res => res.text()));
+      const rawContents = await Promise.all(postPromises);
+
+      container.innerHTML = files.map((file, index) => {
+        const rawText = rawContents[index];
+
+        // Clean YAML frontmatter from GitJournal
+        const cleanText = rawText.replace(/^---[\s\S]*?---/, '').trim();
+
+        // Extract date from filename (e.g. 2026-08-19-17-30.md)
+        let postDate = '';
+        const dateMatch = file.name.match(/^(\d{4}-\d{2}-\d{2}[T_\-]\d{2}[\-:]\d{2})/);
+        if (dateMatch) {
+          const parsed = new Date(dateMatch[1].replace('_', 'T'));
+          if (!isNaN(parsed)) {
+            postDate = parsed.toLocaleString('en-US', {
+              month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+          }
+        }
+
+        return `
+          <article class="microblog-item">
+            ${postDate ? `<time class="microblog-date">${postDate}</time>` : ''}
+            <p class="microblog-text">${cleanText}</p>
+          </article>
+        `;
+      }).join('');
+
+    } catch (err) {
+      console.error('Error fetching flaires:', err);
+      container.innerHTML = `<p style="color: var(--secondary-text);">Unable to load microblogs.</p>`;
+    }
   }
 
   async function loadPodcastFeed() {
@@ -1096,18 +1169,10 @@
   function setupAppleNav() {
     const burgerBtn = document.getElementById('burger-btn');
     const navDrawer = document.getElementById('apple-nav-drawer');
-    const drawerLinks = document.querySelectorAll('.drawer-link');
 
     burgerBtn.addEventListener('click', () => {
       burgerBtn.classList.toggle('active');
       navDrawer.classList.toggle('open');
-    });
-
-    drawerLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        burgerBtn.classList.remove('active');
-        navDrawer.classList.remove('open');
-      });
     });
   }
 
@@ -1277,6 +1342,7 @@
     loadPodcastFeed();
     setupAppleNav();
     setupBakerStreetWireless();
+    fetchMicroblogsFromGitJournal();
   });
 </script>
 
