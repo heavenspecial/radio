@@ -117,18 +117,38 @@
       transform: translateY(-4px) rotate(-45deg);
     }
 
-    /* Apple Navigation Drawer / Flaires Feed Container */
+    /* Navigation Menu Links */
+    .apple-menu-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .apple-menu-links a {
+      color: var(--secondary-text);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+    }
+
+    .apple-menu-links a:hover {
+      color: #ffffff;
+    }
+
+    /* Apple Navigation Drawer */
     .apple-nav-drawer {
       position: fixed;
       top: var(--apple-nav-height);
       left: 0;
       right: 0;
-      background: rgba(10, 10, 12, 0.95);
+      background: rgba(0, 0, 0, 0.92);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       max-height: 0;
-      overflow: hidden;
+      overflow-y: auto;
       transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
       z-index: 999;
       display: flex;
@@ -137,66 +157,51 @@
     }
 
     .apple-nav-drawer.open {
-      max-height: 80vh;
+      max-height: 70vh;
       padding: 1.5rem 1rem 2rem 1rem;
-      overflow-y: auto;
     }
 
-    .flaires-feed-container {
-      max-width: 600px;
+    /* Flaire Timeline Styles */
+    .flaires-container {
       width: 100%;
+      max-width: 500px;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
+      gap: 1rem;
     }
 
-    .flaires-header {
-      font-size: 1.1rem;
+    .flaires-title {
+      font-size: 1rem;
       font-weight: 700;
-      letter-spacing: -0.01em;
-      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
       text-align: left;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 0.75rem;
     }
 
-    .flaires-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-    }
-
-    /* Twitter-Style Microblog Cards */
     .flaire-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 1rem 1.25rem;
+      border-radius: 12px;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
       text-align: left;
-      transition: background 0.2s ease, border-color 0.2s ease;
-    }
-
-    .flaire-card:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.15);
     }
 
     .flaire-content {
       font-size: 0.95rem;
-      color: #e5e5e7;
-      line-height: 1.45;
+      color: #ffffff;
+      line-height: 1.4;
       white-space: pre-wrap;
-      word-break: break-word;
     }
 
     .flaire-timestamp {
       font-size: 0.75rem;
-      color: var(--tertiary-text);
+      color: var(--secondary-text);
       font-weight: 500;
-      margin-top: 0.2rem;
     }
 
     /* --- HERO HEADER --- */
@@ -720,6 +725,7 @@
     }
 
     @media (max-width: 650px) {
+      .apple-menu-links { display: none; }
       header#podcast-header {
         grid-template-columns: 1fr;
         grid-template-areas:
@@ -766,12 +772,12 @@
   </div>
 </nav>
 
-<!-- Flaires Microblog Header Drawer -->
+<!-- Apple Header Drawer -->
 <div class="apple-nav-drawer" id="apple-nav-drawer">
-  <div class="flaires-feed-container">
-    <h2 class="flaires-header">Latest Flaires</h2>
-    <div class="flaires-list" id="flaires-list">
-      <p style="color: var(--secondary-text); font-size: 0.85rem;">Loading flaires...</p>
+  <div class="flaires-container">
+    <div class="flaires-title">Latest Flaires</div>
+    <div id="flaires-list">
+      <p style="color: var(--secondary-text); font-size: 0.9rem;">Loading flaires...</p>
     </div>
   </div>
 </div>
@@ -835,103 +841,6 @@
       return `${hrs}:${formattedMins}:${formattedSecs}`;
     }
     return `${mins}:${formattedSecs}`;
-  }
-
-  /* --- FLAIRES FETCH & PARSE ENGINE --- */
-  function formatFlaireDate(isoString) {
-    const date = new Date(isoString);
-    if (isNaN(date.getTime())) return '';
-    
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // convert 0 to 12
-    
-    const timeStr = `${hours}:${minutes} ${ampm}`;
-    const dateStr = date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-
-    return `${timeStr} • ${dateStr}`;
-  }
-
-  async function loadFlaires() {
-    const listContainer = document.getElementById('flaires-list');
-    try {
-      // 1. Fetch index file or GitHub API listing for /flaires
-      let fileList = [];
-      try {
-        const repoRes = await fetch('https://api.github.com/repos/heavenspecial/radio/contents/flaires');
-        if (repoRes.ok) {
-          const filesData = await repoRes.json();
-          fileList = filesData
-            .filter(f => f.name.endsWith('.md'))
-            .map(f => f.download_url || `flaires/${f.name}`);
-        }
-      } catch (e) {
-        console.warn('API directory fetch failed, falling back to static path checking.', e);
-      }
-
-      if (fileList.length === 0) {
-        listContainer.innerHTML = '<p style="color: var(--secondary-text); font-size: 0.85rem;">No flaires found.</p>';
-        return;
-      }
-
-      // Sort files descending (latest timestamp in filename first)
-      fileList.sort().reverse();
-
-      const flaires = await Promise.all(fileList.map(async (fileUrl) => {
-        try {
-          const res = await fetch(fileUrl);
-          if (!res.ok) return null;
-          const text = await res.content ? await res.text() : await res.text();
-          
-          // Parse YAML Frontmatter
-          const frontmatterRegex = /^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/;
-          const match = text.match(frontmatterRegex);
-
-          let createdDate = '';
-          let body = text;
-
-          if (match) {
-            const yaml = match[1];
-            body = match[2].trim();
-            const createdMatch = yaml.match(/created:\s*(.+)/);
-            if (createdMatch) {
-              createdDate = createdMatch[1].trim();
-            }
-          }
-
-          return {
-            content: body,
-            created: createdDate
-          };
-        } catch (err) {
-          return null;
-        }
-      }));
-
-      const validFlaires = flaires.filter(f => f && f.content);
-      
-      if (validFlaires.length === 0) {
-        listContainer.innerHTML = '<p style="color: var(--secondary-text); font-size: 0.85rem;">No flaires available.</p>';
-        return;
-      }
-
-      listContainer.innerHTML = validFlaires.map(flaire => `
-        <div class="flaire-card">
-          <div class="flaire-content">${flaire.content}</div>
-          <div class="flaire-timestamp">${formatFlaireDate(flaire.created)}</div>
-        </div>
-      `).join('');
-
-    } catch (err) {
-      console.error('Error fetching flaires:', err);
-      listContainer.innerHTML = '<p style="color: var(--secondary-text); font-size: 0.85rem;">Error loading flaires feed.</p>';
-    }
   }
 
   async function loadPodcastFeed() {
@@ -1210,6 +1119,76 @@
     });
   }
 
+  // Fetch and display Flaires from GitHub
+  async function loadFlaires() {
+    const flairesListEl = document.getElementById('flaires-list');
+    const apiRepoUrl = 'https://api.github.com/repos/heavenspecial/radio/contents/flaires';
+
+    try {
+      const res = await fetch(apiRepoUrl);
+      if (!res.ok) throw new Error('Failed to fetch repository files');
+      const files = await res.json();
+
+      // Filter down to .md markdown files
+      const mdFiles = files.filter(f => f.name.endsWith('.md'));
+
+      // Sort files in descending order so newest show up first based on file timestamp
+      mdFiles.sort((a, b) => b.name.localeCompare(a.name));
+
+      const flaires = await Promise.all(mdFiles.map(async file => {
+        const fileRes = await fetch(file.download_url);
+        const text = await fileRes.text();
+
+        // Extract Frontmatter and Body Content
+        let createdStr = '';
+        let body = text;
+
+        const frontmatterMatch = text.match(/^---\s*[\s\S]*?created:\s*(.*?)\s*[\s\S]*?---/m);
+        if (frontmatterMatch) {
+          createdStr = frontmatterMatch[1].trim();
+          body = text.replace(/^---\s*[\s\S]*?---\s*/m, '').trim();
+        }
+
+        // Format Date to: "6:30 PM • May 19, 2020"
+        let formattedDate = '';
+        if (createdStr) {
+          const dateObj = new Date(createdStr);
+          if (!isNaN(dateObj)) {
+            const timePart = dateObj.toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true
+            });
+            const datePart = dateObj.toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            });
+            formattedDate = `${timePart} • ${datePart}`;
+          }
+        }
+
+        return { body, formattedDate };
+      }));
+
+      if (flaires.length === 0) {
+        flairesListEl.innerHTML = `<p style="color: var(--secondary-text); font-size: 0.9rem;">No flaires found.</p>`;
+        return;
+      }
+
+      flairesListEl.innerHTML = flaires.map(item => `
+        <div class="flaire-card">
+          <div class="flaire-content">${item.body}</div>
+          ${item.formattedDate ? `<div class="flaire-timestamp">${item.formattedDate}</div>` : ''}
+        </div>
+      `).join('');
+
+    } catch (err) {
+      console.error('Error fetching flaires:', err);
+      flairesListEl.innerHTML = `<p style="color: var(--secondary-text); font-size: 0.9rem;">Unable to load flaires at this time.</p>`;
+    }
+  }
+
   // Sherlock Holmes Radio Engine
   function setupBakerStreetWireless() {
     const SHERLOCK_JSON_URL = 'https://heavenspecial.github.io/radio/221b.json';
@@ -1374,8 +1353,8 @@
 
   window.addEventListener('DOMContentLoaded', () => {
     loadPodcastFeed();
-    loadFlaires();
     setupAppleNav();
+    loadFlaires();
     setupBakerStreetWireless();
   });
 </script>
