@@ -85,6 +85,26 @@
       position: relative;
     }
 
+    /* Dynamic Nav Title swapping out Sherlock logo when drawer opens */
+    .nav-title-container {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-nav-title {
+      display: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
+    }
+
     /* Burger Icon Container & Animation */
     .burger-btn {
       background: transparent;
@@ -117,77 +137,111 @@
       transform: translateY(-4px) rotate(-45deg);
     }
 
-    /* Apple Navigation Drawer */
+    /* Apple Navigation Drawer - Redesigned full screen with top animation down */
     .apple-nav-drawer {
       position: fixed;
       top: var(--apple-nav-height);
       left: 0;
       right: 0;
-      background: rgba(0, 0, 0, 0.92);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      max-height: 0;
-      overflow-y: auto;
-      transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.3s ease;
+      bottom: 0;
+      height: calc(100vh - var(--apple-nav-height));
+      background: rgba(3, 3, 5, 0.4);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border-bottom: 1px solid rgba(0, 0, 255, 0.3);
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.5s;
       z-index: 999;
       display: flex;
       flex-direction: column;
       align-items: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
     }
 
     .apple-nav-drawer.open {
-      max-height: 70vh;
-      padding: 1.5rem 1rem 2rem 1rem;
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Custom Glassy White Scrollbar */
+    .apple-nav-drawer::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 4px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .apple-nav-drawer {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
     }
 
     /* Flaires Feed Drawer Styling */
     .flaires-wrapper {
       width: 100%;
-      max-width: 600px;
+      max-width: 650px;
       display: flex;
       flex-direction: column;
-      gap: 1.25rem;
-    }
-
-    .flaires-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 0.5rem;
-      text-align: center;
-      letter-spacing: -0.01em;
+      gap: 1.5rem;
     }
 
     .flaires-feed {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
+    /* Flaires Cards with Electric Blue and Glow */
     .flaire-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 1rem;
+      background: rgba(0, 0, 255, 0.05);
+      border: 1px solid var(--electric-blue);
+      border-radius: 14px;
+      padding: 1.25rem;
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.75rem;
       text-align: left;
+      box-shadow: 0 0 15px rgba(0, 0, 255, 0.35), inset 0 0 10px rgba(0, 0, 255, 0.2);
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
     }
 
+    .flaire-card:hover {
+      border-color: #3333ff;
+      box-shadow: 0 0 25px rgba(0, 0, 255, 0.6), inset 0 0 15px rgba(0, 0, 255, 0.3);
+    }
+
+    /* Bigger Flaire Text */
     .flaire-content {
-      font-size: 0.95rem;
-      color: #f5f5f7;
+      font-size: 1.15rem;
+      color: #ffffff;
       white-space: pre-wrap;
       word-break: break-word;
-      line-height: 1.45;
+      line-height: 1.5;
+      text-shadow: 0 0 8px rgba(0, 0, 255, 0.4);
     }
 
     .flaire-timestamp {
-      font-size: 0.78rem;
-      color: var(--secondary-text);
+      font-size: 0.85rem;
+      color: #8080ff;
       font-weight: 500;
+      text-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
     }
 
     /* --- HERO HEADER --- */
@@ -261,6 +315,7 @@
       border-radius: 4px;
       text-transform: uppercase;
       border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 8px rgba(0, 0, 255, 0.6);
     }
 
     h1 {
@@ -593,13 +648,10 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     .sherlock-icon-btn:hover {
-      transform: translateX(-50%) scale(1.1);
+      transform: scale(1.1);
     }
 
     .sherlock-svg {
@@ -738,29 +790,31 @@
       <span class="burger-line line-2"></span>
     </button>
 
-    <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
-      <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
-        <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
-          l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
-          c9.75-76.413-18.366-123.936-70.85-145.942l24.641-5.04l-10.338-26.328l-44.328,20.491L299.813,0l-17.289,22.386l15.795,11.121
-          c-2.024-0.122-4.064-0.23-6.117-0.309c-96.294-3.762-131.662,92.532-131.662,92.532s-36.107,21.812-52.656,30.845
-          c-16.55,9.024-15.803,15.795-11.287,21.811c4.516,6.024,60.942,4.516,60.942,4.516s1.5,18.057,1.5,23.327
-          c0,5.262-17.303,28.582-30.09,44.385c-8.034,9.922,4.509,18.05,22.573,19.557c12.938,1.077,12.034,12.788,8.271,18.058
-          c-1.213,1.701-0.854,3.64,0.18,5.614c-5.809,2.513-12.73,6.311-21.238,12.292c-24.634,17.303-45.146,41.872-45.146,41.872
-          l-1.616-13.964c0.187-0.402,0.309-0.804,0.309-1.22c0-4.552-11.301-8.235-25.244-8.235c-13.936,0-25.244,3.683-25.244,8.235
-          c-1.4,10.288-2.757,26.407,0.122,36.81c3.899,14.122,25.531,25.84,48.37,14.122c22.832-11.717,21.474-28.503,57.438-59.311
-          c4.66-4,9.434-7.762,14.145-11.165c-0.524,1.005-0.848,2.118-0.568,3.533c2.284,11.459,8.688,4.042,11.28,15.048
-          c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
-          c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
-      </svg>
-    </button>
+    <div class="nav-title-container">
+      <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
+        <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
+          <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
+            l21.066-42.131c0,0,27.082,6.017,43.624,6.77c16.556,0.754,18.739-9.764,15.802-19.557c-6.77-22.573-36.106-60.942-36.106-60.942
+            c9.75-76.413-18.366-123.936-70.85-145.942l24.641-5.04l-10.338-26.328l-44.328,20.491L299.813,0l-17.289,22.386l15.795,11.121
+            c-2.024-0.122-4.064-0.23-6.117-0.309c-96.294-3.762-131.662,92.532-131.662,92.532s-36.107,21.812-52.656,30.845
+            c-16.55,9.024-15.803,15.795-11.287,21.811c4.516,6.024,60.942,4.516,60.942,4.516s1.5,18.057,1.5,23.327
+            c0,5.262-17.303,28.582-30.09,44.385c-8.034,9.922,4.509,18.05,22.573,19.557c12.938,1.077,12.034,12.788,8.271,18.058
+            c-1.213,1.701-0.854,3.64,0.18,5.614c-5.809,2.513-12.73,6.311-21.238,12.292c-24.634,17.303-45.146,41.872-45.146,41.872
+            l-1.616-13.964c0.187-0.402,0.309-0.804,0.309-1.22c0-4.552-11.301-8.235-25.244-8.235c-13.936,0-25.244,3.683-25.244,8.235
+            c-1.4,10.288-2.757,26.407,0.122,36.81c3.899,14.122,25.531,25.84,48.37,14.122c22.832-11.717,21.474-28.503,57.438-59.311
+            c4.66-4,9.434-7.762,14.145-11.165c-0.524,1.005-0.848,2.118-0.568,3.533c2.284,11.459,8.688,4.042,11.28,15.048
+            c3.008,12.795-3.755,36.115,15.049,39.122c18.804,3.008,47.394-6.024,47.394-6.024l12.794,37.622l-24.081,48.147
+            c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
+        </svg>
+      </button>
+      <div id="drawer-nav-title" class="drawer-nav-title">Latest Flaires</div>
+    </div>
   </div>
 </nav>
 
 <!-- Apple Header Drawer (Flaires Timeline Feed) -->
 <div class="apple-nav-drawer" id="apple-nav-drawer">
   <div class="flaires-wrapper">
-    <h2 class="flaires-title">Latest Flaires</h2>
     <div class="flaires-feed" id="flaires-feed">
       <p style="color: var(--secondary-text); text-align: center;">Loading flaires...</p>
     </div>
@@ -1097,10 +1151,20 @@
   function setupAppleNav() {
     const burgerBtn = document.getElementById('burger-btn');
     const navDrawer = document.getElementById('apple-nav-drawer');
+    const sherlockBtn = document.getElementById('sherlock-trigger');
+    const drawerNavTitle = document.getElementById('drawer-nav-title');
 
     burgerBtn.addEventListener('click', () => {
-      burgerBtn.classList.toggle('active');
+      const isOpen = burgerBtn.classList.toggle('active');
       navDrawer.classList.toggle('open');
+
+      if (isOpen) {
+        sherlockBtn.style.display = 'none';
+        drawerNavTitle.style.display = 'block';
+      } else {
+        sherlockBtn.style.display = 'inline-flex';
+        drawerNavTitle.style.display = 'none';
+      }
     });
 
     fetchFlaires();
