@@ -157,17 +157,30 @@
     }
 
     .apple-nav-drawer.open {
-      max-height: 300px;
+      max-height: 80vh;
       padding: 1.5rem 0 2rem 0;
+    }
+
+    .apple-drawer-content {
+      width: 100%;
+      max-width: 600px;
+      max-height: calc(80vh - 3.5rem);
+      overflow-y: auto;
+      padding: 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     .apple-drawer-menu {
       list-style: none;
       display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
+      justify-content: center;
+      gap: 2rem;
       text-align: center;
       width: 100%;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .apple-drawer-menu a {
@@ -181,6 +194,36 @@
 
     .apple-drawer-menu a:hover {
       color: var(--accent);
+    }
+
+    /* Flaire Microblog Feed Styles */
+    .flaires-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .flaire-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .flaire-content {
+      color: var(--text);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+
+    .flaire-timestamp {
+      font-size: 0.75rem;
+      color: var(--secondary-text);
+      font-weight: 400;
     }
 
     /* --- HERO HEADER --- */
@@ -759,11 +802,16 @@
 
 <!-- Apple Header Drawer -->
 <div class="apple-nav-drawer" id="apple-nav-drawer">
-  <ul class="apple-drawer-menu">
-    <li><a href="#podcast-header" class="drawer-link">Overview</a></li>
-    <li><a href="#episodes-container" class="drawer-link">Episodes</a></li>
-    <li><a href="#podcast-footer" class="drawer-link">About</a></li>
-  </ul>
+  <div class="apple-drawer-content">
+    <ul class="apple-drawer-menu">
+      <li><a href="#podcast-header" class="drawer-link">Overview</a></li>
+      <li><a href="#episodes-container" class="drawer-link">Episodes</a></li>
+      <li><a href="#podcast-footer" class="drawer-link">About</a></li>
+    </ul>
+    <div class="flaires-feed" id="flaires-feed">
+      <p style="color: var(--secondary-text); text-align: center; font-size: 0.85rem;">Loading flaires...</p>
+    </div>
+  </div>
 </div>
 
 <main>
@@ -1111,6 +1159,90 @@
     });
   }
 
+  // Flaire Loader Engine
+  async function loadFlairesFeed() {
+    const feedContainer = document.getElementById('flaires-feed');
+    try {
+      // Fetch directory index or listing manifest file if available
+      const response = await fetch('/flaires/');
+      if (!response.ok) throw new Error('Failed to access /flaires directory');
+      
+      const htmlText = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlText, 'text/html');
+      
+      // Parse link anchors to find markdown files
+      const links = Array.from(doc.querySelectorAll('a'))
+        .map(a => a.getAttribute('href'))
+        .filter(href => href && href.endsWith('.md'));
+
+      if (links.length === 0) {
+        feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center; font-size: 0.85rem;">No flaires found.</p>';
+        return;
+      }
+
+      const flairesData = await Promise.all(links.map(async (link) => {
+        const filePath = link.startsWith('/') || link.startsWith('http') ? link : `/flaires/${link}`;
+        const fileRes = await fetch(filePath);
+        const text = await fileRes.text();
+
+        // Extract Frontmatter
+        const frontmatterMatch = text.match(/^---\s*[\r\n]+([\s\S]*?)[\r\n]+---\s*[\r\n]+([\s\S]*)$/);
+        
+        let createdDateStr = '';
+        let bodyContent = text.trim();
+
+        if (frontmatterMatch) {
+          const rawYaml = frontmatterMatch[1];
+          bodyContent = frontmatterMatch[2].trim();
+
+          const createdMatch = rawYaml.match(/created:\s*(.+)/);
+          if (createdMatch) {
+            createdDateStr = createdMatch[1].trim();
+          }
+        }
+
+        const dateObj = createdDateStr ? new Date(createdDateStr) : new Date();
+
+        // Format Date to: 6:30 PM • May 19, 2020
+        const formattedTime = dateObj.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true
+        });
+
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+
+        const finalTimestamp = `${formattedTime} • ${formattedDate}`;
+
+        return {
+          content: bodyContent,
+          timestamp: finalTimestamp,
+          rawDate: dateObj
+        };
+      }));
+
+      // Sort flaires newest first
+      flairesData.sort((a, b) => b.rawDate - a.rawDate);
+
+      // Render Feed
+      feedContainer.innerHTML = flairesData.map(flaire => `
+        <div class="flaire-card">
+          <div class="flaire-content">${flaire.content}</div>
+          <div class="flaire-timestamp">${flaire.timestamp}</div>
+        </div>
+      `).join('');
+
+    } catch (err) {
+      console.error('Error loading flaires:', err);
+      feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center; font-size: 0.85rem;">Unable to load flaires feed.</p>';
+    }
+  }
+
   // Sherlock Holmes Radio Engine
   function setupBakerStreetWireless() {
     const SHERLOCK_JSON_URL = 'https://heavenspecial.github.io/radio/221b.json';
@@ -1276,6 +1408,7 @@
   window.addEventListener('DOMContentLoaded', () => {
     loadPodcastFeed();
     setupAppleNav();
+    loadFlairesFeed();
     setupBakerStreetWireless();
   });
 </script>
