@@ -208,23 +208,26 @@
       gap: 1.25rem;
     }
 
-    /* Flaires Cards with Electric Blue and Glow */
+    /* Flaires Cards with Glass-like Transparent White Background */
     .flaire-card {
-      background: rgba(0, 0, 255, 0.05);
-      border: 1px solid var(--electric-blue);
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
       border-radius: 14px;
       padding: 1.25rem;
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       text-align: left;
-      box-shadow: 0 0 15px rgba(0, 0, 255, 0.35), inset 0 0 10px rgba(0, 0, 255, 0.2);
-      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      box-shadow: var(--glass-shadow);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .flaire-card:hover {
-      border-color: #3333ff;
-      box-shadow: 0 0 25px rgba(0, 0, 255, 0.6), inset 0 0 15px rgba(0, 0, 255, 0.3);
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-light);
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     }
 
     /* Bigger Flaire Text */
