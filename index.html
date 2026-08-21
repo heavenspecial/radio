@@ -119,11 +119,17 @@
       gap: 6px;
       padding: 0;
       z-index: 1002;
-      -webkit-tap-highlight-color: transparent;
-      outline: none;
-      -webkit-user-select: none;
-      user-select: none;
-    }
+  
+  /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
+  -webkit-tap-highlight-color: transparent;
+
+  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
+  outline: none;
+
+  /* Removes mobile Chrome/Android default focus shade */
+  -webkit-user-select: none;
+  user-select: none;
+      }
 
     .burger-line {
       width: 21px;
@@ -245,11 +251,10 @@
       text-shadow: 0 0 8px rgba(0, 0, 255, 0.4);
     }
 
-    /* Styled links inside Flaire content */
+    /* Flaire Links - Red Accent Color */
     .flaire-content a {
       color: var(--accent);
       text-decoration: underline;
-      text-underline-offset: 3px;
       transition: color 0.2s ease;
     }
 
@@ -667,10 +672,16 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-      outline: none;
-      -webkit-user-select: none;
-      user-select: none;
+
+      /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
+  -webkit-tap-highlight-color: transparent;
+
+  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
+  outline: none;
+
+  /* Removes mobile Chrome/Android default focus shade */
+  -webkit-user-select: none;
+  user-select: none;
     }
 
     .sherlock-icon-btn:hover {
@@ -683,6 +694,8 @@
       fill: rgba(255, 255, 255, 0.95);
       filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.15));
       transition: fill 0.3s ease, filter 0.3s ease;
+      
+      
     }
 
     .sherlock-icon-btn:hover .sherlock-svg {
@@ -1212,14 +1225,18 @@
     return `${hours}:${minutes} ${ampm} • ${month} ${day}, ${year}`;
   }
 
-  // Helper to parse links in raw markdown text
-  function parseLinks(text) {
+  // Helper to convert Markdown and plaintext URLs into clickable <a> tags
+  function parseFlaireLinks(text) {
     if (!text) return '';
-    // First, replace Markdown links [text](url)
-    let parsed = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    // Next, replace any remaining plain text URLs that aren't already part of an anchor tag
-    parsed = parsed.replace(/(?<!href="|">)(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-    return parsed;
+    
+    // Parse Markdown links [Text](URL)
+    let parsedText = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    
+    // Parse raw URLs that aren't already wrapped in an <a> tag
+    const rawUrlRegex = /(?<!href=")(https?:\/\/[^\s<]+)/g;
+    parsedText = parsedText.replace(rawUrlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+
+    return parsedText;
   }
 
   // Fetch Flaires via GitHub API
@@ -1286,7 +1303,7 @@
         card.className = 'flaire-card';
 
         const formattedTime = formatFlaireTimestamp(flaire.timestamp);
-        const parsedContent = parseLinks(flaire.content);
+        const parsedContent = parseFlaireLinks(flaire.content);
 
         card.innerHTML = `
           <div class="flaire-content">${parsedContent}</div>
