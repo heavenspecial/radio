@@ -934,11 +934,48 @@
       visibility: visible;
     }
 
+    .cart-item-container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
     .cart-product-img {
-      max-width: 100%;
+      width: 100%;
       height: auto;
       border-radius: 12px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1.25rem;
+    }
+
+    .cart-product-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+      text-align: left;
+    }
+
+    .cart-product-description {
+      font-size: 0.95rem;
+      color: #d1d1d6;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .cart-product-description a {
+      color: var(--flaire-link);
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    .cart-product-description a:hover {
+      color: var(--flaire-link-hover);
     }
   </style>
 </head>
@@ -1014,7 +1051,11 @@
      COMPARTMENT 5: CART DRAWER HTML
      ========================================================================= -->
 <div class="cart-drawer" id="cart-drawer">
-  <img src="https://heavenspecial.github.io/radio/artwork/oaknspice.jpg" alt="Oak & Spice Product Image" class="cart-product-img">
+  <div class="cart-item-container">
+    <img src="https://heavenspecial.github.io/radio/artwork/oaknspice.jpg" alt="Oak & Spice Product Image" class="cart-product-img">
+    <h1 class="cart-product-title">Oak 'N Spice Cologne (for men)</h1>
+    <p class="cart-product-description">Introducing Oak 'N Spice. <br> Cologne for men. Coming soon. <a href="https://oaknspice.com" target="_blank" rel="noopener noreferrer">oaknspice.com</a></p>
+  </div>
 </div>
 
 <!-- =========================================================================
