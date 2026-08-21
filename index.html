@@ -119,7 +119,17 @@
       gap: 6px;
       padding: 0;
       z-index: 1002;
-    }
+  
+  /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
+  -webkit-tap-highlight-color: transparent;
+
+  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
+  outline: none;
+
+  /* Removes mobile Chrome/Android default focus shade */
+  -webkit-user-select: none;
+  user-select: none;
+      }
 
     .burger-line {
       width: 18px;
