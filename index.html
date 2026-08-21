@@ -822,10 +822,9 @@
   </style>
 
   <!-- =========================================================================
-       COMPARTMENT 5: CART COMPONENT CSS
+       COMPARTMENT 5: CART DRAWER CSS
        ========================================================================= -->
   <style id="cart-css">
-    /* Cart Button Container & Dynamic Icon Styling */
     .cart-btn {
       background: transparent;
       border: none;
@@ -833,8 +832,8 @@
       width: 28px;
       height: 28px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       padding: 0;
       z-index: 1002;
       -webkit-tap-highlight-color: transparent;
@@ -844,41 +843,67 @@
       position: relative;
     }
 
-    .cart-btn .cart-icon-svg {
+    .cart-icon-wrapper {
       width: 24px;
       height: 24px;
-      fill: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
 
-    .cart-btn .close-line {
+    .cart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .cart-svg path {
+      fill: var(--text);
+      transition: fill 0.3s ease;
+    }
+
+    .cart-close-lines {
+      position: absolute;
+      width: 21px;
+      height: 2px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .cart-close-line {
       position: absolute;
       width: 21px;
       height: 2px;
       background-color: var(--text);
       border-radius: 2px;
-      opacity: 0;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Transform to Close Icon when active */
-    .cart-btn.active .cart-icon-svg {
+    /* Transform to Close Icon State */
+    .cart-btn.active .cart-icon-wrapper {
       opacity: 0;
-      transform: scale(0.5) rotate(90deg);
+      transform: scale(0.5);
     }
 
-    .cart-btn.active .close-line.line-1 {
+    .cart-btn.active .cart-close-lines {
       opacity: 1;
+    }
+
+    .cart-btn.active .cart-close-line-1 {
       transform: rotate(45deg);
     }
 
-    .cart-btn.active .close-line.line-2 {
-      opacity: 1;
+    .cart-btn.active .cart-close-line-2 {
       transform: rotate(-45deg);
     }
 
-    /* Cart Drawer identical to Burger Navigation Drawer */
-    .cart-nav-drawer {
+    /* Cart Drawer Container matching burger menu drawer */
+    .cart-drawer {
       position: fixed;
       top: var(--apple-nav-height);
       left: 0;
@@ -901,18 +926,17 @@
       overflow-y: auto;
     }
 
-    .cart-nav-drawer.open {
+    .cart-drawer.open {
       transform: translateY(0);
       opacity: 1;
       visibility: visible;
     }
 
-    .cart-wrapper {
-      width: 100%;
-      max-width: 650px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+    .cart-empty-message {
+      color: var(--secondary-text);
+      font-size: 1rem;
+      text-align: center;
+      margin-top: 3rem;
     }
   </style>
 </head>
@@ -946,27 +970,29 @@
             c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
         </svg>
       </button>
-      <!-- COMPARTMENT 4 & 5 NAV TITLE -->
+      <!-- COMPARTMENT 4 NAV TITLE -->
       <div id="drawer-nav-title" class="drawer-nav-title">Latest Flaires</div>
     </div>
 
-    <!-- COMPARTMENT 5 TRIGGER (RIGHT SIDE CART ICON) -->
-    <button class="cart-btn" id="cart-btn" aria-label="Toggle shopping cart drawer">
-      <svg class="cart-icon-svg" version="1.1" id="Uploaded_to_svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve">
-        <style type="text/css">
-          .blueprint_een{fill:currentColor;}
-        </style>
-        <path class="blueprint_een" d="M25,29.5c0,0.828-0.672,1.5-1.5,1.5S22,30.328,22,29.5s0.672-1.5,1.5-1.5S25,28.672,25,29.5z
-           M10.5,28C9.672,28,9,28.672,9,29.5S9.672,31,10.5,31s1.5-0.672,1.5-1.5S11.328,28,10.5,28z M30.007,9.003
-          c0.65,0,1.127,0.611,0.97,1.242l-2.991,11.997C27.874,22.687,27.474,23,27.015,23H9.28l0.5,2H25c0.553,0,1,0.448,1,1s-0.447,1-1,1
-          H8.985c-0.459,0-0.859-0.313-0.97-0.758L3.22,7H1C0.447,7,0,6.552,0,6s0.447-1,1-1h2.998c0.459,0,0.859,0.312,0.97,0.757L5.78,9
-          L30.007,9.003z M28.72,11H6.28l2.5,10h17.438L28.72,11z M11,13h-1v1h1V13z M13,13h-1v1h1V13z M15,13h-1v1h1V13z M17,13h-1v1h1V13z
-           M19,13h-1v1h1V13z M21,13h-1v1h1V13z M23,13h-1v1h1V13z M25,13h-1v1h1V13z M25,15h-1v1h1V15z M25,17h-1v1h1V17z M23,15h-1v1h1V15z
-           M21,15h-1v1h1V15z M19,15h-1v1h1V15z M17,15h-1v1h1V15z M15,15h-1v1h1V15z M13,15h-1v1h1V15z M11,15h-1v1h1V15z M11,18v-1h-1v1H11z
-           M13,17h-1v1h1V17z M15,17h-1v1h1V17z M17,17h-1v1h1V17z M19,17h-1v1h1V17z M21,17h-1v1h1V17z M23,17h-1v1h1V17z"/>
-      </svg>
-      <span class="close-line line-1"></span>
-      <span class="close-line line-2"></span>
+    <!-- COMPARTMENT 5 TRIGGER -->
+    <button class="cart-btn" id="cart-btn" aria-label="Toggle Shopping Cart">
+      <div class="cart-icon-wrapper">
+        <svg class="cart-svg" version="1.1" id="Uploaded to svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+           viewBox="0 0 32 32" xml:space="preserve">
+          <path class="blueprint_een" d="M25,29.5c0,0.828-0.672,1.5-1.5,1.5S22,30.328,22,29.5s0.672-1.5,1.5-1.5S25,28.672,25,29.5z
+             M10.5,28C9.672,28,9,28.672,9,29.5S9.672,31,10.5,31s1.5-0.672,1.5-1.5S11.328,28,10.5,28z M30.007,9.003
+            c0.65,0,1.127,0.611,0.97,1.242l-2.991,11.997C27.874,22.687,27.474,23,27.015,23H9.28l0.5,2H25c0.553,0,1,0.448,1,1s-0.447,1-1,1
+            H8.985c-0.459,0-0.859-0.313-0.97-0.758L3.22,7H1C0.447,7,0,6.552,0,6s0.447-1,1-1h2.998c0.459,0,0.859,0.312,0.97,0.757L5.78,9
+            L30.007,9.003z M28.72,11H6.28l2.5,10h17.438L28.72,11z M11,13h-1v1h1V13z M13,13h-1v1h1V13z M15,13h-1v1h1V13z M17,13h-1v1h1V13z
+             M19,13h-1v1h1V13z M21,13h-1v1h1V13z M23,13h-1v1h1V13z M25,13h-1v1h1V13z M25,15h-1v1h1V15z M25,17h-1v1h1V17z M23,15h-1v1h1V15z
+             M21,15h-1v1h1V15z M19,15h-1v1h1V15z M17,15h-1v1h1V15z M15,15h-1v1h1V15z M13,15h-1v1h1V15z M11,15h-1v1h1V15z M11,18v-1h-1v1H11z
+             M13,17h-1v1h1V17z M15,17h-1v1h1V17z M17,17h-1v1h1V17z M19,17h-1v1h1V17z M21,17h-1v1h1V17z M23,17h-1v1h1V17z"/>
+        </svg>
+      </div>
+      <div class="cart-close-lines">
+        <span class="cart-close-line cart-close-line-1"></span>
+        <span class="cart-close-line cart-close-line-2"></span>
+      </div>
     </button>
   </div>
 </nav>
@@ -985,9 +1011,9 @@
 <!-- =========================================================================
      COMPARTMENT 5: CART DRAWER HTML
      ========================================================================= -->
-<div class="cart-nav-drawer" id="cart-nav-drawer">
-  <div class="cart-wrapper">
-    <!-- Empty drawer for now -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-empty-message">
+    Your cart is empty.
   </div>
 </div>
 
@@ -1062,8 +1088,8 @@
   window.addEventListener('DOMContentLoaded', () => {
     if (typeof loadPodcastFeed === 'function') loadPodcastFeed();
     if (typeof setupAppleNav === 'function') setupAppleNav();
-    if (typeof setupCartDrawer === 'function') setupCartDrawer();
     if (typeof setupBakerStreetWireless === 'function') setupBakerStreetWireless();
+    if (typeof setupCartDrawer === 'function') setupCartDrawer();
   });
 </script>
 
@@ -1515,12 +1541,12 @@
     const navDrawer = document.getElementById('apple-nav-drawer');
     const sherlockBtn = document.getElementById('sherlock-trigger');
     const drawerNavTitle = document.getElementById('drawer-nav-title');
-    const cartBtn = document.getElementById('cart-btn');
-    const cartDrawer = document.getElementById('cart-nav-drawer');
 
     burgerBtn.addEventListener('click', () => {
       // Close Cart drawer if open
-      if (cartBtn.classList.contains('active')) {
+      const cartBtn = document.getElementById('cart-btn');
+      const cartDrawer = document.getElementById('cart-drawer');
+      if (cartDrawer.classList.contains('open')) {
         cartBtn.classList.remove('active');
         cartDrawer.classList.remove('open');
       }
@@ -1647,22 +1673,22 @@
 </script>
 
 <!-- =========================================================================
-     COMPARTMENT 5: CART COMPONENT JS
+     COMPARTMENT 5: CART DRAWER JS
      ========================================================================= -->
 <script id="cart-js">
   function setupCartDrawer() {
     const cartBtn = document.getElementById('cart-btn');
-    const cartDrawer = document.getElementById('cart-nav-drawer');
-    const burgerBtn = document.getElementById('burger-btn');
-    const navDrawer = document.getElementById('apple-nav-drawer');
+    const cartDrawer = document.getElementById('cart-drawer');
     const sherlockBtn = document.getElementById('sherlock-trigger');
     const drawerNavTitle = document.getElementById('drawer-nav-title');
 
     cartBtn.addEventListener('click', () => {
-      // Close Flaires navigation drawer if open
-      if (burgerBtn.classList.contains('active')) {
+      // Close burger menu drawer if open
+      const burgerBtn = document.getElementById('burger-btn');
+      const appleNavDrawer = document.getElementById('apple-nav-drawer');
+      if (appleNavDrawer.classList.contains('open')) {
         burgerBtn.classList.remove('active');
-        navDrawer.classList.remove('open');
+        appleNavDrawer.classList.remove('open');
       }
 
       const isOpen = cartBtn.classList.toggle('active');
