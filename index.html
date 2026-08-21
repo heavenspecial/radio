@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bimbo Kimchi: Chase the Myth</title>
-  <style>
+
+  <!-- =========================================================================
+       COMPARTMENT 1: MASTER CSS
+       ========================================================================= -->
+  <style id="master-css">
     :root {
       --bg: #030305;
       /* Dynamic Glass Tokens */
@@ -87,7 +91,6 @@
       position: relative;
     }
 
-    /* Dynamic Nav Title swapping out Sherlock logo when drawer opens */
     .nav-title-container {
       position: absolute;
       left: 50%;
@@ -97,17 +100,6 @@
       justify-content: center;
     }
 
-    .drawer-nav-title {
-      display: none;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.01em;
-      white-space: nowrap;
-      text-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
-    }
-
-    /* Burger Icon Container & Animation */
     .burger-btn {
       background: transparent;
       border: none;
@@ -121,17 +113,11 @@
       gap: 6px;
       padding: 0;
       z-index: 1002;
-  
-  /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
-  -webkit-tap-highlight-color: transparent;
-
-  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
-  outline: none;
-
-  /* Removes mobile Chrome/Android default focus shade */
-  -webkit-user-select: none;
-  user-select: none;
-      }
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
 
     .burger-line {
       width: 21px;
@@ -149,127 +135,25 @@
       transform: translateY(-4px) rotate(-45deg);
     }
 
-    /* Apple Navigation Drawer - Redesigned full screen with top animation down */
-    .apple-nav-drawer {
-      position: fixed;
-      top: var(--apple-nav-height);
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: calc(100vh - var(--apple-nav-height));
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(35px) saturate(200%);
-      -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border-bottom: 1px solid rgba(0, 0, 255, 0.3);
-      transform: translateY(-100%);
-      opacity: 0;
-      visibility: hidden;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.5s;
-      z-index: 999;
+    footer {
+      max-width: 800px;
+      width: 100%;
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--tertiary-text);
+      line-height: 1.5;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 2rem 1rem;
-      overflow-y: auto;
-    }
-
-    .apple-nav-drawer.open {
-      transform: translateY(0);
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* Custom Glassy White Scrollbar */
-    .apple-nav-drawer::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .apple-nav-drawer::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-    }
-
-    .apple-nav-drawer::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.6);
-      border-radius: 4px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    }
-
-    .apple-nav-drawer::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .apple-nav-drawer {
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
-    }
-
-    /* Flaires Feed Drawer Styling */
-    .flaires-wrapper {
-      width: 100%;
-      max-width: 650px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .flaires-feed {
-      display: flex;
-      flex-direction: column;
       gap: 1.25rem;
     }
+  </style>
 
-    /* Flaires Cards with Glass-like Transparent White Background */
-    .flaire-card {
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border: 1px solid var(--glass-border);
-      border-radius: 14px;
-      padding: 1.25rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      text-align: left;
-      box-shadow: var(--glass-shadow);
-      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .flaire-card:hover {
-      background: var(--glass-bg-hover);
-      border-color: var(--glass-border-light);
-      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    }
-
-    /* Bigger Flaire Text */
-    .flaire-content {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #ffffff;
-      white-space: pre-wrap;
-      word-break: break-word;
-      line-height: 1.5;
-      text-shadow: 0 0 8px rgba(0, 0, 255, 0.4);
-    }
-
-    /* Flaire Links - Red Accent Color */
-    .flaire-content a {
-      color: var(--flaire-link);
-      text-decoration: underline;
-      transition: color 0.2s ease;
-    }
-
-    .flaire-content a:hover {
-      color: var(--flaire-link-hover);
-    }
-
-    .flaire-timestamp {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--secondary-text);
-    }
-
+  <!-- =========================================================================
+       COMPARTMENT 2: MAIN PODCAST CSS
+       ========================================================================= -->
+  <style id="podcast-css">
     /* --- HERO HEADER --- */
     header#podcast-header {
       background: var(--glass-bg);
@@ -649,21 +533,27 @@
       font-weight: 500;
     }
 
-    footer {
-      max-width: 800px;
-      width: 100%;
-      margin-top: 3rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--tertiary-text);
-      line-height: 1.5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.25rem;
+    @media (max-width: 650px) {
+      header#podcast-header {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "image"
+          "details"
+          "description";
+        text-align: center;
+        padding: 1.5rem;
+      }
+      header#podcast-header img { margin: 0 auto; }
+      .meta-line, .tags { justify-content: center; }
+      .episode-header { flex-direction: column; gap: 0.25rem; }
+      .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
     }
+  </style>
 
-    /* --- BAKER STREET WIRELESS / SHERLOCK STYLES --- */
+  <!-- =========================================================================
+       COMPARTMENT 3: SHERLOCK RADIO CSS
+       ========================================================================= -->
+  <style id="sherlock-css">
     .sherlock-icon-btn {
       background: transparent;
       border: none;
@@ -674,16 +564,10 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-
-      /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
-  -webkit-tap-highlight-color: transparent;
-
-  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
-  outline: none;
-
-  /* Removes mobile Chrome/Android default focus shade */
-  -webkit-user-select: none;
-  user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .sherlock-icon-btn:hover {
@@ -696,8 +580,6 @@
       fill: rgba(255, 255, 255, 0.95);
       filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.15));
       transition: fill 0.3s ease, filter 0.3s ease;
-      
-      
     }
 
     .sherlock-icon-btn:hover .sherlock-svg {
@@ -801,26 +683,149 @@
     }
 
     @media (max-width: 650px) {
-      header#podcast-header {
-        grid-template-columns: 1fr;
-        grid-template-areas:
-          "image"
-          "details"
-          "description";
-        text-align: center;
-        padding: 1.5rem;
-      }
-      header#podcast-header img { margin: 0 auto; }
-      .meta-line, .tags { justify-content: center; }
-      .episode-header { flex-direction: column; gap: 0.25rem; }
-      .filter-wrapper { flex-direction: column; gap: 1rem; align-items: flex-start; }
       .sherlock-drawer { max-width: 100%; border-radius: 0 0 20px 20px; }
+    }
+  </style>
+
+  <!-- =========================================================================
+       COMPARTMENT 4: FLAIRES FEED CSS
+       ========================================================================= -->
+  <style id="flaires-css">
+    .drawer-nav-title {
+      display: none;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+      text-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
+    }
+
+    /* Apple Navigation Drawer */
+    .apple-nav-drawer {
+      position: fixed;
+      top: var(--apple-nav-height);
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(100vh - var(--apple-nav-height));
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border-bottom: 1px solid rgba(0, 0, 255, 0.3);
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.5s;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+
+    .apple-nav-drawer.open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Custom Glassy White Scrollbar */
+    .apple-nav-drawer::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 4px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .apple-nav-drawer::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .apple-nav-drawer {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
+    }
+
+    /* Flaires Feed Drawer Styling */
+    .flaires-wrapper {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .flaires-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    /* Flaires Cards with Glass-like Transparent White Background */
+    .flaire-card {
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      text-align: left;
+      box-shadow: var(--glass-shadow);
+      transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .flaire-card:hover {
+      background: var(--glass-bg-hover);
+      border-color: var(--glass-border-light);
+      box-shadow: 0 35px 70px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .flaire-content {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.5;
+      text-shadow: 0 0 8px rgba(0, 0, 255, 0.4);
+    }
+
+    .flaire-content a {
+      color: var(--flaire-link);
+      text-decoration: underline;
+      transition: color 0.2s ease;
+    }
+
+    .flaire-content a:hover {
+      color: var(--flaire-link-hover);
+    }
+
+    .flaire-timestamp {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--secondary-text);
     }
   </style>
 </head>
 <body>
 
-<!-- Apple Header Navigation -->
+<!-- =========================================================================
+     COMPARTMENT 1: MASTER HTML
+     ========================================================================= -->
 <nav class="apple-nav">
   <div class="apple-nav-container">
     <button class="burger-btn" id="burger-btn" aria-label="Toggle navigation menu">
@@ -829,6 +834,7 @@
     </button>
 
     <div class="nav-title-container">
+      <!-- COMPARTMENT 3 TRIGGER -->
       <button id="sherlock-trigger" class="sherlock-icon-btn" title="Baker Street Wireless" aria-label="Baker Street Wireless">
         <svg class="sherlock-svg" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg">
           <path d="M443.415,395.057c0,0-8.278-36.861-14.294-54.164c-6.017-17.304-34.607-9.033-34.607-9.033l-4.509-22.566
@@ -845,12 +851,15 @@
             c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
         </svg>
       </button>
+      <!-- COMPARTMENT 4 NAV TITLE -->
       <div id="drawer-nav-title" class="drawer-nav-title">Latest Flaires</div>
     </div>
   </div>
 </nav>
 
-<!-- Apple Header Drawer (Flaires Timeline Feed) -->
+<!-- =========================================================================
+     COMPARTMENT 4: FLAIRES FEED HTML
+     ========================================================================= -->
 <div class="apple-nav-drawer" id="apple-nav-drawer">
   <div class="flaires-wrapper">
     <div class="flaires-feed" id="flaires-feed">
@@ -859,6 +868,9 @@
   </div>
 </div>
 
+<!-- =========================================================================
+     COMPARTMENT 2: MAIN PODCAST HTML
+     ========================================================================= -->
 <main>
   <header id="podcast-header">
     <p>Loading show details...</p>
@@ -883,7 +895,9 @@
   <div id="podcast-footer"></div>
 </footer>
 
-<!-- Sherlock Radio Top Sliding Drawer -->
+<!-- =========================================================================
+     COMPARTMENT 3: SHERLOCK RADIO HTML
+     ========================================================================= -->
 <div class="sherlock-drawer-overlay" id="sherlock-overlay"></div>
 <div class="sherlock-drawer" id="sherlock-drawer">
   <div class="sherlock-content-row">
@@ -903,10 +917,11 @@
   <audio id="sherlock-audio" preload="none"></audio>
 </div>
 
-<script>
-  const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
-  const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
-
+<!-- =========================================================================
+     COMPARTMENT 1: MASTER JS
+     ========================================================================= -->
+<script id="master-js">
+  // Shared Utilities Across Compartments
   function formatTime(seconds) {
     if (isNaN(seconds)) return '0:00';
     const hrs = Math.floor(seconds / 3600);
@@ -919,6 +934,21 @@
     }
     return `${mins}:${formattedSecs}`;
   }
+
+  // Orchestrated Initialization Callout
+  window.addEventListener('DOMContentLoaded', () => {
+    if (typeof loadPodcastFeed === 'function') loadPodcastFeed();
+    if (typeof setupAppleNav === 'function') setupAppleNav();
+    if (typeof setupBakerStreetWireless === 'function') setupBakerStreetWireless();
+  });
+</script>
+
+<!-- =========================================================================
+     COMPARTMENT 2: MAIN PODCAST JS
+     ========================================================================= -->
+<script id="podcast-js">
+  const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
+  const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
   async function loadPodcastFeed() {
     try {
@@ -1184,143 +1214,12 @@
       audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
     });
   }
+</script>
 
-  // Apple Nav Menu Drawer Functionality & Flaires Fetcher
-  function setupAppleNav() {
-    const burgerBtn = document.getElementById('burger-btn');
-    const navDrawer = document.getElementById('apple-nav-drawer');
-    const sherlockBtn = document.getElementById('sherlock-trigger');
-    const drawerNavTitle = document.getElementById('drawer-nav-title');
-
-    burgerBtn.addEventListener('click', () => {
-      const isOpen = burgerBtn.classList.toggle('active');
-      navDrawer.classList.toggle('open');
-
-      if (isOpen) {
-        sherlockBtn.style.display = 'none';
-        drawerNavTitle.style.display = 'block';
-      } else {
-        sherlockBtn.style.display = 'inline-flex';
-        drawerNavTitle.style.display = 'none';
-      }
-    });
-
-    fetchFlaires();
-  }
-
-  // Helper to format ISO timestamps -> 6:30 PM • May 19, 2020
-  function formatFlaireTimestamp(dateStr) {
-    if (!dateStr) return '';
-    const date = new Date(dateStr);
-    if (isNaN(date.getTime())) return dateStr;
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const month = monthNames[date.getMonth()];
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    return `${hours}:${minutes} ${ampm} • ${month} ${day}, ${year}`;
-  }
-
-  // Helper to convert Markdown and plaintext URLs into clickable <a> tags
-  function parseFlaireLinks(text) {
-    if (!text) return '';
-    
-    // Parse Markdown links [Text](URL)
-    let parsedText = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-    
-    // Parse raw URLs that aren't already wrapped in an <a> tag
-    const rawUrlRegex = /(?<!href=")(https?:\/\/[^\s<]+)/g;
-    parsedText = parsedText.replace(rawUrlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-
-    return parsedText;
-  }
-
-  // Fetch Flaires via GitHub API
-  async function fetchFlaires() {
-    const feedContainer = document.getElementById('flaires-feed');
-    const API_URL = 'https://api.github.com/repos/heavenspecial/radio/contents/flaires';
-
-    try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('Failed to fetch flaires directory.');
-
-      const files = await res.json();
-      const mdFiles = files.filter(f => f.name.endsWith('.md'));
-
-      if (mdFiles.length === 0) {
-        feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">No flaires found.</p>';
-        return;
-      }
-
-      const flairesData = await Promise.all(
-        mdFiles.map(async (file) => {
-          const contentRes = await fetch(file.download_url);
-          const rawText = await contentRes.text();
-
-          let createdDate = '';
-          let bodyText = rawText;
-
-          // Parse YAML Frontmatter
-          if (rawText.startsWith('---')) {
-            const parts = rawText.split('---');
-            if (parts.length >= 3) {
-              const frontmatter = parts[1];
-              bodyText = parts.slice(2).join('---').trim();
-
-              const createdMatch = frontmatter.match(/created:\s*(.+)/);
-              if (createdMatch) {
-                createdDate = createdMatch[1].trim();
-              }
-            }
-          }
-
-          // Fallback timestamp parsing from filename (YYYY-MM-DD-HH-mm-ss)
-          if (!createdDate) {
-            const nameMatch = file.name.match(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-(\d{2})\.md$/);
-            if (nameMatch) {
-              createdDate = `${nameMatch[1]}T${nameMatch[2]}:${nameMatch[3]}:${nameMatch[4]}`;
-            }
-          }
-
-          return {
-            content: bodyText,
-            timestamp: createdDate,
-            dateObj: new Date(createdDate)
-          };
-        })
-      );
-
-      // Sort newest first
-      flairesData.sort((a, b) => b.dateObj - a.dateObj);
-
-      feedContainer.innerHTML = '';
-      flairesData.forEach(flaire => {
-        const card = document.createElement('div');
-        card.className = 'flaire-card';
-
-        const formattedTime = formatFlaireTimestamp(flaire.timestamp);
-        const parsedContent = parseFlaireLinks(flaire.content);
-
-        card.innerHTML = `
-          <div class="flaire-content">${parsedContent}</div>
-          <time class="flaire-timestamp">${formattedTime}</time>
-        `;
-        feedContainer.appendChild(card);
-      });
-
-    } catch (err) {
-      console.error('Error fetching flaires:', err);
-      feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">Failed to load flaires.</p>';
-    }
-  }
-
-  // Sherlock Holmes Radio Engine
+<!-- =========================================================================
+     COMPARTMENT 3: SHERLOCK RADIO JS
+     ========================================================================= -->
+<script id="sherlock-js">
   function setupBakerStreetWireless() {
     const SHERLOCK_JSON_URL = 'https://heavenspecial.github.io/radio/221b.json';
     
@@ -1481,12 +1380,137 @@
 
     fetchSherlockTracks();
   }
+</script>
 
-  window.addEventListener('DOMContentLoaded', () => {
-    loadPodcastFeed();
-    setupAppleNav();
-    setupBakerStreetWireless();
-  });
+<!-- =========================================================================
+     COMPARTMENT 4: FLAIRES FEED JS
+     ========================================================================= -->
+<script id="flaires-js">
+  function setupAppleNav() {
+    const burgerBtn = document.getElementById('burger-btn');
+    const navDrawer = document.getElementById('apple-nav-drawer');
+    const sherlockBtn = document.getElementById('sherlock-trigger');
+    const drawerNavTitle = document.getElementById('drawer-nav-title');
+
+    burgerBtn.addEventListener('click', () => {
+      const isOpen = burgerBtn.classList.toggle('active');
+      navDrawer.classList.toggle('open');
+
+      if (isOpen) {
+        sherlockBtn.style.display = 'none';
+        drawerNavTitle.style.display = 'block';
+      } else {
+        sherlockBtn.style.display = 'inline-flex';
+        drawerNavTitle.style.display = 'none';
+      }
+    });
+
+    fetchFlaires();
+  }
+
+  function formatFlaireTimestamp(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return dateStr;
+
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    return `${hours}:${minutes} ${ampm} • ${month} ${day}, ${year}`;
+  }
+
+  function parseFlaireLinks(text) {
+    if (!text) return '';
+    
+    let parsedText = text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+    
+    const rawUrlRegex = /(?<!href=")(https?:\/\/[^\s<]+)/g;
+    parsedText = parsedText.replace(rawUrlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+
+    return parsedText;
+  }
+
+  async function fetchFlaires() {
+    const feedContainer = document.getElementById('flaires-feed');
+    const API_URL = 'https://api.github.com/repos/heavenspecial/radio/contents/flaires';
+
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error('Failed to fetch flaires directory.');
+
+      const files = await res.json();
+      const mdFiles = files.filter(f => f.name.endsWith('.md'));
+
+      if (mdFiles.length === 0) {
+        feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">No flaires found.</p>';
+        return;
+      }
+
+      const flairesData = await Promise.all(
+        mdFiles.map(async (file) => {
+          const contentRes = await fetch(file.download_url);
+          const rawText = await contentRes.text();
+
+          let createdDate = '';
+          let bodyText = rawText;
+
+          if (rawText.startsWith('---')) {
+            const parts = rawText.split('---');
+            if (parts.length >= 3) {
+              const frontmatter = parts[1];
+              bodyText = parts.slice(2).join('---').trim();
+
+              const createdMatch = frontmatter.match(/created:\s*(.+)/);
+              if (createdMatch) {
+                createdDate = createdMatch[1].trim();
+              }
+            }
+          }
+
+          if (!createdDate) {
+            const nameMatch = file.name.match(/^(\d{4}-\d{2}-\d{2})-(\d{2})-(\d{2})-(\d{2})\.md$/);
+            if (nameMatch) {
+              createdDate = `${nameMatch[1]}T${nameMatch[2]}:${nameMatch[3]}:${nameMatch[4]}`;
+            }
+          }
+
+          return {
+            content: bodyText,
+            timestamp: createdDate,
+            dateObj: new Date(createdDate)
+          };
+        })
+      );
+
+      flairesData.sort((a, b) => b.dateObj - a.dateObj);
+
+      feedContainer.innerHTML = '';
+      flairesData.forEach(flaire => {
+        const card = document.createElement('div');
+        card.className = 'flaire-card';
+
+        const formattedTime = formatFlaireTimestamp(flaire.timestamp);
+        const parsedContent = parseFlaireLinks(flaire.content);
+
+        card.innerHTML = `
+          <div class="flaire-content">${parsedContent}</div>
+          <time class="flaire-timestamp">${formattedTime}</time>
+        `;
+        feedContainer.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error('Error fetching flaires:', err);
+      feedContainer.innerHTML = '<p style="color: var(--secondary-text); text-align: center;">Failed to load flaires.</p>';
+    }
+  }
 </script>
 
 </body>
