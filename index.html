@@ -822,103 +822,97 @@
   </style>
 
   <!-- =========================================================================
-       COMPARTMENT 5: CART DRAWER CSS
+       COMPARTMENT 5: CART COMPONENT CSS
        ========================================================================= -->
   <style id="cart-css">
-    .cart-icon-btn {
+    /* Cart Button Container & Dynamic Icon Styling */
+    .cart-btn {
       background: transparent;
       border: none;
       cursor: pointer;
-      padding: 4px;
-      display: inline-flex;
+      width: 28px;
+      height: 28px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s ease;
+      padding: 0;
+      z-index: 1002;
+      -webkit-tap-highlight-color: transparent;
       outline: none;
+      -webkit-user-select: none;
+      user-select: none;
+      position: relative;
     }
 
-    .cart-icon-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .cart-icon-btn svg {
+    .cart-btn .cart-icon-svg {
       width: 24px;
       height: 24px;
-      fill: #ffffff;
+      fill: var(--text);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
 
-    .cart-drawer-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      z-index: 1005;
+    .cart-btn .close-line {
+      position: absolute;
+      width: 21px;
+      height: 2px;
+      background-color: var(--text);
+      border-radius: 2px;
       opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
 
-    .cart-drawer-overlay.open {
+    /* Transform to Close Icon when active */
+    .cart-btn.active .cart-icon-svg {
+      opacity: 0;
+      transform: scale(0.5) rotate(90deg);
+    }
+
+    .cart-btn.active .close-line.line-1 {
       opacity: 1;
-      pointer-events: auto;
+      transform: rotate(45deg);
     }
 
-    .cart-drawer {
+    .cart-btn.active .close-line.line-2 {
+      opacity: 1;
+      transform: rotate(-45deg);
+    }
+
+    /* Cart Drawer identical to Burger Navigation Drawer */
+    .cart-nav-drawer {
       position: fixed;
-      top: 0;
+      top: var(--apple-nav-height);
+      left: 0;
       right: 0;
-      height: 100vh;
-      width: 100%;
-      max-width: 380px;
-      background: var(--glass-bg);
-      backdrop-filter: var(--glass-blur);
-      -webkit-backdrop-filter: var(--glass-blur);
-      border-left: 1px solid var(--glass-border);
-      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-      z-index: 1010;
-      transform: translateX(100%);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      bottom: 0;
+      height: calc(100vh - var(--apple-nav-height));
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border-bottom: 1px solid rgba(0, 0, 255, 0.3);
+      transform: translateY(-100%);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease, visibility 0.5s;
+      z-index: 999;
       display: flex;
       flex-direction: column;
-      padding: 1.5rem;
-    }
-
-    .cart-drawer.open {
-      transform: translateX(0);
-    }
-
-    .cart-drawer-header {
-      display: flex;
       align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      padding-bottom: 1rem;
-      margin-bottom: 1rem;
-    }
-
-    .cart-drawer-header h2 {
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: #ffffff;
-    }
-
-    .cart-close-btn {
-      background: transparent;
-      border: none;
-      color: var(--secondary-text);
-      font-size: 1.5rem;
-      cursor: pointer;
-      line-height: 1;
-      transition: color 0.2s ease;
-    }
-
-    .cart-close-btn:hover {
-      color: #ffffff;
-    }
-
-    .cart-drawer-body {
-      flex: 1;
+      padding: 2rem 1rem;
       overflow-y: auto;
+    }
+
+    .cart-nav-drawer.open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-wrapper {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
   </style>
 </head>
@@ -952,15 +946,15 @@
             c0,0-18.121,17.16-32.825,61.272c154.393-62.492,264.673-36.76,279.377-73.52C479.45,415.583,443.415,395.057,443.415,395.057z"/>
         </svg>
       </button>
-      <!-- COMPARTMENT 4 NAV TITLE -->
+      <!-- COMPARTMENT 4 & 5 NAV TITLE -->
       <div id="drawer-nav-title" class="drawer-nav-title">Latest Flaires</div>
     </div>
 
-    <!-- COMPARTMENT 5 TRIGGER -->
-    <button id="cart-trigger" class="cart-icon-btn" title="Shopping Cart" aria-label="Shopping Cart">
-      <svg version="1.1" id="Uploaded_to_svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve">
+    <!-- COMPARTMENT 5 TRIGGER (RIGHT SIDE CART ICON) -->
+    <button class="cart-btn" id="cart-btn" aria-label="Toggle shopping cart drawer">
+      <svg class="cart-icon-svg" version="1.1" id="Uploaded_to_svgrepo.com" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" xml:space="preserve">
         <style type="text/css">
-          .blueprint_een{fill:#ffffff;}
+          .blueprint_een{fill:currentColor;}
         </style>
         <path class="blueprint_een" d="M25,29.5c0,0.828-0.672,1.5-1.5,1.5S22,30.328,22,29.5s0.672-1.5,1.5-1.5S25,28.672,25,29.5z
            M10.5,28C9.672,28,9,28.672,9,29.5S9.672,31,10.5,31s1.5-0.672,1.5-1.5S11.328,28,10.5,28z M30.007,9.003
@@ -971,6 +965,8 @@
            M21,15h-1v1h1V15z M19,15h-1v1h1V15z M17,15h-1v1h1V15z M15,15h-1v1h1V15z M13,15h-1v1h1V15z M11,15h-1v1h1V15z M11,18v-1h-1v1H11z
            M13,17h-1v1h1V17z M15,17h-1v1h1V17z M17,17h-1v1h1V17z M19,17h-1v1h1V17z M21,17h-1v1h1V17z M23,17h-1v1h1V17z"/>
       </svg>
+      <span class="close-line line-1"></span>
+      <span class="close-line line-2"></span>
     </button>
   </div>
 </nav>
@@ -983,6 +979,15 @@
     <div class="flaires-feed" id="flaires-feed">
       <p style="color: var(--secondary-text); text-align: center;">Loading flaires...</p>
     </div>
+  </div>
+</div>
+
+<!-- =========================================================================
+     COMPARTMENT 5: CART DRAWER HTML
+     ========================================================================= -->
+<div class="cart-nav-drawer" id="cart-nav-drawer">
+  <div class="cart-wrapper">
+    <!-- Empty drawer for now -->
   </div>
 </div>
 
@@ -1036,20 +1041,6 @@
 </div>
 
 <!-- =========================================================================
-     COMPARTMENT 5: CART DRAWER HTML
-     ========================================================================= -->
-<div class="cart-drawer-overlay" id="cart-overlay"></div>
-<div class="cart-drawer" id="cart-drawer">
-  <div class="cart-drawer-header">
-    <h2>Your Cart</h2>
-    <button class="cart-close-btn" id="cart-close-btn" aria-label="Close Cart">&times;</button>
-  </div>
-  <div class="cart-drawer-body">
-    <!-- Empty drawer -->
-  </div>
-</div>
-
-<!-- =========================================================================
      COMPARTMENT 1: MASTER JS
      ========================================================================= -->
 <script id="master-js">
@@ -1071,8 +1062,8 @@
   window.addEventListener('DOMContentLoaded', () => {
     if (typeof loadPodcastFeed === 'function') loadPodcastFeed();
     if (typeof setupAppleNav === 'function') setupAppleNav();
-    if (typeof setupBakerStreetWireless === 'function') setupBakerStreetWireless();
     if (typeof setupCartDrawer === 'function') setupCartDrawer();
+    if (typeof setupBakerStreetWireless === 'function') setupBakerStreetWireless();
   });
 </script>
 
@@ -1524,13 +1515,22 @@
     const navDrawer = document.getElementById('apple-nav-drawer');
     const sherlockBtn = document.getElementById('sherlock-trigger');
     const drawerNavTitle = document.getElementById('drawer-nav-title');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartDrawer = document.getElementById('cart-nav-drawer');
 
     burgerBtn.addEventListener('click', () => {
+      // Close Cart drawer if open
+      if (cartBtn.classList.contains('active')) {
+        cartBtn.classList.remove('active');
+        cartDrawer.classList.remove('open');
+      }
+
       const isOpen = burgerBtn.classList.toggle('active');
       navDrawer.classList.toggle('open');
 
       if (isOpen) {
         sherlockBtn.style.display = 'none';
+        drawerNavTitle.textContent = 'Latest Flaires';
         drawerNavTitle.style.display = 'block';
       } else {
         sherlockBtn.style.display = 'inline-flex';
@@ -1647,28 +1647,36 @@
 </script>
 
 <!-- =========================================================================
-     COMPARTMENT 5: CART DRAWER JS
+     COMPARTMENT 5: CART COMPONENT JS
      ========================================================================= -->
 <script id="cart-js">
   function setupCartDrawer() {
-    const trigger = document.getElementById('cart-trigger');
-    const drawer = document.getElementById('cart-drawer');
-    const overlay = document.getElementById('cart-overlay');
-    const closeBtn = document.getElementById('cart-close-btn');
+    const cartBtn = document.getElementById('cart-btn');
+    const cartDrawer = document.getElementById('cart-nav-drawer');
+    const burgerBtn = document.getElementById('burger-btn');
+    const navDrawer = document.getElementById('apple-nav-drawer');
+    const sherlockBtn = document.getElementById('sherlock-trigger');
+    const drawerNavTitle = document.getElementById('drawer-nav-title');
 
-    const openCart = () => {
-      drawer.classList.add('open');
-      overlay.classList.add('open');
-    };
+    cartBtn.addEventListener('click', () => {
+      // Close Flaires navigation drawer if open
+      if (burgerBtn.classList.contains('active')) {
+        burgerBtn.classList.remove('active');
+        navDrawer.classList.remove('open');
+      }
 
-    const closeCart = () => {
-      drawer.classList.remove('open');
-      overlay.classList.remove('open');
-    };
+      const isOpen = cartBtn.classList.toggle('active');
+      cartDrawer.classList.toggle('open');
 
-    trigger.addEventListener('click', openCart);
-    closeBtn.addEventListener('click', closeCart);
-    overlay.addEventListener('click', closeCart);
+      if (isOpen) {
+        sherlockBtn.style.display = 'none';
+        drawerNavTitle.textContent = 'SHOP';
+        drawerNavTitle.style.display = 'block';
+      } else {
+        sherlockBtn.style.display = 'inline-flex';
+        drawerNavTitle.style.display = 'none';
+      }
+    });
   }
 </script>
 
