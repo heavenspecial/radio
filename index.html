@@ -672,6 +672,16 @@
       fill: rgba(255, 255, 255, 0.95);
       /*filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.15));*/
       transition: fill 0.3s ease, filter 0.3s ease;
+      
+      /* Removes mobile touch overlay (Mobile Safari, Chrome on Android) */
+  -webkit-tap-highlight-color: transparent;
+
+  /* Removes default browser focus ring (Desktop Windows/Mac Chrome, Firefox, Edge) */
+  outline: none;
+
+  /* Removes mobile Chrome/Android default focus shade */
+  -webkit-user-select: none;
+  user-select: none;
     }
 
     .sherlock-icon-btn:hover .sherlock-svg {
