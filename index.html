@@ -1286,6 +1286,21 @@
     if ('mediaSession' in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata(metadataConfig);
 
+      // Reset media position state when switching active player
+      if ('setPositionState' in navigator.mediaSession) {
+        try {
+          if (!isNaN(audioElement.duration) && audioElement.duration > 0) {
+            navigator.mediaSession.setPositionState({
+              duration: audioElement.duration,
+              playbackRate: audioElement.playbackRate || 1,
+              position: audioElement.currentTime || 0
+            });
+          } else {
+            navigator.mediaSession.setPositionState(null);
+          }
+        } catch (e) {}
+      }
+
       // Unbind standard actions to clean state
       const actions = ['play', 'pause', 'seekbackward', 'seekforward', 'seekto', 'previoustrack', 'nexttrack'];
       actions.forEach(action => {
@@ -1754,6 +1769,20 @@
       iconPause.style.display = 'none';
     });
 
+    sherlockAudio.addEventListener('timeupdate', () => {
+      if (window.activeAudio === sherlockAudio && !isNaN(sherlockAudio.duration) && sherlockAudio.duration > 0) {
+        if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: sherlockAudio.duration,
+              playbackRate: sherlockAudio.playbackRate,
+              position: sherlockAudio.currentTime
+            });
+          } catch (e) {}
+        }
+      }
+    });
+
     sherlockAudio.addEventListener('ended', () => {
       playRandomTrack(false);
     });
@@ -2030,7 +2059,8 @@
         artwork: [{ src: track.artwork, sizes: '512x512', type: 'image/jpeg' }]
       }, {
         previoustrack: () => playTrack((currentIndex - 1 + promos.length) % promos.length),
-        nexttrack: () => playTrack((currentIndex + 1) % promos.length)
+        nexttrack: () => playTrack((currentIndex + 1) % promos.length),
+        seekto: (details) => { if (details.seekTime && !isNaN(audio.duration)) audio.currentTime = details.seekTime; }
       });
     });
 
@@ -2045,6 +2075,16 @@
         slider.value = percentage;
         slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.12) ${percentage}%, rgba(255, 255, 255, 0.12) 100%)`;
         timeCurrent.textContent = formatTime(audio.currentTime);
+
+        if (window.activeAudio === audio && 'mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: audio.duration,
+              playbackRate: audio.playbackRate,
+              position: audio.currentTime
+            });
+          } catch (e) {}
+        }
       }
     });
 
