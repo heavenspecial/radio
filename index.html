@@ -1266,6 +1266,12 @@
   const RSS_URL = 'https://heavenspecial.github.io/radio/feed.xml';
   const ITUNES_NS = 'http://www.itunes.com/dtds/podcast-1.0.dtd';
 
+  let globalPodcastMeta = {
+    title: '',
+    author: '',
+    imageUrl: 'https://heavenspecial.github.io/radio/artwork/album.jpg'
+  };
+
   async function loadPodcastFeed() {
     try {
       const response = await fetch(RSS_URL);
@@ -1293,6 +1299,12 @@
       const categories = Array.from(channel.getElementsByTagNameNS(ITUNES_NS, 'category')).map(cat => cat.getAttribute('text'));
       const imageNode = channel.getElementsByTagNameNS(ITUNES_NS, 'image')[0];
       const imageUrl = imageNode ? imageNode.getAttribute('href') : 'https://heavenspecial.github.io/radio/artwork/album.jpg';
+
+      globalPodcastMeta = {
+        title: podcastTitle,
+        author: podcastAuthor,
+        imageUrl: imageUrl
+      };
 
       document.title = podcastTitle;
 
@@ -1447,7 +1459,7 @@
 
     filtered.forEach(ep => {
       if (ep.audioUrl) {
-        setupPlayerControls(document.getElementById(`player-${ep.index}`));
+        setupPlayerControls(document.getElementById(`player-${ep.index}`), ep);
       }
     });
   }
@@ -1464,7 +1476,7 @@
     });
   }
 
-  function setupPlayerControls(playerEl) {
+  function setupPlayerControls(playerEl, episodeData) {
     if (!playerEl) return;
 
     const audio = playerEl.querySelector('audio');
@@ -1476,6 +1488,35 @@
     const slider = playerEl.querySelector('.seek-slider');
     const timeCurrent = playerEl.querySelector('.time-current');
     const timeDuration = playerEl.querySelector('.time-duration');
+
+    function updateMediaSession() {
+      if ('mediaSession' in navigator && episodeData) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: episodeData.title,
+          artist: globalPodcastMeta.author || 'Bimbo Kimchi',
+          album: globalPodcastMeta.title || 'Chase the Myth',
+          artwork: [
+            { src: globalPodcastMeta.imageUrl, sizes: '512x512', type: 'image/jpeg' }
+          ]
+        });
+
+        navigator.mediaSession.setActionHandler('play', () => audio.play());
+        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
+        navigator.mediaSession.setActionHandler('seekbackward', () => {
+          audio.currentTime = Math.max(0, audio.currentTime - 15);
+        });
+        navigator.mediaSession.setActionHandler('seekforward', () => {
+          audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
+        });
+        try {
+          navigator.mediaSession.setActionHandler('seekto', (details) => {
+            if (details.seekTime && !isNaN(audio.duration)) {
+              audio.currentTime = details.seekTime;
+            }
+          });
+        } catch (e) {}
+      }
+    }
 
     audio.addEventListener('loadedmetadata', () => {
       timeDuration.textContent = formatTime(audio.duration);
@@ -1500,6 +1541,7 @@
     audio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
+      updateMediaSession();
     });
 
     audio.addEventListener('pause', () => {
@@ -1513,6 +1555,16 @@
         slider.value = percentage;
         slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.12) ${percentage}%, rgba(255, 255, 255, 0.12) 100%)`;
         timeCurrent.textContent = formatTime(audio.currentTime);
+
+        if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: audio.duration,
+              playbackRate: audio.playbackRate,
+              position: audio.currentTime
+            });
+          } catch (e) {}
+        }
       }
     });
 
