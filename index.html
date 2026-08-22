@@ -1672,10 +1672,15 @@
 
     const updateMediaSession = () => {
       if ('mediaSession' in navigator) {
+        const numListeners = Math.floor(Math.random() * 58) + 3; // Random number between 3 and 60 inclusive
+        
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: 'Baker Street Wireless',
-          artist: 'Live Broadcast',
-          album: 'Sherlock Radio'
+          title: currentTrackTitle || 'Baker Street Wireless',
+          artist: `Live Broadcast - ${numListeners} listening`,
+          album: 'Baker Street Wireless',
+          artwork: [
+            { src: 'https://heavenspecial.github.io/radio/media/holmes.jpg', sizes: '512x512', type: 'image/jpeg' }
+          ]
         });
 
         if ('setPositionState' in navigator.mediaSession) {
