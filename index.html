@@ -1269,6 +1269,52 @@
     return `${mins}:${formattedSecs}`;
   }
 
+  // Centralized Active Audio Manager & Media Session Controller
+  window.activeAudio = null;
+
+  function setActiveAudioPlayer(audioElement, metadataConfig, customHandlers = {}) {
+    // 1. Pause any other playing audio on the page
+    document.querySelectorAll('audio').forEach(a => {
+      if (a !== audioElement && !a.paused) {
+        a.pause();
+      }
+    });
+
+    window.activeAudio = audioElement;
+
+    // 2. Bind MediaSession to active player
+    if ('mediaSession' in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata(metadataConfig);
+
+      // Unbind standard actions to clean state
+      const actions = ['play', 'pause', 'seekbackward', 'seekforward', 'seekto', 'previoustrack', 'nexttrack'];
+      actions.forEach(action => {
+        try { navigator.mediaSession.setActionHandler(action, null); } catch (e) {}
+      });
+
+      // Bind Play & Pause to current active instance
+      navigator.mediaSession.setActionHandler('play', () => window.activeAudio?.play());
+      navigator.mediaSession.setActionHandler('pause', () => window.activeAudio?.pause());
+
+      // Optionally bind contextual handlers
+      if (customHandlers.seekbackward) {
+        navigator.mediaSession.setActionHandler('seekbackward', customHandlers.seekbackward);
+      }
+      if (customHandlers.seekforward) {
+        navigator.mediaSession.setActionHandler('seekforward', customHandlers.seekforward);
+      }
+      if (customHandlers.seekto) {
+        navigator.mediaSession.setActionHandler('seekto', customHandlers.seekto);
+      }
+      if (customHandlers.previoustrack) {
+        navigator.mediaSession.setActionHandler('previoustrack', customHandlers.previoustrack);
+      }
+      if (customHandlers.nexttrack) {
+        navigator.mediaSession.setActionHandler('nexttrack', customHandlers.nexttrack);
+      }
+    }
+  }
+
   // Orchestrated Initialization Callout
   window.addEventListener('DOMContentLoaded', () => {
     if (typeof loadPodcastFeed === 'function') loadPodcastFeed();
@@ -1508,48 +1554,11 @@
     const timeCurrent = playerEl.querySelector('.time-current');
     const timeDuration = playerEl.querySelector('.time-duration');
 
-    function updateMediaSession() {
-      if ('mediaSession' in navigator && episodeData) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: episodeData.title,
-          artist: globalPodcastMeta.author || 'Bimbo Kimchi',
-          album: globalPodcastMeta.title || 'Chase the Myth',
-          artwork: [
-            { src: globalPodcastMeta.imageUrl, sizes: '512x512', type: 'image/jpeg' }
-          ]
-        });
-
-        navigator.mediaSession.setActionHandler('play', () => audio.play());
-        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
-        navigator.mediaSession.setActionHandler('seekbackward', () => {
-          audio.currentTime = Math.max(0, audio.currentTime - 15);
-        });
-        navigator.mediaSession.setActionHandler('seekforward', () => {
-          audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30);
-        });
-        try {
-          navigator.mediaSession.setActionHandler('seekto', (details) => {
-            if (details.seekTime && !isNaN(audio.duration)) {
-              audio.currentTime = details.seekTime;
-            }
-          });
-        } catch (e) {}
-      }
-    }
-
     audio.addEventListener('loadedmetadata', () => {
       timeDuration.textContent = formatTime(audio.duration);
     });
 
     playPauseBtn.addEventListener('click', () => {
-      const sherlockAudio = document.getElementById('sherlock-audio');
-      if (sherlockAudio && !sherlockAudio.paused) {
-        sherlockAudio.pause();
-      }
-
-      document.querySelectorAll('audio').forEach(other => {
-        if (other !== audio) other.pause();
-      });
       if (audio.paused) {
         audio.play();
       } else {
@@ -1560,7 +1569,17 @@
     audio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
-      updateMediaSession();
+
+      setActiveAudioPlayer(audio, {
+        title: episodeData.title,
+        artist: globalPodcastMeta.author || 'Bimbo Kimchi',
+        album: globalPodcastMeta.title || 'Chase the Myth',
+        artwork: [{ src: globalPodcastMeta.imageUrl, sizes: '512x512', type: 'image/jpeg' }]
+      }, {
+        seekbackward: () => { audio.currentTime = Math.max(0, audio.currentTime - 15); },
+        seekforward: () => { audio.currentTime = Math.min(audio.duration || Infinity, audio.currentTime + 30); },
+        seekto: (details) => { if (details.seekTime && !isNaN(audio.duration)) audio.currentTime = details.seekTime; }
+      });
     });
 
     audio.addEventListener('pause', () => {
@@ -1575,7 +1594,7 @@
         slider.style.background = `linear-gradient(to right, var(--accent) 0%, var(--accent) ${percentage}%, rgba(255, 255, 255, 0.12) ${percentage}%, rgba(255, 255, 255, 0.12) 100%)`;
         timeCurrent.textContent = formatTime(audio.currentTime);
 
-        if ('mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
+        if (window.activeAudio === audio && 'mediaSession' in navigator && 'setPositionState' in navigator.mediaSession) {
           try {
             navigator.mediaSession.setPositionState({
               duration: audio.duration,
@@ -1670,44 +1689,6 @@
       return sherlockTracks[idx];
     };
 
-    const updateMediaSession = () => {
-      if ('mediaSession' in navigator) {
-        const num = Math.floor(Math.random() * (60 - 3 + 1)) + 3;
-
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: 'Baker Street Wireless',
-          artist: `Live Broadcast - ${num} listening`,
-          album: currentTrackTitle || 'Sherlock Radio',
-          artwork: [
-            {
-              src: 'https://heavenspecial.github.io/radio/media/holmes.jpg',
-              sizes: '512x512',
-              type: 'image/jpeg'
-            }
-          ]
-        });
-
-        if ('setPositionState' in navigator.mediaSession) {
-          navigator.mediaSession.setPositionState({
-            duration: Infinity,
-            playbackRate: 1.0,
-            position: 0
-          });
-        }
-
-        try {
-          navigator.mediaSession.setActionHandler('seekto', null);
-          navigator.mediaSession.setActionHandler('seekforward', null);
-          navigator.mediaSession.setActionHandler('seekbackward', null);
-        } catch (e) {
-          console.warn('MediaSession seek handlers unbind not supported');
-        }
-
-        navigator.mediaSession.setActionHandler('play', () => sherlockAudio.play());
-        navigator.mediaSession.setActionHandler('pause', () => sherlockAudio.pause());
-      }
-    };
-
     const playRandomTrack = (randomSeek = false) => {
       if (!sherlockTracks.length) return;
 
@@ -1742,10 +1723,6 @@
         await fetchSherlockTracks();
       }
 
-      document.querySelectorAll('audio').forEach(a => {
-        if (a !== sherlockAudio) a.pause();
-      });
-
       if (sherlockAudio.paused) {
         if (isFirstPlay || !sherlockAudio.src) {
           playRandomTrack(true);
@@ -1762,7 +1739,14 @@
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
       statusText.textContent = `Now Playing: ${currentTrackTitle}`;
-      updateMediaSession();
+
+      const numListeners = Math.floor(Math.random() * (60 - 3 + 1)) + 3;
+      setActiveAudioPlayer(sherlockAudio, {
+        title: 'Baker Street Wireless',
+        artist: `Live Broadcast - ${numListeners} listening`,
+        album: currentTrackTitle || 'Sherlock Radio',
+        artwork: [{ src: 'https://heavenspecial.github.io/radio/media/holmes.jpg', sizes: '512x512', type: 'image/jpeg' }]
+      });
     });
 
     sherlockAudio.addEventListener('pause', () => {
@@ -1998,24 +1982,6 @@
     const timeCurrent = document.getElementById('promo-time-current');
     const timeDuration = document.getElementById('promo-time-duration');
 
-    function updateMediaSession(track) {
-      if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: track.artist,
-          artist: track.artist,
-          album: track.album,
-          artwork: [
-            { src: track.artwork, sizes: '512x512', type: 'image/jpeg' }
-          ]
-        });
-
-        navigator.mediaSession.setActionHandler('play', () => audio.play());
-        navigator.mediaSession.setActionHandler('pause', () => audio.pause());
-        navigator.mediaSession.setActionHandler('previoustrack', () => playTrack((currentIndex - 1 + promos.length) % promos.length));
-        navigator.mediaSession.setActionHandler('nexttrack', () => playTrack((currentIndex + 1) % promos.length));
-      }
-    }
-
     function loadTrack(index) {
       currentIndex = index;
       const track = promos[currentIndex];
@@ -2028,13 +1994,12 @@
       slider.style.background = `rgba(255, 255, 255, 0.12)`;
       timeCurrent.textContent = '0:00';
       timeDuration.textContent = '0:00';
-      updateMediaSession(track);
     }
 
     function playTrack(index) {
-      const isPaused = audio.paused;
+      const wasPlaying = !audio.paused;
       loadTrack(index);
-      if (!isPaused) {
+      if (wasPlaying) {
         audio.play().catch(e => console.error(e));
       }
     }
@@ -2046,10 +2011,6 @@
     });
 
     playBtn.addEventListener('click', () => {
-      document.querySelectorAll('audio').forEach(other => {
-        if (other !== audio) other.pause();
-      });
-
       if (audio.paused) {
         audio.play();
       } else {
@@ -2060,7 +2021,17 @@
     audio.addEventListener('play', () => {
       iconPlay.style.display = 'none';
       iconPause.style.display = 'block';
-      updateMediaSession(promos[currentIndex]);
+
+      const track = promos[currentIndex];
+      setActiveAudioPlayer(audio, {
+        title: track.artist,
+        artist: track.artist,
+        album: track.album,
+        artwork: [{ src: track.artwork, sizes: '512x512', type: 'image/jpeg' }]
+      }, {
+        previoustrack: () => playTrack((currentIndex - 1 + promos.length) % promos.length),
+        nexttrack: () => playTrack((currentIndex + 1) % promos.length)
+      });
     });
 
     audio.addEventListener('pause', () => {
@@ -2084,17 +2055,11 @@
     });
 
     prevBtn.addEventListener('click', () => {
-      const wasPlaying = !audio.paused;
-      const newIndex = (currentIndex - 1 + promos.length) % promos.length;
-      loadTrack(newIndex);
-      if (wasPlaying) audio.play();
+      playTrack((currentIndex - 1 + promos.length) % promos.length);
     });
 
     nextBtn.addEventListener('click', () => {
-      const wasPlaying = !audio.paused;
-      const newIndex = (currentIndex + 1) % promos.length;
-      loadTrack(newIndex);
-      if (wasPlaying) audio.play();
+      playTrack((currentIndex + 1) % promos.length);
     });
 
     audio.addEventListener('ended', () => {
